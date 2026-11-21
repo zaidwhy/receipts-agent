@@ -1,0 +1,42 @@
+{
+  "request": {
+    "query": "Neon pricing Pro plan monthly cost compute",
+    "start_date": null,
+    "end_date": null
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://www.prisma.io/blog/prisma-postgres-vs-neon-pricing-2026",
+        "title": "Prisma Postgres vs Neon Pricing 2026: Tables + Worked Examples",
+        "snippet": "Two honesty notes. If your app genuinely fits Neon's 0.25 CU minimum around the clock, always-on drops to about $21/month all-in and the comparison inverts in Neon's favor; the $33-vs-$78 result rests on 1 CU being the realistic floor for latency-sensitive production traffic with bursts, so size that against your real load, not the average. And the advantage flips back as query volume grows: past roughly 24M operations a month (against the $49 Pro plan at 1 CU), always-on compute becomes the [...] | Plan | Monthly base | Included operations | Overage rate | Included storage | Storage overage |\n ---  ---  --- |\n| Free | $0 | 200,000 | None | 2 GB | None |\n| Starter | $10 | 1,000,000 | $0.0080 / 1k ops | 10 GB | $2.00 / GB |\n| Pro | $49 | 10,000,000 | $0.0020 / 1k ops | 50 GB | $1.50 / GB |\n| Business | $129 | 50,000,000 | $0.0010 / 1k ops | 100 GB | $1.00 / GB | [...] ```\nOperations/month = 50 queries/day × 30 daysOperations/month = 50 queries/day × 30 days = 1,500 = 1,500Included on Pro = 10,000,000 → no overageIncluded on Pro = 10,000,000 → no overageStorage = 50 GB (50 GB included) → no overageStorage = 50 GB (50 GB included) → no overage Monthly cost = $49.00Monthly cost = $49.00\n```\n\nNeon (Launch plan):",
+        "publishedDate": "2026-06-24T00:00:00.000Z"
+      },
+      {
+        "url": "https://makerkit.dev/pricing-calculator/neon",
+        "title": "Neon Pricing Calculator (2026) — Estimate Your Monthly Bill",
+        "snippet": "Neon Launch\n\nVerified 2026-09\n\nEstimated monthly cost · 100 GB storage ·2 GB RAM\n\n$73.16/mo\n\nPlatform fee\n\nNo monthly minimum — pay-as-you-go\n\nincluded\n\nCompute (0.5 CU × 720h)\n\n0.5 CU × 720 hrs × $0.106/CU-hr\n\n$38.16\n\nStorage\n\n100 GB × $0.35/GB-mo\n\n$35.00\n\nEgress\n\n30 GB — within 500 GB included\n\nincluded\n\nCompute: 0.5 CU = 0.5 vCPU, 2 GB RAM. Always-on: 720 active hours/month billed at full CU rate. [...] The defining feature of Neon is scale-to-zero: your database automatically suspends after a configurable idle period (default 5 minutes). While suspended, you pay zero compute cost — only storage is billed. This makes Neon dramatically cheaper than always-on databases for workloads with bursty or low traffic patterns.\n\n## Neon compute units explained [...] Always-on workloads with large CU sizes can become expensive. 4 CU × 720 hours × $0.106 = $305/month in compute alone before storage. At that scale, compare against dedicated-instance options like Supabase or PlanetScale.\n\n## How this calculator works",
+        "publishedDate": "2026-05-21T00:00:00.000Z"
+      },
+      {
+        "url": "https://www.jetadmin.io/blog/neon-pricing",
+        "title": "Neon Pricing 2026: Plans, Costs & Limits",
+        "snippet": "| Input | Calculation | Monthly cost |\n --- \n| Compute: 0.25 CU for 160 hours | 40 CU-hours × $0.106 | $4.24 |\n| Database storage: 5 GB-months | 5 × $0.35 | $1.75 |\n| History storage: 1 GB-month | 1 × $0.20 | $0.20 |\n| Snapshot storage: 5 GB-months | 5 × $0.09 | $0.45 |\n| Known database subtotal | 4.24 + 1.75 + 0.20 + 0.45 | $6.64 |\n\n### Scenario 2: the app runs continuously [...] | Input | Calculation | Monthly cost |\n --- \n| Compute: 1 CU for a 730-hour month | 730 × $0.106 | $77.38 |\n| Database storage: 50 GB-months | 50 × $0.35 | $17.50 |\n| History storage: 10 GB-months | 10 × $0.20 | $2.00 |\n| Snapshot storage: 50 GB-months | 50 × $0.09 | $4.50 |\n| Known database subtotal | 77.38 + 17.50 + 2.00 + 4.50 | $101.38 | [...] Jet Admin Pro is $20/month on monthly billing, or $192/year ($16/month equivalent); Business is $100/month or $960/year ($80/month equivalent). Business includes granular permissions, SSO, and audit logs. Check Jet Admin’s current plan gates.",
+        "publishedDate": "2026-09-26T05:02:25.000Z"
+      },
+      {
+        "url": "https://www.buildmvpfast.com/tools/api-pricing-estimator/neon",
+        "title": "Neon Pricing Calculator (2026) | BuildMVPFast",
+        "snippet": "### Estimated Monthly Cost\n\nSummary\n\nCost Optimization Tips\n\n## Neon Pricing Plans\n\n### Free Tier\n\n100 projects\n\n100 CU-hours/project\n\n0.5GB storage/project\n\nUp to 2 CU (8 GB RAM)\n\nPerfect for dev\n\n### Launch (Usage-based)\n\nNo monthly minimum\n\n100 projects\n\n$0.106/CU-hour compute\n\n$0.35/GB-mo storage\n\nUp to 16 CU (64 GB RAM)\n\nFor startups\n\n### Weight (Usage-based)\n\nNo monthly minimum\n\n1,000+ projects\n\n$0.222/CU-hour compute\n\n$0.35/GB-mo storage\n\nUp to 56 CU (224 GB RAM)\n\nFor growth [...] Usage is calculated as: users × typical usage per user\n\nWorks with: Email, SMS, Auth, Analytics, Hosting, Maps, Push Notifications, Monitoring, and more. Monthly flat-rate services always show their fixed price.\n\n### Database9 services\n\nIncludes auth, realtime, storage. Pro plan available\n\nServerless Postgres. Usage-based, no monthly minimum: Launch $0.106/CU-hr, Scale $0.222/CU-hr, $0.35/GB storage. Plan prices shown are typical monthly estimates.\n\nMySQL (Vitess) + PostgreSQL. No free tier. [...] Plan-based pricing. Supports Postgres, MySQL, Redis.\n\nSQLite at the edge. Free 5GB. Developer $4.99/mo. Scaler $24.92/mo.\n\nFree M0 512MB. Flex ~$8/mo (up to 5GB). Dedicated from ~$57/mo.\n\nReactive backend. Free Starter: 1M calls/mo. Usage-based overage at $2.2/1M calls. Professional plan available.\n\nOpen-source BaaS. Free: 75K MAU. Pro plan per project with unlimited members.\n\nDDN (v3): Base from $5/active model, Advanced from $30/active model. Active model = accessed >1000 times/mo.",
+        "publishedDate": null
+      },
+      {
+        "url": "https://neon.com/pricing",
+        "title": "Neon Pricing: Free Plan With 100 Projects, Typical Spend $15/Month",
+        "snippet": "`Monthly CU-hours = [average CU size] × [number of hours the compute runs in the month]``Monthly compute cost = [monthly CU-hours] × [CU-hour price]`\nThe CU-hour price depends on your pricing plan:\n\n       Launch plan: $0.106 per CU-hour\n       Scale plan: $0.222 per CU-hour\n\nRemember that when your database is idle, compute can scale down to zero, so you don't consume CU-hours while it's not running. Learn more about Neon's billing. [...] A CU-hour is Neon's unit for measuring Postgres database compute usage. Because Neon databases scale to zero and autoscale, you're billed only for the database compute resources you actually use. In other words, your monthly database compute usage depends on:\n\n       How many compute endpoints you're running\n       How large your compute endpoints are (in CUs)\n       How long they run (in hours)\n\nFor a single compute, the calculation works like this: [...] With usage, not with instance size or project count. There's no per-project or per-database fee: each project pays for the compute it actually runs (CU-hours) and the storage it holds.\n\n       Idle databases scale to zero, so you don't pay for compute while they're suspended. Storage is still billed.\n       Autoscaling sizes compute to the load within the limits you set, so you don't pay for peak capacity all month.",
+        "publishedDate": "2026-04-02T15:55:21.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}

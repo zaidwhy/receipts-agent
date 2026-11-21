@@ -1,0 +1,25 @@
+{
+  "request": {
+    "query": "Render pricing OR launch OR release",
+    "start_date": "2026-11-17",
+    "end_date": null,
+    "filter_by_published_date": true
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://render.com/articles/how-to-rollback-a-broken-deployment-quickly",
+        "title": "How to rollback a broken deployment quickly",
+        "snippet": "You need at least one previous successful deploy to return to. Instant rollbacks also depend on how many builds Render retains for your workspace plan, as shown below.\n\n|  |  |\n---|\n| Free web services | Two most recent previous deploys |\n| Hobby | 5 |\n| Pro | 15 |\n| Scale | 30 |\n| Enterprise | 30 |\n\nSee Render pricing for plan details. If your target is older than your retention window, use a specific commit instead.\n\nDocumentation checked: Render between 2026-09-11 and 2026-11-20. [...] - Roll back first and debug second. Restoring service gives you time to investigate. Once you're stable, tools like Jules by Google Labs can help you debug a failed Render deploy.\n- Choose a plan whose build retention covers how far back you might need to go.\n- Put expand and contract steps in separate deploys.\n- Don't ship a migration and a destructive cleanup in the same deploy.\n- Don't treat a passing health check as proof that the deploy is correct. [...] In maintenance mode, your web service keeps running but is unreachable from the public internet. Render responds to every incoming request with `503 Service Unavailable` and your maintenance page. You can still reach the service over your private network and through SSH, so you can repair it while users are blocked. Maintenance mode is available only for paid web services.\n\nTo enable it:",
+        "publishedDate": "2026-11-20T20:00:00.000Z"
+      },
+      {
+        "url": "https://render.com/docs/api-keys",
+        "title": "API Keys – Render Docs",
+        "snippet": "### Sandboxes\n\nRender Sandboxes is in public beta.\n\nAPIs, defaults, and limits might change during the beta period. [...] ### Services\n\n| Permission | Action | Read | Write | Read & write |\n ---  --- \n| Web and private services, static sites, background workers, and cron jobs | View services and their configuration | 🟢 | ➖ | 🟢 |\n| Create, update, and delete services | ❌ | ➖ | 🟢 |\n| Manage preview environments and one-off jobs | ❌ | ➖ | 🟢 |\n| Environment variables and secret files | View environment variables and secret files | 🟢 | ❌ | 🟢 |\n| Set environment variable and secret file values | ❌ | 🟢 | 🟢 | [...] ### Deploys\n\n| Permission | Action | Read | Run |\n ---  --- |\n| Deployment information | View deploys, their status, and history | 🟢 | 🟢 |\n| Run deployments | Trigger and cancel deploys | ❌ | 🟢 |\n| Trigger rollbacks | ❌ | 🟢 |\n\n### Monitoring\n\n| Permission | Action | Read |\n --- \n| Read resource logs, metrics, events, and export settings | View service events | 🟢 |\n| View service metrics | 🟢 |\n| View service logs | 🟢 |\n| View log forwarding and metrics stream settings | 🟢 |\n\n### Postgres",
+        "publishedDate": "2026-11-18T21:00:00.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}

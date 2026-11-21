@@ -1,7 +1,8 @@
 // `npm run eval`: runs every case against the real model and writes evals/RESULTS.md.
 //   EVAL_RUNS=2 npm run eval          replay the recorded web (default mode)
 //   WEB_MODE=record npm run eval      hit the real web once and save fixtures/web/*.json
-//   EVAL_ONLY=hi,crm-recheck ...      run only those case ids
+//   EVAL_ONLY=hi,crm-recheck ...      run only those case ids (RESULTS.md is not rewritten)
+//   EVAL_SHOW=1 ...                   also print each answer
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -24,7 +25,11 @@ const runs: CaseResult[][] = [];
 for (let run = 1; run <= runCount; run += 1) {
   const results: CaseResult[] = [];
   for (const testCase of cases) {
-    const result = resultOf(testCase, await runConversation(config, testCase));
+    const conversation = await runConversation(config, testCase);
+    if (process.env.EVAL_SHOW) console.log(`--- ${testCase.id}
+${conversation.last.answer}
+---`);
+    const result = resultOf(testCase, conversation);
     results.push(result);
     console.log(`run ${run} ${result.passed ? "pass" : "FAIL"} ${testCase.id} first token ${result.firstTokenMs ?? "-"} ms, total ${result.totalMs} ms${result.passed ? "" : `: ${result.reasons.join("; ")}`}`);
   }

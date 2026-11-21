@@ -1,0 +1,42 @@
+{
+  "request": {
+    "query": "Neon Postgres Pro plan price per month",
+    "start_date": null,
+    "end_date": null
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://www.prisma.io/blog/prisma-postgres-vs-neon-pricing-2026",
+        "title": "Prisma Postgres vs Neon Pricing 2026: Tables + Worked Examples",
+        "snippet": "| Plan | Monthly base | Included operations | Overage rate | Included storage | Storage overage |\n ---  ---  --- |\n| Free | $0 | 200,000 | None | 2 GB | None |\n| Starter | $10 | 1,000,000 | $0.0080 / 1k ops | 10 GB | $2.00 / GB |\n| Pro | $49 | 10,000,000 | $0.0020 / 1k ops | 50 GB | $1.50 / GB |\n| Business | $129 | 50,000,000 | $0.0010 / 1k ops | 100 GB | $1.00 / GB | [...] Two honesty notes. If your app genuinely fits Neon's 0.25 CU minimum around the clock, always-on drops to about $21/month all-in and the comparison inverts in Neon's favor; the $33-vs-$78 result rests on 1 CU being the realistic floor for latency-sensitive production traffic with bursts, so size that against your real load, not the average. And the advantage flips back as query volume grows: past roughly 24M operations a month (against the $49 Pro plan at 1 CU), always-on compute becomes the [...] ```\nOperations/month = 50 queries/day × 30 daysOperations/month = 50 queries/day × 30 days = 1,500 = 1,500Included on Pro = 10,000,000 → no overageIncluded on Pro = 10,000,000 → no overageStorage = 50 GB (50 GB included) → no overageStorage = 50 GB (50 GB included) → no overage Monthly cost = $49.00Monthly cost = $49.00\n```\n\nNeon (Launch plan):",
+        "publishedDate": "2026-06-24T00:00:00.000Z"
+      },
+      {
+        "url": "https://selfhost.dev/blog/neon-pricing-cost-of-serverless-postgres",
+        "title": "Neon Pricing: The Honest Cost of Serverless Postgres",
+        "snippet": "### vs Supabase.\n\nThis is the comparison people get wrong most often, because they are not really the same product. Supabase is a backend platform: Postgres bundled with auth, storage, realtime, and edge functions, on a flat $25/month Pro floor. Neon is the database first, billed by usage, with auth, object storage and functions now offered as add-ons beside it. [...] For an idle or bursty database, usually yes, because Neon scales to zero while Supabase Pro starts at a flat $25/month. But Supabase bundles auth, storage, realtime, and edge functions into one flat fee, while Neon now offers auth, object storage and functions as add-ons with their own allowances, so compare only the features you would actually use. We break down why people compare the two wrong in Neon vs Supabase.\n\n### Did Neon pricing change in 2026? [...] Price your size →\n\nManaged PostgreSQL from $8.10 a month in Mumbai. Dedicated Postgres or MySQL on AWS, with restore, pooling and Multi-AZ failover when you want it.\n\n{price}\n\nPrice your size →\n\nManaged PostgreSQL from $8.10 a month in Mumbai. Dedicated Postgres or MySQL on AWS, with restore, pooling and Multi-AZ failover when you want it.\n\n{price} Pay-as-you-go credits, top up from $5, no plan tiers.\n\nPrice your size →",
+        "publishedDate": "2026-06-25T08:25:10.000Z"
+      },
+      {
+        "url": "https://www.buildmvpfast.com/tools/api-pricing-estimator/neon",
+        "title": "Neon Pricing Calculator (2026) | BuildMVPFast",
+        "snippet": "Usage is calculated as: users × typical usage per user\n\nWorks with: Email, SMS, Auth, Analytics, Hosting, Maps, Push Notifications, Monitoring, and more. Monthly flat-rate services always show their fixed price.\n\n### Database9 services\n\nIncludes auth, realtime, storage. Pro plan available\n\nServerless Postgres. Usage-based, no monthly minimum: Launch $0.106/CU-hr, Scale $0.222/CU-hr, $0.35/GB storage. Plan prices shown are typical monthly estimates.\n\nMySQL (Vitess) + PostgreSQL. No free tier. [...] Plan-based pricing. Supports Postgres, MySQL, Redis.\n\nSQLite at the edge. Free 5GB. Developer $4.99/mo. Scaler $24.92/mo.\n\nFree M0 512MB. Flex ~$8/mo (up to 5GB). Dedicated from ~$57/mo.\n\nReactive backend. Free Starter: 1M calls/mo. Usage-based overage at $2.2/1M calls. Professional plan available.\n\nOpen-source BaaS. Free: 75K MAU. Pro plan per project with unlimited members.\n\nDDN (v3): Base from $5/active model, Advanced from $30/active model. Active model = accessed >1000 times/mo.",
+        "publishedDate": null
+      },
+      {
+        "url": "https://makerkit.dev/pricing-calculator/neon",
+        "title": "Neon Pricing Calculator (2026) — Estimate Your Monthly Bill",
+        "snippet": "Estimates are approximate. Rates verified 2026-09 — confirm onNeon's pricing page.Think something is wrong? Let us know.\n\nSame workload, all databases\n\nEstimated monthly cost — sorted cheapest first\n\nConvexProfessional\n\n$35.00/mo\n\nSupabasePro\n\n$41.50/mo\n\nXataXata Cloud\n\n$45.28/mo\n\nPlanetScalePostgres\n\n$60.25/mo\n\nNeon Launch\n\n$73.16/mo\n\nConvex uses per-seat pricing — costs grow with team size.Think something is wrong?\n\nWhat Neon excels at [...] A side project with scale-to-zero can cost as little as $1–3/month. A production SaaS on 1 CU always-on runs about $78/month before storage. Neon has no monthly minimum on the Launch plan — you pay only for what you use.\n\n### Does Neon have a free plan?\n\nYes. The Free plan includes 100 CU-hours/month, 0.5 GB storage, and up to 2 CU autoscale. It is suitable for development and side projects. The Launch plan removes these limits and enables scale-to-zero with configurable autoscale up to 8 CU. [...] Neon Launch\n\nVerified 2026-09\n\nEstimated monthly cost · 100 GB storage ·2 GB RAM\n\n$73.16/mo\n\nPlatform fee\n\nNo monthly minimum — pay-as-you-go\n\nincluded\n\nCompute (0.5 CU × 720h)\n\n0.5 CU × 720 hrs × $0.106/CU-hr\n\n$38.16\n\nStorage\n\n100 GB × $0.35/GB-mo\n\n$35.00\n\nEgress\n\n30 GB — within 500 GB included\n\nincluded\n\nCompute: 0.5 CU = 0.5 vCPU, 2 GB RAM. Always-on: 720 active hours/month billed at full CU rate.",
+        "publishedDate": "2026-05-21T00:00:00.000Z"
+      },
+      {
+        "url": "https://neon.com/pricing",
+        "title": "Neon Pricing: Free Plan With 100 Projects, Typical Spend $15/Month",
+        "snippet": "## Neon pricing plans\n\n   ### Free\n\n#### $0\n\nBuild and learn free with no time limits and no credit card required.  Try Neon \n\nLakebase Postgres\n\n       100 projectsImage 12Image 13\n\n       100 CU-hrs monthly per projectImage 14Image 15\n\n       1 GB of storage per project\n\n       Sizes up to 2 CU (8 GB RAM)\n\n       Unlimited team members\n\nBackend\n\n       Managed Better AuthImage 16Image 17\n\n       5 GB of Object StorageImage 18Image 19\n\n       FunctionsImage 20Image 21 [...] With usage, not with instance size or project count. There's no per-project or per-database fee: each project pays for the compute it actually runs (CU-hours) and the storage it holds.\n\n       Idle databases scale to zero, so you don't pay for compute while they're suspended. Storage is still billed.\n       Autoscaling sizes compute to the load within the limits you set, so you don't pay for peak capacity all month. [...] ### How are the backend services billed?\n\nObject Storage, Functions, and AI Gateway are billed separately from Postgres compute (CU-hours). Managed Better Auth, the Data API, and Realtime have no separate charge.\n\nManaged Better Auth is included up to 60,000 MAU per project on Free and 1 million MAU per project on paid plans.\n\nThe Data API is included on every plan. The queries it runs use your database compute and count toward network transfer, like any other query.",
+        "publishedDate": "2026-04-02T15:55:21.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}

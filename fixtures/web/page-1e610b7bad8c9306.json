@@ -1,0 +1,11 @@
+{
+  "request": {
+    "url": "https://www.pipedrive.com/en/pricing",
+    "extractor": "fetch"
+  },
+  "response": {
+    "ok": false,
+    "reason": "failed",
+    "error": "HTTP 403"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "request": {
+    "query": "Neon pricing OR launch OR release",
+    "start_date": "2026-11-17",
+    "end_date": null,
+    "filter_by_published_date": true
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://shattered.io/gemini-4-neon-3-15-pricing-1m-context-four-thinking-levels",
+        "title": "Gemini 4 Neon: $3/$15 Pricing, 1M Context",
+        "snippet": "The rollout spans several surfaces at once. Neon is live in the Gemini API through Google AI Studio, in Gemini for business, in Google Antigravity, and in the Gemini app for eligible paid Google AI Pro and Ultra subscribers. A same-day launch across the API, the enterprise product, the coding environment, and the consumer app is a sign Google wants Neon to be the workhorse tier, not a lab showpiece. [...] Google released Gemini 4 Neon on November 18, 2026, and the company’s launch post sells it as “frontier-level intelligence with fast end-to-end task completion” for software engineering, knowledge work, and science. The model ID is `gemini-4-neon`. It costs $3 per million input tokens and $15 per million output tokens, and it carries a 1-million-token context window. [...] ## What Google Announced on November 18\n\nThe core announcement is short. Google named a new model, Gemini 4 Neon, gave it the ID `gemini-4-neon`, and put a price on it the same day. The Gemini API release notes mark the model as generally available on November 18, 2026, which means developers did not have to wait through a preview period to ship against it.",
+        "publishedDate": "2026-11-19T08:55:37.000Z"
+      },
+      {
+        "url": "https://www.requesty.ai/blog/gemini-neon-pricing-benchmarks",
+        "title": "Gemini Neon pricing and benchmarks | Requesty",
+        "snippet": "## Gemini Neon API pricing\n\nGoogle's launch announcement gives Neon the standard rates below. Cached input carries a 95% discount against regular input.\n\n| Gemini 4 Neon token type | Price per million tokens |\n---|\n| Input | $3.00 |\n| Cached input | $0.15 |\n| Output | $15.00 | [...] In November 2026, Gemini 4 Neon costs $3 per million input tokens, $0.15 per million cached input tokens and $15 per million output tokens on the paid Gemini API. Google introduced Neon on November 18, with pricing between the introductory and standard rates for Carbon and Argon.\n\nThe date decides which model is cheaper. Neon costs 50% more per token than Carbon through November 30; when Carbon's introductory rates double on December 1, Neon becomes 25% cheaper per token. [...] | Model and price date | Input cost | Output cost | Cost per task |\n------|\n| Neon | $0.030 | $0.030 | $0.060 |\n| Carbon or Argon, through November 30, 2026 | $0.020 | $0.020 | $0.040 |\n| Carbon or Argon, from December 1, 2026 | $0.040 | $0.040 | $0.080 |\n| Hydrogen | $0.015 | $0.015 | $0.030 |\n| Flash, through December 2026 | $0.0075 | $0.0075 | $0.015 |\n| Flash, from January 2027 | $0.015 | $0.015 | $0.030 |",
+        "publishedDate": "2026-11-19T00:00:00.000Z"
+      },
+      {
+        "url": "https://www.mindstudio.ai/blog/gemini-4-neon-pricing-benchmarks",
+        "title": "Gemini 4 Neon Pricing and Benchmarks: Is It Worth Using? | MindStudio",
+        "snippet": "- Neon prices at $3/$15 per million tokens, undercutting Claude Opus 5.5 and Claude Fable 5.2 on the API while beating both on several coding benchmarks.\n- It placed second out of 18 models on KingBench 4, a six-project coding benchmark, scoring 37.9 out of 60 (63.2%), behind only Claude Fable 5.2.\n- Token efficiency is the real story: one test run cost $20.36 on Neon versus $222 for Fable 5.2 and $234 for Carbon on its current discounted pricing. [...] The catch is timing. Because Carbon’s promotional pricing undercuts Neon through the end of November, Neon is technically the more expensive-per-token option for a few weeks. That flips on December 1, when Carbon reverts to its full $4/$20 rate, making Neon the clearly cheaper mid-tier choice going forward. Total cost still depends heavily on token efficiency, not just per-token price, and that’s where Neon pulled ahead even during the discount window. [...] Within the Gemini 4 family, pricing scales with capability. Hydrogen, the fastest and cheapest tier, runs $1.50 per million input tokens and $7.50 per million output tokens, aimed at everyday coding and agentic tasks where speed matters more than depth. Carbon is the top-end model for the hardest long-horizon projects and deep research, priced at $4/$20 per million tokens normally, though Google ran a promotional rate of $2/$10 through November 30. Neon lands in between at $3/$15, positioned",
+        "publishedDate": "2026-11-19T00:00:00.000Z"
+      },
+      {
+        "url": "https://www.datacamp.com/blog/gemini-4-neon",
+        "title": "Gemini 4 Neon: Features, Benchmarks, Pricing, and Access | DataCamp",
+        "snippet": "The timing makes the comparison with Carbon unusual. Carbon's introductory price of $2.00 / $10.00 runs through November 30, 2026, so for the rest of November, Neon costs 50% more per token than Carbon; from December 1, Carbon moves to $4.00 / $20.00 and Neon becomes 25% cheaper per token. [...] There is no free tier: Neon runs only on paid Gemini API projects, while Hydrogen and Flash-Lite keep free access. Explicit context caching is not supported. In Google's apps, Neon is available to Google AI Pro and Ultra subscribers in the Gemini app, Google AI Studio, and Google Antigravity.\n\n## How to Get Access to Gemini 4 Neon? [...] Google describes Neon as \"frontier-level intelligence with fast end-to-end task completion\" for complex software engineering, knowledge work, and science. Its model card reports Neon ahead of Claude Opus 5.5 and GPT-6.2 Sol on 17 of 19 benchmarks, at $3 per million input tokens and $15 per million output tokens.",
+        "publishedDate": "2026-11-19T11:45:00.000Z"
+      },
+      {
+        "url": "https://openrouter.ai/google/gemini-4-neon",
+        "title": "Gemini 4 Neon - API Pricing & Providers | OpenRouter",
+        "snippet": "Gemini 4 Neon is served by 2 providers on OpenRouter: Google AI Studio and Google Vertex. Requests are routed to the best available provider, with automatic failover to the others, and you can pin or exclude providers with provider routing.\n\n### When was Gemini 4 Neon released?\n\nGemini 4 Neon was released on November 18, 2026.\n\n## Explore more models\n\n## Footer\n\nOpenRouter\nOpenRouter\n\n### Product\n\n### Explore\n\n### Company\n\n### Developer\n\n### Connect\n\n## More models from Google",
+        "publishedDate": "2026-11-18T21:00:00.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}

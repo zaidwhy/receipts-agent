@@ -1,0 +1,19 @@
+{
+  "request": {
+    "query": "Supabase pricing OR launch OR release",
+    "start_date": "2026-11-17",
+    "end_date": null,
+    "filter_by_published_date": true
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://catdoes.com/blog/supabase-pricing",
+        "title": "Supabase Pricing 2026: Free Tier Limits & Costs - CatDoes",
+        "snippet": "| Plan | Price | Built for | What you get |\n------|\n| Free | $0 | Prototypes, learning, side projects | 2 active projects, shared CPU with 500 MB RAM, 500 MB database per project, community support |\n| Pro | From $25/month | Launched apps | $10 compute credit, 8 GB disk per project, 100,000 MAU, daily backups kept 7 days, email support, no pausing | [...] | App | Setup | Example usage | Monthly bill |\n------|\n| Side project or prototype | Free, 1 project | Within every Free limit | $0 |\n| Launched MVP | Pro, 1 project on Micro | 5,000 MAU, 1 GB database, 20 GB files, 40 GB egress | $25 |\n| MVP with a staging copy | Pro, 2 projects on Micro | Same as above | $35 |\n| Agency with 5 client apps | Pro, 5 projects on Micro | All within Pro quotas | $65 | [...] $0 on Free. On Pro, $25 a month for one project on Micro compute, plus about $10 for each extra project and any usage above the included quotas. In our examples, a launched MVP pays $25 to $35 a month, and a consumer app with 150,000 monthly active users pays about $275.\n\n### Why is my Supabase bill higher than $25?",
+        "publishedDate": "2026-11-19T11:37:37.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}

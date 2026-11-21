@@ -1,0 +1,37 @@
+{
+  "request": {
+    "query": "Zoho pricing OR launch OR release",
+    "start_date": "2026-11-15",
+    "end_date": null,
+    "filter_by_published_date": true
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://www.crmreviews.com/reviews/zoho-crm-review",
+        "title": "Zoho CRM Review: Six Months of Real Testing",
+        "snippet": "A technically minded operator: The deeper you are willing to go into workflow rules, Blueprints, and custom functions, the more Zoho repays your time.\n\n## Pricing: more flexible than it first appears\n\nZoho CRM offers five tiers: a Free plan for up to three users with basic CRM functionality, Standard at $14 per user per month, Professional at $23, Enterprise at $40, and Ultimate at $52, all prices based on annual billing, as Siit’s 2025 Zoho review outlines. [...] - Pricing is genuinely competitive: Capterra’s Zoho CRM pricing page confirms that paid plans range from $14 to $52 per user per month, with a free plan for up to three users, making it one of the most affordable full-featured CRM options on the market. If you are comparing on cost alone, budget at the Standard tier and upgrade only when you hit a genuine workflow wall. [...] ### How does Zoho CRM compare on price to alternatives like HubSpot?\n\nZoho CRM pricing typically runs from $14 to $52 per user per month, while HubSpot’s plans start at $45 monthly and climb into the hundreds for advanced tiers. For feature-equivalent tiers, Zoho is meaningfully cheaper, which matters most for teams with more than five or six users.\n\n### Do I need Zoho Analytics to get proper reporting?",
+        "publishedDate": "2026-11-19T07:37:39.000Z"
+      },
+      {
+        "url": "https://www.cloudadvies.nl/en/zoho-one",
+        "title": "Zoho One",
+        "snippet": "Want to learn more about all of Zoho One's applications?\n\n## Zoho One Pricing\n\nAll Employee Pricing:€37 per user per month (billed annually)Flexible User Pricing:€90 per user per month (billed annually)All Employee Pricing:€45 per user per month (billed monthly)Flexible User Pricing:€105 per user per month (billed monthly)\n\nFor more information and current pricing, see Zoho One's detailed pricing page.\n\n## Companies already using Zoho One:\n\n## Why CloudAdvies?",
+        "publishedDate": "2026-11-16T18:00:00.000Z"
+      },
+      {
+        "url": "https://www.zoho.com/billing/academy/pricing-mechanisms-and-strategies/pricing-models-guide.html",
+        "title": "A detailed guide on popular pricing models | Zoho Billing",
+        "snippet": "Per-seat, per-month software licensing is the textbook case. It could be a user, or an organization depending on what it serves primarily. For an example, look no farther than Zoho Billing's pricing plans, they are charged per organization, with further limits on capabilities provided.\n\n### How do you operationalize unit-based pricing? [...] Stair-step pricing offers a set of fixed-price packages, each covering a range of usage or a set of limits, and the customer pays the price of whichever step they fall into. Unlike tiered pricing, nothing gets added up across slabs, so the customer is either on one step or on the one above it.\n\nIt gives the customer a predictable bill while giving you room to shape each package around the job your customer is trying to get done.\n\n### Where you can see this in action [...] You will seldom find ramp pricing on a public pricing page, because it is negotiated contract by contract. It shows up most in multi-year enterprise software agreements, where a customer rolls a product out to one department first and the rest of the company later, and no one wants to pay full price for licenses that will not be used for months.\n\n### How do you operationalize ramp pricing?",
+        "publishedDate": "2026-11-18T08:56:22.000Z"
+      },
+      {
+        "url": "https://www.linkedin.com/pulse/zoho-workplace-pricing-how-organizations-can-save-money-ijzhf",
+        "title": "Zoho Workplace Pricing: How Organizations Can Save Money and Increase Benefits",
+        "snippet": "The price of Zoho Workplace Standard starts at ₹99 per user per month, while the price of Google Workspace Business Starter is ₹270 per user per month.\n\nThat makes Zoho a good choice for cost-conscious businesses.\n\n### 3. What Do You Get with Zoho Workplace?\n\nThe concept of affordable price does not limit businesses to rely only on one or two basic tools.\n\nZoho Workplace integrates many productivity tools into one suite. [...] Instead of having to manage different tools for various workplace operations, businesses can have an integrated platform.\n\n### 4. Why Does Pricing Matter More as Your Business Grows?\n\nImagine your organisation has 100 employees.\n\nHere is an easy annual subscription comparison based on the plans discussed above:\n\nDetails/ Zoho Standard/ Google Starter\n\nMonthly cost per user/ ₹99/ ₹270\n\nNumber of users/ 100/ 100\n\nMonthly subscription/ ₹9,900/ ₹27,000\n\nAnnual subscription/ ₹1,18,800/ ₹3,24,000 [...] Higher full-suite plan/ ₹399/user/month (Professional)/ ₹1,080/user/month (Business Standard)\n\nThese prices are calculated on the basis of publicly available annual billing rates in India. There may be tax implications. Plan benefits and storage differ from each other, so businesses have to consider all of them before choosing one.\n\nAnd that makes the difference quite noticeable.",
+        "publishedDate": "2026-11-20T11:03:29.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}

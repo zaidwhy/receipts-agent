@@ -1,0 +1,43 @@
+{
+  "request": {
+    "query": "Salesforce pricing OR launch OR release",
+    "start_date": "2026-11-15",
+    "end_date": null,
+    "filter_by_published_date": true
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://www.agileinfoways.com/blog/salesforce-implementation-cost-in-2026-what-nobody-budgets-for",
+        "title": "Salesforce Implementation Cost 2026: What's Not Budgeted",
+        "snippet": "Salesforce licensing depends on the selected cloud, edition, features, and number of users. For example, Salesforce's current Sales pricing page lists Starter Suite at $25 per user per month, Pro Suite at $100, Core at $195, Advanced at $395, and Max at $550, subject to billing terms and pricing changes. These are published Sales Suite prices, not universal prices for every Salesforce product. [...] Published Salesforce US pricing at the time of research, November 16, 2026. Eligibility, usage conditions, billing arrangements, and contract terms apply. Verify current terms with Salesforce before budgeting.\n\nThe important distinction is how consumption-based pricing works.\n\nFor example, Flex Credits are consumed when an agent performs an action, such as updating a customer record, summarizing a support case, or executing a business workflow. [...] Choosing an unnecessarily advanced edition increases recurring expenses. Choosing an edition without the required functionality can lead to upgrades, add-ons, or architectural changes later.\n\n### How Much Does Salesforce Agentforce Cost in 2026?\n\nAgentforce pricing depends on how an organization deploys its agents and how it wants to pay for usage.\n\nSalesforce currently publishes several pricing options, including:",
+        "publishedDate": "2026-11-17T00:00:00.000Z"
+      },
+      {
+        "url": "https://www.girikon.com/blog/salesforce-sales-cloud-pricing",
+        "title": "Salesforce Sales Cloud Pricing 2027: Core vs Advanced vs Max",
+        "snippet": "| Edition | Monthly cost/user | Annual cost/user |\n---\n| Core | $195 | $2,340 |\n| Advanced | $395 | $4,740 |\n| Max | $550 | $6,600 |\n\nSwipe to see all columns →\n\nRemember one thing: The difference in pricing is beyond adding features — each Sales Cloud edition has different capabilities to provide, along with AI functionalities and business benefits. Now, let’s see what each edition has to offer, and based on that, you can make a better decision for your business. [...] | Features | Core | Advanced | Max |\n------|\n| Price per user/month | $195 | $395 | $550 |\n| Annual license cost/user | $2,340 | $4,740 | $6,600 |\n| Sales CRM capabilities | Included | Included | Included |\n| Pipeline management | Included | Included | Included |\n| Sales forecasting | Included | Included | Included |\n| Slack | Business+ | Business+ | Enterprise+ |\n| Tableau Next | Included | Included | Included |\n| Flex Credits (per organization) | 500K | 1M | 2.75M | [...] Swipe to see all columns →\n\n### Salesforce Core: Essential sales CRM capabilities at $195/user/month\n\nThe Salesforce Core edition starts at $195 per user/month — giving businesses a strong base to handle various sales activities, customer relationships, unique opportunities, and forecasting.\n\nWith these capabilities, the Core edition includes Slack Business+, Tableau Next, and 500,000 Flex Credits per organization.",
+        "publishedDate": "2026-11-17T17:18:14.000Z"
+      },
+      {
+        "url": "https://www.supportbench.com/how-salesforce-service-cloud-pricing-works",
+        "title": "Salesforce Service Cloud Pricing: How It Really Works (2026)",
+        "snippet": "Roughly $60,000 a year at list — before implementation (typically $10,000–$50,000+ with a partner), before the admin time (Salesforce orgs realistically consume a half-time to full-time admin), and before renewal uplift. That is the number to compare against alternatives, not the $175 on the pricing page. We wrote the same breakdown for Zendesk in how Zendesk pricing really works — the pattern of seat price versus real price is an industry habit, not a Salesforce quirk. [...] ## Quick answer\n\nList price: $25–$550 per user per month across five editions; most support teams need Enterprise at $175, billed annually. What inflates it: Digital Engagement adds $75 per user and Agentforce AI is billed per use, so a 12-agent team runs about $60,000 a year at list before implementation. All-inclusive alternative: Supportbench is $32 per agent per month with AI and onboarding included.\n\nComparing platforms rather than plans? See Salesforce Service Cloud vs Supportbench. [...] | Edition | List price (per user/month) | What you actually get |\n---\n| Starter Suite | $25 | Basic case management inside a lightweight CRM bundle. Not a full service desk. |\n| Pro Suite | $100 | Adds omni-channel routing and case swarming. Still a bundle, still capped. |\n| Enterprise | $175 | The first real service desk tier: AI for service, self-service help center, workflow automation, incident management. |\n| Unlimited | $350 | Adds chat and bots, Salesforce Knowledge, premier support. |",
+        "publishedDate": "2026-11-17T22:00:00.000Z"
+      },
+      {
+        "url": "https://2-data.com/knowledge-hub/salesforce-data-360-pricing-how-flex-credits-are-consumed",
+        "title": "Salesforce Data 360 Pricing: How Flex Credits Are Consumed - 2Data I Software Optimization Experts",
+        "snippet": "The new Salesforce editions add to this. Futurum Research’s analysis of the September 2026 editions notes that Flex Credit allocations scale by tier, with 500,000 for Core, 1 million for Advanced and 2.75 million for Max.\n\nAs Subscription Insider pointed out, those allocations are per organisation per year. A large enterprise and a small team on the same edition receive the same pool, so the allocation will go much further in some organisations than in others. [...] Salesforce’s Data 360 pricing page sets out two current pricing models alongside the older Data Services model. The first is Flex Credits, priced at $500 per 100,000 credits, which can be used for any Data 360 action and bought on a pre-purchase, pay-as-you-go or pre-commit basis. [...] The second is profile-based pricing. Profiles are listed at $240 per 1,000 profiles per year and include one Flex Credit per profile, while Enterprise Profiles are listed at $420 per 1,000 profiles per year with two credits per profile and additional actions included. Profile-based pricing bundles common profile-building actions into a flat cost, while Flex Credits are still used for other work such as querying data or processing unstructured data for AI agents.",
+        "publishedDate": "2026-11-17T12:05:18.000Z"
+      },
+      {
+        "url": "https://www.zarasa.io/blog/salesforce-whatsapp-pricing.html",
+        "title": "WhatsApp in Salesforce: Options and Pricing 2026 | Zarasa",
+        "snippet": "| Option | License | Who bills the messages | When it fits |\n ---  --- |\n| Native digital channels for Service Cloud | US$75 per user per month, billed annually, according to the Salesforce pricing page. Some editions already include them | Salesforce, through messaging credits consumed according to its multiplier rate card | Contact centers that need several channels, routing and bots in one console | [...] When it fits: Companies that already work with a provider and have a technical team to maintain the integration\n\nNative digital channels. Salesforce sells a package for Service Cloud that adds web and in-app chat, plus messaging over SMS, WhatsApp, Facebook Messenger, Apple Messages for Business and LINE. The pricing page lists it at US$75 per user per month and notes that SMS and WhatsApp usage is charged separately, according to its own rate card (Salesforce). [...] Salesforce passed the change on to its rate card a month later. The version effective November 1, 2026 states that utility templates and service messages sent inside the customer service window are now charged too (Salesforce).\n\n### In one line\n\nServing customers on WhatsApp is no longer free above a certain volume. The cost per message is low, but it now needs a budget line, and it changes with the customer’s country and with the way you connect WhatsApp to Salesforce.",
+        "publishedDate": "2026-11-16T16:00:00.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}

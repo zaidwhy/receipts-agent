@@ -1,0 +1,43 @@
+{
+  "request": {
+    "query": "Attio pricing OR launch OR release",
+    "start_date": "2026-11-15",
+    "end_date": null,
+    "filter_by_published_date": true
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://pricingsaas.com/companies/attio/diffs/2026W47",
+        "title": "Attio ditches per-seat pricing for workspace plans, adds $1,000 Ultra tier — Nov 16, 2026 · PricingSaaS Pulse",
+        "snippet": "Between the Nov 9, 2026 and Nov 16, 2026 captures of Attio's pricing page, Pulse recorded 2 changes: Per-seat pricing replaced by per-workspace base prices (Plus $40, Pro $100 incl. 1 user, add users extra); new Ultra plan $1,000/mo incl. 5 users; paid add-ons for extra records and objects; New plan features: SQL queries via API/MCP, data connector, data rules, audit logs, governance add-on and forward-deployed onboarding. Pulse files it as a packaging change (packaging change, feature added). [...] Per-seat pricing replaced by per-workspace base prices (Plus $40, Pro $100 incl. 1 user, add users extra); new Ultra plan $1,000/mo incl. 5 users; paid add-ons for extra records and objects; New plan features: SQL queries via API/MCP, data connector, data rules, audit logs, governance add-on and forward-deployed onboarding. Pulse compared the captures it took on Nov 9, 2026 and Nov 16, 2026 UTC; the before/after table above lists each item as written on the page. [...] This weekly roll-up includes the change Pulse first recorded in a shorter period: \"Attio shifts to per-workspace pricing, adds $1,000/mo Ultra plan\" (Day 315, 2026, saved Nov 11, 2026). It also records changes none of that period did (feature added), so Pulse counts it as a change of its own. Before that, Attio's previous recorded change was \"Attio: Formula attributes feature added to Pro and Enterprise plans\" (Aug 2, 2026). Attio has been tracked since 2026-05-05.",
+        "publishedDate": "2026-11-16T00:34:07.000Z"
+      },
+      {
+        "url": "https://honestcrm.ai/attio-pricing",
+        "title": "Attio Pricing 2026: Plans, Team Cost | HonestCRM",
+        "snippet": "Attio has 3 paid plans, billed yearly: Plus at $40 a month with 1 user, then $35 for each added user; Pro at $100 a month with 1 user, then $79 for each added user; Ultra at $1,000 a month with 5 users, then $189 for each added user. A 5-person team pays $2,160 a year on Plus.\n\nFor a 5-person team, HonestCRM Pro costs $299 a year for the whole company, $1,861 less than Attio Plus. HonestCRM Free costs $0 for unlimited users. [...] - Each paid plan has a workspace price that includes 1 user (5 on Ultra), and each added user costs extra.\n- Plus allows up to 10 users. Larger teams need Pro.\n- Workflows and AI use monthly credits.\n\n## Work out your own Attio cost\n\nChange the plan and team size to match yours.\n\nAttio Plus, 5 users\n\n$2,160\n\na year\n\nHonestCRM Free, any number of users\n\n$0\n\na year\n\nNeed more? Pro is $299 a year or $39 a month ($468 a year) for the whole company. See the Free plan limits.\n\nYou'd save\n\n$2,160 [...] # Attio pricing: what a small business pays\n\nAttio's cheapest paid plan, Plus, costs $40 a month for the workspace with 1 user, plus $35 for each added user, billed yearly ($50 and $44 billed monthly), so a 5-person team pays $2,160 a year. Free plan: Up to 3 seats, with mailbox sync.\n\nHonestCRM is a free CRM for small business with unlimited users on every plan.\n\nStart for free\n\n## How much does Attio cost?",
+        "publishedDate": "2026-11-20T17:00:00.000Z"
+      },
+      {
+        "url": "https://attio.com/pl/p/crm-1916120920",
+        "title": "CRM for the next generation of teams.",
+        "snippet": "Tested and used many, but @attio takes the cake all the time.\n\n## Start today for free.\n\nDesigned for every stage of your journey. Start your 14 day free trial of pro today, no credit card required.\n\nSave 20% with annual billing\n\n### Free\n\nFor individuals to get started with Attio.\n\nStart for free\n\nGet started with:\n\n Ask Attio, your personal agent\n Self-builds from email and calendar\n Automatic enrichment\n\n Agents and workflows\n 50,000 records and 3 objects\n\n### Plus [...] Attio has plans for teams of all sizes, including a free option for very small teams or light projects. Our paid plans are incredibly powerful and are the best way to get the most out of Attio.\n\nNo problem – our customer support team are always on hand to help you get the most out of Attio. Check out our directory of Attio experts, and see our help center for more info. Or, reach out at support@attio.com.\n\nYes, you can easily import data into Attio from other applications through CSV files. [...] Enterprise (for large organizations): This plan includes everything from our Pro plan plus advanced admin tools, permission access and SAML support. It is built for large organizations with strategic relationships spanning multiple business units.\n\n## Agentic revenueruns on Attio.\n\nStart for free\nTalk to salesTalk to sales",
+        "publishedDate": "2026-11-16T17:00:00.000Z"
+      },
+      {
+        "url": "https://markets.businessinsider.com/news/stocks/agents-running-20x-more-tasks-in-attio-the-fastest-growing-revenue-platform-1036770406",
+        "title": "Agents running 20x more tasks in Attio, the fastest-growing revenue platform | Markets Insider",
+        "snippet": "While agents were already running in Attio before the launch, they can now complete tasks of increasing data complexity, from running calculations on a single deal to analyzing an entire pipeline in one query.\n\nThe launch included four new additions to the platform:\n\nLearn more at attio.com/architecture.\n\nIndependent spend data shows the same momentum [...] “Legacy CRMs were built for people, not AI agents” said Nicolas Sharp, CEO and co-founder of Attio. “We built Attio for both. Just one month after launching our new architecture, agents are already among our biggest users. They can query millions of records using SQL, just as they would a database, while businesses retain control over what they can access and change and what actions they can take. Combined with the full context of every customer relationship, this means agents can take on real [...] A 20x increase in agents running tasks\n\nThe number of tasks AI agents are running in Attio is a 20x increase since the company launched its new hybrid architecture just one month ago, giving people and agents the controls of application software at the scale of infrastructure. More than 35,000 companies run their go-to-market on Attio, including Granola, Turbopuffer, and Modal.",
+        "publishedDate": "2026-11-16T20:02:00.000Z"
+      },
+      {
+        "url": "https://lemonado.io/integrations/attio",
+        "title": "Attio MCP server for Claude & ChatGPT | Lemonado",
+        "snippet": "| Attio's MCP server compared with Lemonado for Attio |  |  |\n---\n| Attio's MCP server | Lemonado |  |\n| Setup | Sign in with Attio in each AI app | Sign in once, paste one URL |\n| Other platforms | Attio only | Attio plus LinkedIn Ads, Google Ads, GA4 and 3,000+ tools |\n| Target accounts that clicked your ads | No ad data | Yes, in one question |\n| Reports and alerts on a schedule | No | Yes, in Slack or email |\n| Price | Part of your Attio plan | See pricing | [...] Source: Attio\n\nWhich companies on our Attio target account list clicked LinkedIn Ads this month, and do they have an open deal?\n\n14 target companies clicked LinkedIn Ads. 5 have open deals; the other 9 have no deal and no owner yet.\n\nSource: Attio + LinkedIn Ads\n\nNew Attio deals by source this quarter, next to Google Ads and LinkedIn Ads spend.\n\nGoogle Ads: $980 per new deal. LinkedIn: $2,300, with deals averaging $24k against $11k from search.\n\nSource: Attio + ads [...] - Every Monday, send deals created, won and lost in Attio last week, plus any that moved backwards, to #revenue.\n  \n  ### Monday deal movement\n- Every Wednesday, list companies from our Attio target list that clicked an ad or visited the pricing page this week.\n  \n  ### Target account activity\n- On the 1st, send last month's cost per new deal for Google Ads and LinkedIn Ads, using the deal source in Attio.\n  \n  ### Monthly cost per deal\n\n## Why Lemonado?",
+        "publishedDate": "2026-11-18T18:00:00.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}
