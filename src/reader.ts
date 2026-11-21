@@ -2,7 +2,7 @@
 // plain fetch for any URL Tavily could not return. Each page records which
 // extractor produced its text, because a later recheck must use the same one.
 import type { WebMode } from "./config.ts";
-import { readFixture, replayStats, writeFixture } from "./fixtures.ts";
+import { liveUsage, readFixture, replayStats, writeFixture } from "./fixtures.ts";
 import { createLogger } from "./log.ts";
 import { toIsoDate } from "./search.ts";
 
@@ -196,6 +196,8 @@ async function readByTavily(urls: string[], apiKey: string | undefined): Promise
 
 async function tavilyExtract(urls: string[], apiKey: string | undefined): Promise<TavilyExtractResponse> {
   if (!apiKey) throw new Error("TAVILY_API_KEY is not set");
+  liveUsage.extractCalls += 1;
+  liveUsage.extractUrls += urls.length;
   const response = await fetch("https://api.tavily.com/extract", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },

@@ -2,7 +2,7 @@
 // fixtures, replay answers from saved fixtures only.
 import type { WebMode } from "./config.ts";
 import { queryTerms } from "./excerpt.ts";
-import { hasFixture, readFixture, readNearestSearchFixture, replayStats, writeFixture } from "./fixtures.ts";
+import { hasFixture, liveUsage, readFixture, readNearestSearchFixture, replayStats, writeFixture } from "./fixtures.ts";
 import { createLogger } from "./log.ts";
 
 const log = createLogger("search");
@@ -92,6 +92,7 @@ function createLiveSearch(apiKey: string | undefined): SearchPort {
     if (request.startDate) body.start_date = request.startDate;
     if (request.endDate) body.end_date = request.endDate;
     if (request.filterByPublishedDate) body.filter_by_published_date = true;
+    liveUsage.searches += 1;
     return fetch("https://api.tavily.com/search", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },

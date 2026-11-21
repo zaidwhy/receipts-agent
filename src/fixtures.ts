@@ -10,6 +10,9 @@ export type FixtureKind = "search" | "page" | "feed";
 // What replay did, so an eval can say how much of a run came from exact fixtures.
 export const replayStats = { searchExact: 0, searchNearest: 0, pageHit: 0, pageMiss: 0 };
 
+// Tavily calls made in this process, so a run can say roughly how many credits it spent.
+export const liveUsage = { searches: 0, extractCalls: 0, extractUrls: 0 };
+
 export function resetReplayStats(): void {
   replayStats.searchExact = 0;
   replayStats.searchNearest = 0;
