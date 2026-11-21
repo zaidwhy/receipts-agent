@@ -177,10 +177,10 @@ test("recall tool arguments are checked and an empty result says there is no rec
 });
 
 test("only messages about the earlier conversation count as memory references", () => {
-  for (const text of ["What did I ask you earlier today?", "you told me on Monday", "we shortlisted five tools", "last time we talked", "Tell me again what was said earlier", "Did I ask about Neon?", "What did we discuss last week?", "did you say that?", "my question on Tuesday"]) {
+  for (const text of ["What did I ask you earlier today?", "you told me on Monday", "we shortlisted five tools", "last time we talked", "Tell me again what was said earlier", "Did I ask about Neon?", "What did we discuss last week?", "did you say that?", "my question on Tuesday", "Last Tuesday we compared Neon, Supabase and Render", "On Monday we narrowed it down to three", "the CRM you recommended on Friday", "what we looked at yesterday", "the plan I picked last week"]) {
     assert.equal(refersToPastConversation(text), true, text);
   }
-  for (const text of ["What does Neon cost on Monday?", "What changed on 3 November?", "hi"]) {
+  for (const text of ["What does Neon cost on Monday?", "What changed on 3 November?", "hi", "We need a CRM for 20 people", "I used Neon last week, is it cheaper now?"]) {
     assert.equal(refersToPastConversation(text), false, text);
   }
 });

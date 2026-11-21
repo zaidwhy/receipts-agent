@@ -213,11 +213,16 @@ export const RECALL_TOOL: ToolDefinition = {
   },
 };
 
-const PAST_REFERENCE = /\b(i asked|did i ask|you said|you told|did you say|did you tell|we shortlisted|we discussed|did we discuss|we talked|did we talk|last time|earlier|my question)\b/i;
+const PAST_REFERENCE = /\b(did i ask|did you say|did you tell|did we discuss|did we talk|last time|earlier|my question)\b/i;
+
+// "I/we/you" followed by a verb about talking or deciding. Code runs recall on this, so a
+// weaker model that forgets to call the recall tool still answers from memory.
+const CONVERSATION_VERB =
+  /\b(i|we|you)\s+(?:\w+\s+)?(asked|said|told|compared|shortlisted|discussed|talked|looked at|picked|chose|chosen|decided|narrowed|listed|mentioned|recommended|suggested|researched|covered|went over|reviewed)\b/i;
 
 // True when the message is about the earlier conversation, not just about a date.
 export function refersToPastConversation(message: string): boolean {
-  return PAST_REFERENCE.test(message);
+  return PAST_REFERENCE.test(message) || CONVERSATION_VERB.test(message);
 }
 
 export function parseRecallArguments(raw: string, now: Date): { query: RecallQuery } | { error: string } {
