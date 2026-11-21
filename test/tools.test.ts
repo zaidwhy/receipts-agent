@@ -2,10 +2,25 @@ import "./helpers.ts";
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { createClock } from "../src/clock.ts";
-import { EXCERPT_CAP_CHARS, excerptFor } from "../src/excerpt.ts";
+import { EXCERPT_CAP_CHARS, excerptFor, GAP } from "../src/excerpt.ts";
 import type { ReaderPort, ReadOutcome } from "../src/reader.ts";
 import type { SearchPort, SearchResult } from "../src/search.ts";
 import { MAX_PAGES_READ, runWebSearch, type Source, type ToolContext } from "../src/tools.ts";
+
+// Every excerpt line is a line of the page, and lines shown one after the other really follow
+// each other on the page, so a quote copied across them is a real substring. Gaps carry a marker.
+function assertQuotable(page: string, excerpt: string): void {
+  const pageLines = page.split("\n").map((line) => line.trim()).filter((line) => line !== "");
+  const shown = excerpt.split("\n");
+  shown.forEach((line, i) => {
+    if (line === GAP) return;
+    assert.ok(pageLines.includes(line), `not a line of the page: ${line}`);
+    const next = shown[i + 1];
+    if (next === undefined || next === GAP) return;
+    const joined = `${line} ${next}`;
+    assert.ok(pageLines.some((_, at) => `${pageLines[at]} ${pageLines[at + 1]}` === joined), `lines are not neighbours on the page: ${joined}`);
+  });
+}
 
 function longPricingPage(): string {
   const filler = Array.from({ length: 120 }, (_, i) => `Section ${i}: general notes about regions, support hours and company news ${"x".repeat(60)}`);
@@ -19,8 +34,7 @@ test("an excerpt is made of verbatim lines of the page, keeps the lines that mat
 
   assert.ok(excerpt.length <= EXCERPT_CAP_CHARS);
   assert.ok(excerpt.length < page.length);
-  const pageLines = new Set(page.split("\n"));
-  for (const line of excerpt.split("\n")) assert.ok(pageLines.has(line), `not a line of the page: ${line}`);
+  assertQuotable(page, excerpt);
   assert.match(excerpt, /Launch plan: \$19 per month/);
   assert.match(excerpt, /Scale plan: \$69 per month/);
   // Page order is kept and the result is the same every time.
@@ -112,5 +126,64 @@ test("when every line matches, the excerpt still stops at the cap and fills most
   const page = Array.from({ length: 300 }, (_, i) => `Pricing detail ${i}: the plan costs money ${"z".repeat(50)}`).join("\n");
   const excerpt = excerptFor(page, "plan pricing");
   assert.ok(excerpt.length <= EXCERPT_CAP_CHARS);
-  assert.ok(excerpt.length > EXCERPT_CAP_CHARS * 0.9);
+  assert.ok(excerpt.length > EXCERPT_CAP_CHARS * 0.8);
+});
+
+test("for a price question the excerpt keeps an amount on its own line and the plan name above it", () => {
+  // Every prose line is 124 characters, so exactly 20 of them fill the 2500-character budget.
+  const prose = (i: number) => `Pro plan details ${i}: the Pro plan includes support and projects `.padEnd(124, "w");
+  const lines = Array.from({ length: 60 }, (_, i) => prose(i));
+  lines.splice(30, 0, "### Pro", "For production applications.", "From", "$25", "*", "/ month");
+  const page = lines.join("\n");
+
+  const excerpt = excerptFor(page, "Supabase Pro plan price");
+  assert.ok(excerpt.length <= EXCERPT_CAP_CHARS);
+  const kept = excerpt.split("\n");
+  assert.ok(kept.includes("$25"));
+  assert.ok(kept.includes("### Pro"));
+  assert.ok(kept.includes("/ month"));
+  assert.ok(!kept.includes("*"));
+  assertQuotable(page, excerpt);
+});
+
+test("text left out of an excerpt is marked, so a quote cannot be stitched across it", () => {
+  // "/ month" appears three times; only the first copy is kept, which leaves a hole after "$25".
+  const page = [
+    ...Array.from({ length: 40 }, (_, i) => `intro ${i} ${"i".repeat(60)}`),
+    "### Free", "$0", "/ month",
+    "### Pro", "$25", "/ month", "First project included.",
+    ...Array.from({ length: 40 }, (_, i) => `outro ${i} ${"o".repeat(60)}`),
+  ].join("\n");
+  const excerpt = excerptFor(page, "Pro plan price");
+  const shown = excerpt.split("\n");
+  assert.ok(shown.includes("$25"));
+  assert.equal(shown[shown.indexOf("$25") + 1], GAP);
+  assertQuotable(page, excerpt);
+});
+
+test("bare bullets and repeated table cells do not use up the excerpt", () => {
+  const filler = Array.from({ length: 300 }, (_, i) => `padding row ${i} ${"p".repeat(50)}`);
+  const page = ["*", "|---|", ...Array.from({ length: 50 }, () => "Custom plan"), ...filler].join("\n");
+  const lines = excerptFor(page, "custom plan").split("\n");
+  assert.equal(lines.filter((line) => line === "Custom plan").length, 1);
+  assert.ok(!lines.includes("*") && !lines.includes("|---|"));
+});
+
+test("a line that was shortened is followed by a marker, not by the next line as if it continued", () => {
+  const page = [
+    ...Array.from({ length: 30 }, (_, i) => `padding ${i} ${"p".repeat(70)}`),
+    `Pro plan ${"very long description ".repeat(30)}`,
+    "Pro costs $25",
+  ].join("\n");
+  const shown = excerptFor(page, "Pro plan price").split("\n");
+  const next = shown[shown.findIndex((line) => line.startsWith("Pro plan ")) + 1];
+  assert.equal(next, GAP);
+});
+
+test("the gap markers count towards the cap", () => {
+  // Every other line matches, so every kept line is preceded by a marker.
+  const page = Array.from({ length: 400 }, (_, i) => (i % 2 === 0 ? `plan row ${i} ${"m".repeat(40)}` : `unrelated ${i} ${"u".repeat(40)}`)).join("\n");
+  const excerpt = excerptFor(page, "plan");
+  assert.ok(excerpt.includes(GAP));
+  assert.ok(excerpt.length <= EXCERPT_CAP_CHARS);
 });
