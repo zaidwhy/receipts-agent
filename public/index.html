@@ -58,6 +58,18 @@
   .sources a { color: var(--text); overflow-wrap: anywhere; }
   .sources .num { color: var(--accent); font-weight: 600; margin-right: 6px; }
   .error { color: var(--accent); }
+  .recheck { margin: 8px 0 12px; font-size: 14px; }
+  .recheck table { width: 100%; border-collapse: collapse; }
+  .recheck th { text-align: left; font-weight: 600; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .recheck th, .recheck td { padding: 5px 8px 5px 0; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: anywhere; }
+  .recheck .note { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .recheck .st-changed, .recheck .st-context_changed { color: var(--accent); font-weight: 600; }
+  .recheck .st-could_not_verify, .recheck .st-cannot_tell { color: var(--muted); font-style: italic; }
+  .recheck .tier { color: var(--muted); font-size: 12px; margin-left: 4px; }
+  .recheck ul { list-style: none; margin: 8px 0 0; padding: 0; }
+  .recheck li { margin: 3px 0; }
+  .recheck .label { color: var(--muted); font-size: 12px; }
+  .recheck .coverage { margin-top: 8px; color: var(--muted); font-size: 13px; }
   .card {
     max-width: 720px;
     margin: 0 auto 20px;
@@ -171,6 +183,74 @@
     turn.appendChild(list);
   }
 
+  const STATUS_WORDS = {
+    source_unchanged: "source unchanged",
+    changed: "changed",
+    context_changed: "context changed",
+    reworded: "reworded",
+    cannot_tell: "cannot tell",
+    could_not_verify: "could not verify",
+  };
+
+  function linkTo(url, label) {
+    const link = element("a", "", label);
+    link.href = url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    return link;
+  }
+
+  function hostOf(url) {
+    try { return new URL(url).hostname.replace(/^www\./, ""); } catch { return url; }
+  }
+
+  // The recheck box sits above the model's prose: claim table, then events, then the coverage line.
+  function createRecheckBox(pending) {
+    const box = element("div", "recheck");
+    const table = element("table");
+    const head = element("tr");
+    for (const title of ["Claim", "Then", "Now", "Source", "Status"]) head.appendChild(element("th", "", title));
+    table.appendChild(head);
+    table.hidden = true; // shown with the first row, so a recheck with only events has no empty table
+    const events = element("ul");
+    const coverage = element("div", "coverage");
+    box.append(table, events, coverage);
+    pending.turn.insertBefore(box, pending.body);
+    return { table, events, coverage };
+  }
+
+  function addRecheckRow(box, row) {
+    const tr = element("tr");
+    tr.appendChild(element("td", "", row.entity + ": " + row.claim));
+    tr.appendChild(element("td", "", row.then));
+    tr.appendChild(element("td", "", row.now === null ? "-" : row.now));
+    const source = element("td");
+    if (row.source_url) source.appendChild(linkTo(row.source_url, hostOf(row.source_url)));
+    else source.textContent = "-";
+    tr.appendChild(source);
+    const status = element("td", "st-" + row.status);
+    status.appendChild(document.createTextNode(STATUS_WORDS[row.status] || row.status));
+    status.appendChild(element("span", "tier", "tier " + row.tier));
+    if (row.note) status.appendChild(element("span", "note", row.note));
+    if (row.lead) {
+      const lead = element("span", "note", "Lead from a different source: ");
+      lead.appendChild(linkTo(row.lead.url, row.lead.title));
+      status.appendChild(lead);
+    }
+    tr.appendChild(status);
+    box.table.hidden = false;
+    box.table.appendChild(tr);
+  }
+
+  function addEventRow(box, event) {
+    const item = element("li");
+    const when = event.published_at ? new Date(event.published_at).toLocaleDateString(undefined, { day: "numeric", month: "short" }) : "undated, may predate";
+    item.appendChild(element("strong", "", event.entity + " "));
+    item.appendChild(element("span", "label", event.kind + ", " + when + (event.confirmed ? "" : ", unconfirmed") + ": "));
+    item.appendChild(linkTo(event.url, event.title));
+    box.events.appendChild(item);
+  }
+
   // Server-Sent Events arrive as blocks separated by a blank line.
   function parseEvent(block) {
     let name = "message";
@@ -190,6 +270,7 @@
     const status = element("div", "status", "thinking");
     pending.turn.appendChild(status);
     let answer = "";
+    let recheckBox = null;
 
     try {
       const response = await fetch("/chat", {
@@ -221,6 +302,15 @@
           } else if (event.name === "sources") {
             renderAnswer(pending.body, answer, event.data.sources);
             renderSources(pending.turn, event.data.sources);
+          } else if (event.name === "recheck_row") {
+            recheckBox ??= createRecheckBox(pending);
+            addRecheckRow(recheckBox, event.data);
+          } else if (event.name === "event_row") {
+            recheckBox ??= createRecheckBox(pending);
+            addEventRow(recheckBox, event.data);
+          } else if (event.name === "coverage") {
+            recheckBox ??= createRecheckBox(pending);
+            recheckBox.coverage.textContent = event.data.line;
           } else if (event.name === "error") {
             throw new Error(event.data.message);
           }

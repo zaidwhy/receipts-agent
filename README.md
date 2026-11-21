@@ -2,7 +2,7 @@
 
 Every answer is a receipt, so "is it still true?" is a diff of what the source said then against what it says now, plus a dated search for what is new, and the agent tells you exactly what it could not check.
 
-Status: the chat loop with web search, page reading, streaming, and receipt storage (claims anchored in page snapshots) is built. Recheck, discovery and memory are not yet.
+Status: the chat loop with web search, page reading, streaming, receipt storage (claims anchored in page snapshots), memory of earlier turns, and recheck (re-read cited pages, look for what shipped since) is built. Seed data, evals and the video are not yet.
 
 ## Run it
 
