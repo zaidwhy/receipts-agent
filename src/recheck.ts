@@ -340,9 +340,20 @@ async function judgePage(llm: LlmClient, url: string, pending: PendingClaim[], n
       verdicts.set(item.claim.id, { status: "cannot_tell", newValue: null, note: "the model reported a change but its new value is not on the page" });
       continue;
     }
+    // Same numbers under another currency label (CA$16 vs $16) is usually a regional copy of the page, not a price change.
+    if (entry.status === "changed" && entry.newValue && sameAmounts(item.claim.quote, entry.newValue)) {
+      verdicts.set(item.claim.id, { status: "reworded", newValue: null, note: "same amounts; only the currency label or wording differs, possibly a regional copy of the page" });
+      continue;
+    }
     verdicts.set(item.claim.id, { status: entry.status, newValue: entry.status === "changed" ? entry.newValue : null, note: entry.note });
   }
   return verdicts;
+}
+
+function sameAmounts(oldText: string, newText: string): boolean {
+  const amounts = (text: string) => (text.match(/\d[\d,]*(?:\.\d+)?/g) ?? []).map((n) => n.replace(/,/g, "")).sort().join(" ");
+  const before = amounts(oldText);
+  return before !== "" && before === amounts(newText);
 }
 
 const JUDGE_SYSTEM =

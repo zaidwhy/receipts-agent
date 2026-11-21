@@ -119,6 +119,17 @@ test("a new value that is not on the page is not reported as a change", async ()
   assert.equal(result.rows[0]?.now, null);
 });
 
+test("the same amount under another currency label is reworded, not changed", async () => {
+  const db = memoryDb();
+  seedPricing(db, { quote: "Starting from CA$16", page: "Acme add-ons. Projects: Starting from CA$16. Contact sales." });
+  const regional = "Acme add-ons. Projects: Starting from $16. Contact sales.";
+  const llm = new ScriptedLlm([() => reply([{ id: 1, status: "changed", new_value: "Starting from $16" }])]);
+  const result = await run(db, depsFor(db, new FakeReader(() => regional), llm));
+
+  assert.equal(result.rows[0]?.status, "reworded");
+  assert.equal(result.rows[0]?.now, null);
+});
+
 test("a model reply that is not JSON leaves the claim as cannot tell", async () => {
   const db = memoryDb();
   seedPricing(db);
