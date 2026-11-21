@@ -258,3 +258,21 @@ test("claims are found by question id (through the answer that follows it) or by
   assert.equal(loadClaims(db, { turnIds: [1], entities: ["OtherDB"] }).length, 2);
   assert.equal(loadClaims(db, {}).length, 0);
 });
+
+test("a price claim worded without price words still shows the model the price lines of a long new page", async () => {
+  const db = memoryDb();
+  seedExchange(db, {
+    question: "What does AcmeDB cost?",
+    answer: "Starting from $16.",
+    askedAt: "2026-11-21T04:00:00.000Z",
+    entities: ["AcmeDB"],
+    claims: [
+      { text: "AcmeDB: Starting from $16", kind: "price", entity: "AcmeDB", quote: "Starting from $16", url: URL_A, page: "Starting from $16 for the first plan", fetchedAt: "2026-11-21T04:00:04.000Z" },
+    ],
+  });
+  const navigation = Array.from({ length: 300 }, (_, index) => `Menu item ${index} about products and teams`).join("\n");
+  const newPage = `${navigation}\nGrowth plan $24 / month per seat\n${navigation.replace(/Menu/g, "Footer")}`;
+  const llm = new ScriptedLlm([() => reply([])]);
+  await run(db, depsFor(db, new FakeReader(() => newPage), llm));
+  assert.match(promptOf(llm.requests[0] as RecordedRequest), /Growth plan \$24 \/ month/);
+});

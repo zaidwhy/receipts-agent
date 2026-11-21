@@ -193,6 +193,8 @@ async function recheckPage(deps: RecheckDeps, claims: StoredClaim[], totals: Cla
   const readAt = deps.clock.now().toISOString();
   const saved = saveSnapshot(deps.db, url, primary.page.finalUrl, primary.page.text, primary.page.extractor, readAt, primary.page.publishedAt ?? undefined);
   const newText = saved.text;
+  // The stored text has its line breaks folded into spaces, which would make the whole page one line to the excerpt picker.
+  const rawNewText = primary.page.text;
   const plainText = plain?.page ? normalizeText(plain.page.text) : null;
   const plainIsSubstantial = plainText !== null && plainText.length > SUBSTANTIAL_TEXT_CHARS;
 
@@ -219,13 +221,14 @@ async function recheckPage(deps: RecheckDeps, claims: StoredClaim[], totals: Cla
       pending.push({ claim, tier: 2, oldContext: oldContextFor(claim, oldText), newContext: contextAround(newText, claim.quote), secondRead: null });
     } else {
       // Quote lost, never anchored, or the two reads disagree: the model compares old context with an excerpt chosen by the claim's words.
-      const search = `${claim.text} ${claim.quote}`;
+      // A price claim like "Starting from $16" has no price words of its own; without them the excerpt falls back to the top of the page (its menu).
+      const search = `${claim.text} ${claim.quote}${claim.kind === "price" ? " price pricing" : ""}`;
       pending.push({
         claim,
         tier: 3,
         oldContext: oldContextFor(claim, oldText),
-        newContext: excerptFor(newText, search, 1500),
-        secondRead: disagree && plainText ? excerptFor(plainText, search, 1000) : null,
+        newContext: excerptFor(rawNewText, search, 1500),
+        secondRead: disagree && plain?.page ? excerptFor(plain.page.text, search, 1000) : null,
       });
     }
   }
