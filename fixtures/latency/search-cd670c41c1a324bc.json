@@ -1,0 +1,42 @@
+{
+  "request": {
+    "query": "Cloudflare Workers Paid plan monthly price",
+    "start_date": null,
+    "end_date": null
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://makerkit.dev/pricing-calculator/cloudflare",
+        "title": "Cloudflare Workers Pricing Calculator (2026) — Estimate Your Monthly Bill",
+        "snippet": "The Workers Paid plan costs $5/month and includes 10 million requests and 30 million CPU milliseconds. Most small-to-medium apps stay well within those limits and pay only the $5 base fee. High-traffic apps pay $0.30 per additional million requests and $0.02 per additional million CPU-ms.\n\n### Does Cloudflare charge for bandwidth? [...] Cloudflare Workers Paid costs $5/month base and includes 10 million requests and 30 million CPU milliseconds. Beyond the included tier, additional requests cost $0.30 per million and additional CPU time costs $0.02 per million milliseconds. Workers executions are priced on CPU time — the time your code is actually executing — not wall-clock time. A function waiting on a database query doesn't rack up CPU charges during the wait. [...] # Cloudflare Workers Pricing Calculator\n\n## Estimate your real monthly Cloudflare bill for Workers, R2, D1, and KV — and see what the same workload costs on every other platform.\n\n1. Pick a workload\n\nChoose the preset closest to your project. You can fine-tune the numbers in step 2.\n\n2. Customize (optional)\n\nTweak the assumptions to match your real numbers.\n\nCloudflareWorkers Paid\n\nVerified 2026-05\n\nEstimated monthly cost\n\n$5.04/mo\n\nWorkers Paid (base)\n\n10M requests + 30M CPU-ms included\n\n$5.00",
+        "publishedDate": "2026-05-21T00:00:00.000Z"
+      },
+      {
+        "url": "https://developers.cloudflare.com/workers/platform/pricing",
+        "title": "Pricing · Cloudflare Workers docs",
+        "snippet": "The Workers Paid plan includes Workers, Pages Functions, Workers KV, Hyperdrive, and Durable Objects usage for a minimum charge of $5 USD per month for an account. The plan includes increased initial usage allotments, with clear charges for usage that exceeds the base plan. There are no additional charges for data transfer (egress) or throughput (bandwidth).\n\nAll included usage is on a monthly basis.\n\n## Workers [...] Containers are billed for every 10ms that they are actively running at the following rates, with included monthly usage as part of the $5 USD per month Workers Paid plan:\n\n| Memory | CPU | Disk |\n --- \n| Free | N/A | N/A | N/A |\n| Workers Paid | 25 GiB-hours/month included   +$0.0000025 per additional GiB-second | 375 vCPU-minutes/month  + $0.000020 per additional vCPU-second | 200 GB-hours/month   +$0.00000007 per additional GB-second | [...] | Free plan | Paid plan |\n --- |\n| Requests | 100,000 / day | 1 million / month, + $0.15/million  Includes HTTP requests, RPC sessions1, WebSocket messages2, and alarm invocations |\n| Duration3 | 13,000 GB-s / day | 400,000 GB-s / month, + $12.50/million GB-s4,5 |\n\nFootnotes\n\n1 Each RPC session is billed as one request to your Durable Object. Every RPC method call on a Durable Objects stub is its own RPC session and therefore a single billed request.",
+        "publishedDate": "2026-10-02T00:00:00.000Z"
+      },
+      {
+        "url": "https://www.activepieces.com/blog/cloudflare-workers-pricing-2026-free-vs-paid-plans",
+        "title": "Cloudflare Workers Pricing 2026: Free vs Paid Plans",
+        "snippet": "According to Developers, start on Free at $0, and move to Paid at $5 a month the day you hit the daily request or CPU-time cap, which is a handy line to know whether you're wiring up a side project or a workflow built with Activepieces.\n\nEnterprise is custom-quoted and only matters once a contract or compliance requirement forces it, so the standard user's starting cost is $5 per month, with overage and storage billed on top. [...] ### Solo developer: Free at $0 until the daily cap\n\nA personal project or a prototype you're still pitching carries no cost on Free.\n\nThe limit is the daily cap: once you reach it, requests stop until the next day.\n\n### Small team in production: Paid, $5 minimum\n\nThe first time a real user hits the cap, buy Paid at $5 a month.\n\n### Heavy traffic or API volume: Paid plus overage [...] | Situation | Recommended plan | Monthly cost | The catch that pushes up a tier |\n ---  --- |\n| Hobby project | Free | $0 | The daily request cap stops the Worker mid-day |\n| Side project hitting the daily cap | Paid | $5 minimum | Storage products are billed separately from the Worker |\n| Production API | Paid plus usage | $5 plus overage | CPU time, not request count, drives the bill |\n| Enterprise or compliance | Enterprise | Custom quote | SSO, SLAs or contract terms Paid doesn't cover |",
+        "publishedDate": "2026-11-09T10:37:15.000Z"
+      },
+      {
+        "url": "https://developers.cloudflare.com/containers/platform/pricing",
+        "title": "Pricing · Cloudflare Containers docs",
+        "snippet": "Containers are billed for every 10ms that they are actively running at the following rates, with included monthly usage as part of the $5 USD per month Workers Paid plan:\n\n| Memory | CPU | Disk |\n --- \n| Free | N/A | N/A |\n| Workers Paid | 25 GiB-hours/month included   +$0.0000025 per additional GiB-second | 375 vCPU-minutes/month  + $0.000020 per additional vCPU-second | 200 GB-hours/month   +$0.00000007 per additional GB-second |",
+        "publishedDate": "2026-11-13T07:00:00.000Z"
+      },
+      {
+        "url": "https://www.spendhound.com/marketplace/cloudflare-pricing",
+        "title": "Cloudflare Pricing 2026: Plans, Spend Data, and How to Pay Less",
+        "snippet": "| Product | Free tier | Paid rate |\n --- \n| Workers (serverless functions) | 100k requests/day, 10 ms CPU/request | $0.30/million requests, $0.02/million CPU ms |\n| R2 (object storage) | 10 GB storage, 1M Class A ops, 10M Class B ops | $0.015/GB-month, $4.50/M Class A, $0.36/M Class B |\n| D1 (serverless SQL) | 5 GB storage, 5M rows read/day, 100K rows written/day | $0.75/GB-month, $0.001/M rows read, $1.00/M rows written | [...] Cloudflare's developer products — Workers, R2, D1, KV, Durable Objects, Queues, Vectorize, Workers AI, Images, Stream, and others — are priced on a pure usage basis. Each product has a generous free tier (daily or monthly allowance) and then charges per unit of consumption (requests, CPU milliseconds, GB stored, rows read/written, etc.). There is no bundled \"developer plan\" — you pay only for what each product consumes beyond the free allowance.\n\n### Add-ons [...] At $7/user/month on pay-as-you-go, a 500-person organization pays $3,500/month ($42,000/year). There's no volume discount on the self-serve tier. Organizations above ~100 users should explore Enterprise pricing where per-seat rates decrease with commitment.\n\n### No hidden fees",
+        "publishedDate": "2026-03-24T00:00:00.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}

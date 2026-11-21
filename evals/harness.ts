@@ -75,7 +75,7 @@ export function buildDeps(config: Config, options: { now: string; db: Database; 
     },
   };
   return {
-    deps: { llm: watchingLlm, search: countingSearch, reader: countingReader, feeds: createFeedPort(config.webMode, config.fixturesDir), db: options.db, clock: createClock(options.now) },
+    deps: { llm: watchingLlm, search: countingSearch, reader: countingReader, feeds: createFeedPort(config.webMode, config.fixturesDir), db: options.db, clock: createClock(options.now), speculativeSearch: config.speculativeSearch, compactPrompt: config.compactPrompt },
     counts,
     modelCalls,
   };

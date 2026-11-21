@@ -1,0 +1,42 @@
+{
+  "request": {
+    "query": "Neon pricing Launch plan cost",
+    "start_date": null,
+    "end_date": null
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://selfhost.dev/blog/neon-pricing-cost-of-serverless-postgres",
+        "title": "Neon Pricing: The Honest Cost of Serverless Postgres",
+        "snippet": "| Plan | Compute | Storage | Autoscaling | Best for |\n ---  --- \n| Free | $0 (100 CU-hours/project) | $0 (1 GB/project) | Up to 2 CU | Prototypes, learning, side projects |\n| Launch | $0.106/CU-hour | $0.35/GB-month | Up to 16 CU | Startups and growing production apps |\n| Scale | $0.222/CU-hour | $0.35/GB-month | Up to 16 CU autoscaling (or fixed sizes up to 56 CU) | Production needing compliance and SLAs | [...] The exact same database on Scale ($0.222/CU-hour) costs about $683. Neon’s own pricing page lands in the same range: it quotes a typical spend of $701 a month on Scale for a high-load, 100 GB database, and $15 a month on Launch for an intermittent 1 GB one. [...] One quick accuracy check before you budget: if you are reading an older comparison, verify its numbers. A lot of guides still quote a $5 monthly minimum on Launch, a $69 minimum on Scale, or $0.14/CU-hour compute. All three are out of date. Neon removed the minimums in December 2025 and cut Launch compute to $0.106/CU-hour, so any total built on the old figures is too high.",
+        "publishedDate": "2026-06-25T08:25:10.000Z"
+      },
+      {
+        "url": "https://neon.com/pricing",
+        "title": "Neon Pricing: Free Plan With 100 Projects, Typical Spend $15/Month",
+        "snippet": "`Monthly CU-hours = [average CU size] × [number of hours the compute runs in the month]``Monthly compute cost = [monthly CU-hours] × [CU-hour price]`\nThe CU-hour price depends on your pricing plan:\n\n       Launch plan: $0.106 per CU-hour\n       Scale plan: $0.222 per CU-hour\n\nRemember that when your database is idle, compute can scale down to zero, so you don't consume CU-hours while it's not running. Learn more about Neon's billing. [...] Example: The Launch plan includes 10 branches per project. If you already have 10 branches but create 2 additional branches and keep them for 5 hours each, that'd be 10 extra branch-hours total: 10 × $0.002/hour = $0.02\n\nHow to avoid extra branch charges [...] AI GatewayImage 22Image 23\n\n       Realtime (Beta)Image 24Image 25\n\n   ### Launch\n\n#### Usage-based\n\nTypical spend:$15/mo Image 26Image 27 Based on:Intermittent load, 1 GB    Get started \n\nLakebase Postgres\n\n       100 projectsImage 28Image 29\n\n       $0.106 per CU-hrImage 30Image 31\n\n       $0.35 per GB-month\n\n       Sizes up to 16 CU (64 GB RAM)\n\n       3-day metrics/logs in UI\n\nBackend\n\n       Managed Better AuthImage 32Image 33\n\n       Object StorageImage 34Image 35",
+        "publishedDate": "2026-04-02T15:55:21.000Z"
+      },
+      {
+        "url": "https://www.jetadmin.io/blog/neon-pricing",
+        "title": "Neon Pricing 2026: Plans, Costs & Limits",
+        "snippet": "Summarize with AI\n\n\n\nShare article\n\n\n\nNeon pricing starts with a free plan; paid Launch and Scale plans charge for actual usage with no monthly minimum. Database compute costs $0.106 per CU-hour on Launch and $0.222 on Scale, with storage billed separately. The main budget question is how much compute runs, and for how long—not how many colleagues log in. [...] | Plan | Billing | Database allowance or rate | When it fits |\n ---  --- |\n| Free | $0; no annual commitment | 100 CU-hours and 0.5 GB storage per project | Experiments and small workloads within every free limit |\n| Launch | Usage billed monthly; no fixed annual equivalent | $0.106/CU-hour; $0.35/GB-month | Applications that exceed Free without requiring Scale controls |",
+        "publishedDate": "2026-09-26T05:02:25.000Z"
+      },
+      {
+        "url": "https://makerkit.dev/pricing-calculator/neon",
+        "title": "Neon Pricing Calculator (2026) — Estimate Your Monthly Bill",
+        "snippet": "A side project with scale-to-zero can cost as little as $1–3/month. A production SaaS on 1 CU always-on runs about $78/month before storage. Neon has no monthly minimum on the Launch plan — you pay only for what you use.\n\n### Does Neon have a free plan?\n\nYes. The Free plan includes 100 CU-hours/month, 0.5 GB storage, and up to 2 CU autoscale. It is suitable for development and side projects. The Launch plan removes these limits and enables scale-to-zero with configurable autoscale up to 8 CU. [...] ## How Neon pricing works in 2026\n\nNeon is a serverless Postgres database with two distinct billing dimensions: compute andstorage. Compute is measured in Compute Units (CU) — one CU equals 1 vCPU and 4 GB RAM — and billed per hour of active use at$0.106/CU-hour on the Launch plan. Storage is$0.35/GB-month. Egress is 100 GB/month included, then $0.10/GB. [...] Neon Launch\n\nVerified 2026-09\n\nEstimated monthly cost · 100 GB storage ·2 GB RAM\n\n$73.16/mo\n\nPlatform fee\n\nNo monthly minimum — pay-as-you-go\n\nincluded\n\nCompute (0.5 CU × 720h)\n\n0.5 CU × 720 hrs × $0.106/CU-hr\n\n$38.16\n\nStorage\n\n100 GB × $0.35/GB-mo\n\n$35.00\n\nEgress\n\n30 GB — within 500 GB included\n\nincluded\n\nCompute: 0.5 CU = 0.5 vCPU, 2 GB RAM. Always-on: 720 active hours/month billed at full CU rate.",
+        "publishedDate": "2026-05-21T00:00:00.000Z"
+      },
+      {
+        "url": "https://neon.com/docs/introduction/plans",
+        "title": "Neon plans - Neon Docs",
+        "snippet": "1 extra branch × 1 month = 1 branch-month\n\nCost: $1.50/branch-month (~$0.002/hour).\n\nExample: The Launch plan includes 10 branches/project. You create 2 extra branches for 5 hours each → 10 extra branch-hours × $0.002/hour = ~$0.02 total.\n\n> Extra branches are not available on the Free plan. Delete branches or upgrade if you need more.\n\nThe maximum number of branches you can have per project:\n\n   Launch: 5,000 branches/project\n   Scale: 5,000 branches/project [...] ### Launch plan\n\n       Compute: ~10 CU-hours = 1 CU × 10 hours: $1.06  \n_(10 CU-hours × $0.106/CU-hour)_\n\n       Root branch storage: 2 GB: $0.70  \n_(2 GB × $0.35/GB-month)_\n\n       Child branch storage: 1 GB: $0.35  \n_(1 GB × $0.35/GB-month)_\n\n       Instant restore history: 1 GB: $0.20  \n_(1 GB × $0.20/GB-month)_\n\nAmount due:$2.31\n\n   Example 2\n\n       Compute: ~120 CU-hours = 1 CU × 120 hours (about 5 billable days): $12.72  \n_(120 CU-hours × $0.106/CU-hour)_ [...] 0.25 CU for 4 hours = 1 CU-hour\n   2 CU for 3 hours = 6 CU-hours\n   8 CU for 2 hours = 16 CU-hours\n\nFree: 100 CU-hours/project/month (enough to run a 0.25 CU compute in a project for 400 hours/month).  \nLaunch: $0.106/CU-hour  \nScale: $0.222/CU-hour\n\n> All computes in your project count toward usage. Each branch has a read-write compute by default; read replicas add read-only computes.",
+        "publishedDate": "2025-05-30T00:00:00.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}

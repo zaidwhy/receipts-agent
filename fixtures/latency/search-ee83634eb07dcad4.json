@@ -1,0 +1,42 @@
+{
+  "request": {
+    "query": "Supabase pricing Pro plan monthly cost",
+    "start_date": null,
+    "end_date": null
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://www.jetadmin.io/blog/supabase-pricing-2026-guide-to-plans-limits-and-real-world-costs",
+        "title": "Supabase Pricing: 2026 Guide to Plans, Limits, and Real-World Costs",
+        "snippet": "### Pro plan\n\nThe pro plan is where most production apps start. At $25 per month per organization, it delivers meaningfully higher usage limits, daily backups, and email support - the baseline for serious workloads.\n\nThe Pro plan costs $25/month and supports 100,000 MAUs. It includes a $10/month compute credit per project, which covers one micro instance (1 gb ram, 2-core arm). Extra projects beyond the first are billed at roughly $10/month each for compute. [...] - Supabase offers four pricing plans - Free ($0), Pro ($25/month), Team ($599/month), and Enterprise (custom pricing) - billed per organization with usage-based overages for database size, file storage, egress, and monthly active users.\n- The supabase free tier gives you two free projects with a 500 mb database, 1 gb file storage, 5 GB egress, and 50,000 monthly active users, but free projects pause after one week of inactivity. [...] | Feature | Free | Pro | Team | Enterprise |\n------\n| Monthly cost | $0 | $25 | $599 | Custom |\n| Billing basis | Per org | Per org | Per org | Per org (annual) |\n| Database storage | 500 MB | 8 GB | 8 GB | Custom |\n| File storage | 1 GB | 100 GB | 100 GB | Custom |\n| Egress (uncached) | 5 GB | 250 GB | 250 GB | Custom |\n| Cached egress | 5 GB | 250 GB | 250 GB | Custom |\n| Auth MAUs | 50,000 | 100,000 | 100,000 | Custom |\n| Active projects | 2 | Unlimited | Unlimited | Unlimited |",
+        "publishedDate": "2026-07-24T10:35:38.000Z"
+      },
+      {
+        "url": "https://brandexponents.com/supabase-pricing",
+        "title": "Supabase Pricing in 2026: What the $25 Pro Plan Really Costs (and 3 Ways to Pay Less) - BE",
+        "snippet": "| Plan | Price | What you get | The catch |\n ---  --- |\n| Free | $0 | 500 MB database, 1 GB file storage, 2 active projects | Projects pause after 1 week of inactivity |\n| Pro | From $25/mo | 100,000 monthly active users, 8 GB disk per project, 250 GB egress, 100 GB file storage, daily backups kept 7 days | Includes $10/mo of compute credits, which covers exactly one Micro project |\n| Team | From $599/mo | Pro plus SSO and compliance features | A 24x jump with nothing in between | [...] | Your situation | Best move | Monthly cost |\n --- \n| One app, using auth, storage and realtime | Stay on Pro | $25 and up |\n| Several projects, want the real Supabase API | Self-host on a 4 to 8 GB Docker host | The server, plus your time |\n| You mostly use the database | Postgres plus your app on one pod | $7 flat |\n| Hobby project you open twice a month | Anything but the free tier, or accept the pause | $0 to $7 |\n\n## FAQ\n\n### Is Supabase really free? [...] October 5, 2026\n\nSupabase Pro is “from $25/month”. The word doing the work in that sentence is “from”. I went through the pricing page and the cost-control docs line by line on 5 October 2026 to work out what a real project pays, where the bill grows, and when it is worth leaving. Short version: one small project really is $25. Three projects is $45 before a single user shows up. And the spend cap protects you from less than most people assume.\n\n## The short answer",
+        "publishedDate": "2026-10-05T03:01:32.000Z"
+      },
+      {
+        "url": "https://schematichq.com/blog/supabase-pricing",
+        "title": "Supabase Pricing Page and Costs Explained (2026)",
+        "snippet": "### Pro\n\nPro is Supabase's most popular pricing plan. It is the main starting point for companies building production applications.\n\nImage\n\nSource: Supabase.com\n\nAt $25/month, the Pro plan supports up to 100,000 monthly active users. It also includes a larger database size (8 GB per project), more storage (100 GB), higher bandwidth consumption (250 GB egress), and daily backups for seven days. Plus, it unlocks email support. [...] Supabase is not costly for small teams or early-stage startups. The Free tier offers generous limits, while the Pro plan starts at $25/month. Costs only increase when your app uses more compute, storage, bandwidth, monthly active users, or paid add-ons.\n\n### Is Supabase cheaper than AWS?\n\nSupabase can be cheaper and easier to budget than AWS because it offers predictable pricing plans. AWS may provide more services, but pricing can be harder to predict across multiple products. [...] Supabase is a masterclass in predictable pricing by using tiered plans, transparent overage policies, cost control, linked docs, and detailed FAQs.\n It offers four pricing plans: Free for basic projects, Pro ($25/month) for production apps, Team ($599/month) for scaling companies, and Enterprise for large organizations with custom needs.",
+        "publishedDate": "2026-05-26T00:00:00.000Z"
+      },
+      {
+        "url": "https://makerkit.dev/pricing-calculator/supabase",
+        "title": "Supabase Pricing Calculator (2026) — Estimate Your Monthly Bill",
+        "snippet": "Supabase Pro costs $25/month and bundles far more than just a database: Auth (50,000 MAU included), Storage (100 GB included), Edge Functions (2M invocations included), Realtime (200 concurrent connections included), and the Postgres database with Row Level Security. This is a Backend-as-a-Service platform, not a pure database — comparing it against database-only providers requires accounting for the additional services you would otherwise pay for separately. [...] Database pricing is highly variable. Costs depend on query patterns, connection pooling, IOPS, backup retention, and plan-specific limits that this calculator cannot fully model. Treat these as order-of-magnitude estimates and verify against each provider's pricing page and your actual usage.\n\nSupabasePro\n\nVerified 2026-09\n\nEstimated monthly cost · 100GB storage ·2GB RAM\n\n$41.50/mo\n\nPro plan base\n\nIncludes Auth, Storage, Edge Functions, Realtime + DB — $10 compute credit included\n\n$25.00 [...] The Pro plan includes a $10/month compute credit, which covers one Micro instance (2-core ARM, 1 GB RAM). Upgrading to a larger compute tier costs the difference: Small ($15/mo) = $5 extra, Medium ($60/mo) = $50 extra, Large ($110/mo) = $100 extra.\n\n## Supabase compute tiers",
+        "publishedDate": "2026-05-20T00:00:00.000Z"
+      },
+      {
+        "url": "https://www.activepieces.com/blog/supabase-pricing-free-tier-limits-pro-costs-egress",
+        "title": "Supabase Pricing: Free Tier Limits, Pro Costs & Egress",
+        "snippet": "| Tier | Database Size | Egress | Monthly Active Users (MAUs) |\n ---  --- |\n| Free | 500MB | 5GB | 50,000 |\n| Pro ($25/mo) | 8GB (included) | 250GB (included) | 100,000 (included) |\n| Team ($599/mo) | Unlimited (usage-based) | Unlimited (usage-based) | Unlimited (usage-based) |\n| Enterprise | Unlimited | Unlimited | Unlimited |\n\nPrices and plan limits checked against supabase.com on November 12, 2026.\n\n### Scaling limits and user caps [...] Yes, Supabase has a free tier at no cost, with 500MB of database space, 5GB of egress and 50,000 monthly active users. It suits prototyping, but projects pause after 7 days of inactivity. Production apps need the Pro plan, which starts at $25 per month and removes the inactivity pause. [...] 50,000 monthly active users is the cap for the Free plan, so a viral launch can hit the plan's limits if the account is not upgraded.\n\nMoving to the Pro plan at $25 per month increases this limit to 100,000 users, so scaling your application becomes significantly more affordable as your user base grows. At the Team tier, starting at $599 per month, the pricing model shifts entirely toward usage-based billing.\n\nEgress costs remain the most volatile variable:",
+        "publishedDate": "2026-11-12T03:17:29.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}

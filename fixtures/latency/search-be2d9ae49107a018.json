@@ -1,0 +1,42 @@
+{
+  "request": {
+    "query": "Cloudflare Workers pricing paid plan minimum per month included requests",
+    "start_date": null,
+    "end_date": null
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://shattered.io/cloudflare-workers-pricing-vs-lambda-azure-functions-cloud-run-2026",
+        "title": "Cloudflare Workers Pricing: $5 Plan vs 3 Rivals [2026]",
+        "snippet": "Cloudflare’s documentation lists Workers Paid at a $5 monthly minimum per account. That fee includes 10 million requests and 30 million CPU milliseconds each month. Past those allowances, requests cost $0.30 per million and CPU time costs $0.02 per million CPU milliseconds. Storage in the Workers bundle includes 1 GB-month, then $0.20 per GB-month. [...] | Line item | Cloudflare Workers Paid | AWS Lambda Event Functions | Azure Functions Flex Consumption |\n------|\n| Base fee | $5/month minimum | None | None |\n| Included requests | 10M/month | 1M/month | 250,000 executions/month |\n| Included compute | 30M CPU ms/month | 400,000 GB-s/month | 100,000 GB-s/month |\n| Extra requests | $0.30 per million | $0.20 per million | See Azure pricing page |\n| Extra compute | $0.02 per million CPU ms | $0.0000166667 per GB-s | See Azure pricing page | [...] Workers Paid is $5 a month per account and includes 10 million requests and 30 million CPU milliseconds. Extra requests cost $0.30 per million and extra CPU time costs $0.02 per million CPU milliseconds. The Free plan allows 100,000 requests per day.\n\n### Is Cloudflare Workers cheaper than AWS Lambda?",
+        "publishedDate": "2026-11-02T22:18:48.000Z"
+      },
+      {
+        "url": "https://makerkit.dev/pricing-calculator/cloudflare",
+        "title": "Cloudflare Workers Pricing Calculator (2026) — Estimate Your Monthly Bill",
+        "snippet": "The Workers Paid plan costs $5/month and includes 10 million requests and 30 million CPU milliseconds. Most small-to-medium apps stay well within those limits and pay only the $5 base fee. High-traffic apps pay $0.30 per additional million requests and $0.02 per additional million CPU-ms.\n\n### Does Cloudflare charge for bandwidth? [...] Cloudflare Workers Paid costs $5/month base and includes 10 million requests and 30 million CPU milliseconds. Beyond the included tier, additional requests cost $0.30 per million and additional CPU time costs $0.02 per million milliseconds. Workers executions are priced on CPU time — the time your code is actually executing — not wall-clock time. A function waiting on a database query doesn't rack up CPU charges during the wait. [...] # Cloudflare Workers Pricing Calculator\n\n## Estimate your real monthly Cloudflare bill for Workers, R2, D1, and KV — and see what the same workload costs on every other platform.\n\n1. Pick a workload\n\nChoose the preset closest to your project. You can fine-tune the numbers in step 2.\n\n2. Customize (optional)\n\nTweak the assumptions to match your real numbers.\n\nCloudflareWorkers Paid\n\nVerified 2026-05\n\nEstimated monthly cost\n\n$5.04/mo\n\nWorkers Paid (base)\n\n10M requests + 30M CPU-ms included\n\n$5.00",
+        "publishedDate": "2026-05-21T00:00:00.000Z"
+      },
+      {
+        "url": "https://developers.cloudflare.com/workers/platform/pricing",
+        "title": "Pricing · Cloudflare Workers docs",
+        "snippet": "The Workers Paid plan includes Workers, Pages Functions, Workers KV, Hyperdrive, and Durable Objects usage for a minimum charge of $5 USD per month for an account. The plan includes increased initial usage allotments, with clear charges for usage that exceeds the base plan. There are no additional charges for data transfer (egress) or throughput (bandwidth).\n\nAll included usage is on a monthly basis.\n\n## Workers [...] | Unit | Workers Free | Workers Paid |\n --- \n| Requests (millions) | 100,000 per day (shared with Workers requests) | 10 million included per month + $0.30 per additional million |\n| CPU time (ms) | 10 milliseconds of CPU time per invocation | 30 million CPU milliseconds included per month + $0.02 per additional million CPU milliseconds |\n| Storage (GB-mo) | 1 GB-month | 1 GB-month included + $0.20/ GB-month | [...] | Free plan | Paid plan |\n --- |\n| Requests | 100,000 / day | 1 million / month, + $0.15/million  Includes HTTP requests, RPC sessions1, WebSocket messages2, and alarm invocations |\n| Duration3 | 13,000 GB-s / day | 400,000 GB-s / month, + $12.50/million GB-s4,5 |\n\nFootnotes\n\n1 Each RPC session is billed as one request to your Durable Object. Every RPC method call on a Durable Objects stub is its own RPC session and therefore a single billed request.",
+        "publishedDate": "2026-10-02T00:00:00.000Z"
+      },
+      {
+        "url": "https://neptuneinfotech.in/blogs/understanding-cloudflare-workers-pricing-the-5-minimum-explained",
+        "title": "Blog | Neptune Infotech",
+        "snippet": "Cloudflare Workers is defined as a serverless platform that runs JavaScript, Rust, or C code at the edge, enabling ultra‑low‑latency applications.\n\n## What’s Included in the $5 Paid Plan?\n\nThe entry‑level paid tier provides a generous baseline for most production workloads.\n\n 10 million requests per month\n 30 million CPU milliseconds per month\n Access to Workers, Pages Functions, KV, Hyperdrive, and Durable Objects\n No charge for data transfer or bandwidth\n\n## How Overages Are Charged [...] The Free tier is suitable for low‑traffic sites but has strict caps.\n\nAccording to Cloudflare Workers Limits & Pricing 2026 (May 28, 2026), the Free plan includes 100,000 requests per day and 10 ms CPU per invocation.\n\nIf your daily traffic consistently exceeds these limits or you need advanced features like Durable Objects, the $5 paid plan becomes cost‑effective.\n\n## Best Practices to Keep Costs Low on Workers",
+        "publishedDate": "2026-10-25T15:00:00.000Z"
+      },
+      {
+        "url": "https://blog.blazingcdn.com/en-us/cloudflares-pricing-changes-in-2025-what-you-need-to-know",
+        "title": "Cloudflare Pricing in 2025: What’s Changing and How It Affects You",
+        "snippet": "The Workers free tier includes 100,000 requests per day. The paid tier ($5/month) includes 10 million requests and 30 million milliseconds of CPU time. Beyond that, additional requests cost $0.02 per million and CPU time costs $12.50 per million milliseconds. Teams running heavy edge compute should model CPU time carefully, as it is now the primary cost driver.\n\n### What changed in Cloudflare pricing in 2025 and 2026? [...] New in 2026: Cloudflare Workers pricing has also been adjusted. The free tier still includes 100,000 requests per day. The paid Workers tier (bundled into the $5/month Workers Paid plan) now meters CPU time more granularly, charging $0.02 per additional million requests and $12.50 per additional million milliseconds of CPU time. For teams running heavy compute at the edge, this is the line item that surprises.\n\n## Cloudflare Plans in 2026: Free vs Pro vs Business vs Enterprise",
+        "publishedDate": "2026-11-11T00:00:00.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}

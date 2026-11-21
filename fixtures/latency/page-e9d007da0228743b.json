@@ -1,0 +1,15 @@
+{
+  "request": {
+    "url": "https://www.cloudflare.com/plans/developer-platform/"
+  },
+  "response": {
+    "ok": true,
+    "page": {
+      "url": "https://www.cloudflare.com/plans/developer-platform/",
+      "finalUrl": "https://www.cloudflare.com/plans/developer-platform/",
+      "text": "[Sign up](https://dash.cloudflare.com/sign-up)\n\n# Security, Performance, and Reliability - all in one package\n\n[Application ServicesApplication security and performance](/plans/)[SASE and Workspace SecurityEmployees, apps, email, and data](/plans/zero-trust-services/)[Network ServicesOn-premise and hybrid networks](/plans/network-services/)[Developer PlatformServerless applications](/plans/developer-platform/)\n\n### **Development platform for serverless applications.**\n\nCloudflare Workers\n\nDeploy serverless code instantly across the globe\n\nWorkers KV\n\nProvides access to a secure low latency key-value store at all of our data centers\n\nStore and retrieve objects with zero egress fees.\n\n### Deploy applications instantly across the globe.\n\n[Sign Up](https://dash.cloudflare.com/sign-up)\n\nGETTING STARTED\n\n* [Free plans](/plans/free/)\n* [Small business plans](/small-business/)\n* [For enterprises](/enterprise/)\n* [Get a recommendation](/about-your-website/)\n* [Request a demo](/plans/enterprise/demo/)\n* [Contact sales](/plans/enterprise/contact/)\n\n* [Connectivity cloud](/connectivity-cloud/)\n* [Application services](/application-services/)\n* [SASE and workspace security](/sase/)\n* [Network services](/network-services/)\n* [Developer platform](/developer-platform/)\n\n* [Help center](https://support.cloudflare.com)\n* [Customer support](https://dash.cloudflare.com/?to=/:account/support)\n* [Community forum](https://community.cloudflare.com)\n* [Developers Discord](https://discord.com/invite/cloudflaredev)\n* [Lost account access?](https://developers.cloudflare.com/support/account-management-billing/common-account-questions/login-and-account-issues/)\n* [Cloudflare status](https://www.cloudflarestatus.com/)\n\n* [Compliance resources](/trust-hub/compliance-resources/)\n* [Trust](/trust-hub/)\n* [GDPR](/trust-hub/gdpr/)\n* [Responsible AI](/trust-hub/responsible-ai/)\n* [Transparency report](/transparency/)\n* [Report abuse](/trust-hub/abuse-approach/)\n\nPUBLIC INTEREST\n\n* [Project Galileo](/galileo/)\n* [Athenian Project](/athenian/)\n* [Cloudflare for Campaigns](/campaigns/)\n* [Project Fairshot](/fair-shot/)\n\n* [About Cloudflare](/about-overview/)\n* [Network map](/network/)\n* [Our team](/people/)\n* [Logos & press kit](/press/press-kit/)\n* [Diversity, equity, & inclusion](/diversity-equity-and-inclusion/)\n* [Impact/ESG](/impact/)\n\n© 2026 Cloudflare, Inc.[Privacy Policy](/privacypolicy/)[Terms of Use](/website-terms/)[Report Security Issues](/disclosure/)[Trademark](/trademark/)",
+      "extractor": "tavily-basic",
+      "publishedAt": null
+    }
+  }
+}

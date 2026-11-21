@@ -1,0 +1,15 @@
+{
+  "request": {
+    "url": "https://www.stackco.st/tool/neon"
+  },
+  "response": {
+    "ok": true,
+    "page": {
+      "url": "https://www.stackco.st/tool/neon",
+      "finalUrl": "https://www.stackco.st/tool/neon",
+      "text": "[Log in](/sign-in)[Get started](/sign-up?redirect_url=%2Fdashboard%2Fstack%2Fnew)\n\n\n\n[All tools](/tools)\n\n## Ready to publish?\n\nWe walk through backlinks, pricing signal, and what happens to your tool listings—before you commit.\n\n[Publish your stack](/sign-up?redirect_url=%2Fdashboard%2Fstack%2Fnew)[Transform or claim a tool?](/why)\n\n![Neon](https://www.google.com/s2/favicons?domain=neon.tech&sz=128)\n\n# Neon\n\nDatabase\n\nMar 10, 2026\n\nServerless Postgres with branching.\n\n5.0\n\n1 stacks(1%)\n\n3\n\n[Visit Neon](https://neon.tech?utm_source=stackcost&utm_medium=referral&utm_campaign=tool_page)\n\n## How much does Neon cost in 2026?\n\nFounders on stackco.st pay aboutFree/mo for Neon across 1 published stack. Compare official plans, real bills, and cheaper alternatives below.\n\nAvg. monthly cost\n\nFree\n\nMost common discovery\n\nNot sure yet\n\nMost common why chosen\n\nNot sure yet\n\n## Neonplans & pricing\n\n[View pricing](https://neon.tech/pricing?utm_source=stackcost&utm_medium=referral&utm_campaign=tool_pricing)\n\nFree\n\nFree/mo\n\nLaunch\n\n$19/mo\n\n## Neonpricing calculator 2026\n\n[Open full calculator](/tool/neon/calculator)\n\nPick a plan\n\nEstimated list price\n\nFree/mo\n\nFounders actually pay aboutFree/mo on average across 1 stack — often below list price after usage and bundle choices.\n\n## Stacks running on Neon\n\n[![France](https://purecatamphetamine.github.io/country-flag-icons/3x2/FR.svg)\n\n### Trya\n\n@remibuchaillat\n\nCost/mo](/stack/trya)\n\n## Neonpricing FAQ\n\nHow much does Neon cost per month?\n:   On stackco.st, founders report paying about Free/mo for Neon across 1 published stack. Actual bills vary by plan and usage.\n\nIs Neon free?\n:   Yes — Neon has a free tier (Free). Paid plans add more capacity and features; see the plan list above for 2026 prices.\n\nHow much is Neon Pro?\n:   Neon Launch is listed at $19/mo; founders on stackco.st average Free/mo overall.\n\nWhat is the Neon pricing calculator?\n:   Use the calculator on this page to compare Neon's listed plans with the ~Free/mo founders actually pay after discounts, usage, and bundle choices.\n\nYou use Neon? Show what you actually pay.\n\nTakes 2 minutes. Your product gets a backlink.\n\n[Add your stack →](/sign-up?redirect_url=/dashboard/stack/new)",
+      "extractor": "tavily-basic",
+      "publishedAt": null
+    }
+  }
+}

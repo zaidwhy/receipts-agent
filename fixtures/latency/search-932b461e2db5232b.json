@@ -1,0 +1,42 @@
+{
+  "request": {
+    "query": "How much does Cloudflare Workers Paid cost per month?",
+    "start_date": null,
+    "end_date": null
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://makerkit.dev/pricing-calculator/cloudflare",
+        "title": "Cloudflare Workers Pricing Calculator (2026) — Estimate Your Monthly Bill",
+        "snippet": "Cloudflare Workers Paid costs $5/month base and includes 10 million requests and 30 million CPU milliseconds. Beyond the included tier, additional requests cost $0.30 per million and additional CPU time costs $0.02 per million milliseconds. Workers executions are priced on CPU time — the time your code is actually executing — not wall-clock time. A function waiting on a database query doesn't rack up CPU charges during the wait. [...] The Workers Paid plan costs $5/month and includes 10 million requests and 30 million CPU milliseconds. Most small-to-medium apps stay well within those limits and pay only the $5 base fee. High-traffic apps pay $0.30 per additional million requests and $0.02 per additional million CPU-ms.\n\n### Does Cloudflare charge for bandwidth? [...] # Cloudflare Workers Pricing Calculator\n\n## Estimate your real monthly Cloudflare bill for Workers, R2, D1, and KV — and see what the same workload costs on every other platform.\n\n1. Pick a workload\n\nChoose the preset closest to your project. You can fine-tune the numbers in step 2.\n\n2. Customize (optional)\n\nTweak the assumptions to match your real numbers.\n\nCloudflareWorkers Paid\n\nVerified 2026-05\n\nEstimated monthly cost\n\n$5.04/mo\n\nWorkers Paid (base)\n\n10M requests + 30M CPU-ms included\n\n$5.00",
+        "publishedDate": "2026-05-21T00:00:00.000Z"
+      },
+      {
+        "url": "https://developers.cloudflare.com/workers/platform/pricing",
+        "title": "Pricing · Cloudflare Workers docs",
+        "snippet": "The Workers Paid plan includes Workers, Pages Functions, Workers KV, Hyperdrive, and Durable Objects usage for a minimum charge of $5 USD per month for an account. The plan includes increased initial usage allotments, with clear charges for usage that exceeds the base plan. There are no additional charges for data transfer (egress) or throughput (bandwidth).\n\nAll included usage is on a monthly basis.\n\n## Workers [...] Containers are billed for every 10ms that they are actively running at the following rates, with included monthly usage as part of the $5 USD per month Workers Paid plan:\n\n| Memory | CPU | Disk |\n --- \n| Free | N/A | N/A | N/A |\n| Workers Paid | 25 GiB-hours/month included   +$0.0000025 per additional GiB-second | 375 vCPU-minutes/month  + $0.000020 per additional vCPU-second | 200 GB-hours/month   +$0.00000007 per additional GB-second | [...] | Unit | Workers Free | Workers Paid |\n --- \n| Requests (millions) | 100,000 per day (shared with Workers requests) | 10 million included per month + $0.30 per additional million |\n| CPU time (ms) | 10 milliseconds of CPU time per invocation | 30 million CPU milliseconds included per month + $0.02 per additional million CPU milliseconds |\n| Storage (GB-mo) | 1 GB-month | 1 GB-month included + $0.20/ GB-month |",
+        "publishedDate": "2026-10-02T00:00:00.000Z"
+      },
+      {
+        "url": "https://www.activepieces.com/blog/cloudflare-workers-pricing-2026-free-vs-paid-plans",
+        "title": "Cloudflare Workers Pricing 2026: Free vs Paid Plans",
+        "snippet": "According to Developers, start on Free at $0, and move to Paid at $5 a month the day you hit the daily request or CPU-time cap, which is a handy line to know whether you're wiring up a side project or a workflow built with Activepieces.\n\nEnterprise is custom-quoted and only matters once a contract or compliance requirement forces it, so the standard user's starting cost is $5 per month, with overage and storage billed on top. [...] ### Solo developer: Free at $0 until the daily cap\n\nA personal project or a prototype you're still pitching carries no cost on Free.\n\nThe limit is the daily cap: once you reach it, requests stop until the next day.\n\n### Small team in production: Paid, $5 minimum\n\nThe first time a real user hits the cap, buy Paid at $5 a month.\n\n### Heavy traffic or API volume: Paid plus overage [...] | Situation | Recommended plan | Monthly cost | The catch that pushes up a tier |\n ---  --- |\n| Hobby project | Free | $0 | The daily request cap stops the Worker mid-day |\n| Side project hitting the daily cap | Paid | $5 minimum | Storage products are billed separately from the Worker |\n| Production API | Paid plus usage | $5 plus overage | CPU time, not request count, drives the bill |\n| Enterprise or compliance | Enterprise | Custom quote | SSO, SLAs or contract terms Paid doesn't cover |",
+        "publishedDate": "2026-11-09T10:37:15.000Z"
+      },
+      {
+        "url": "https://blog.blazingcdn.com/en-us/cloudflares-pricing-changes-in-2025-what-you-need-to-know",
+        "title": "Cloudflare Pricing in 2025: What’s Changing and How It Affects You",
+        "snippet": "The Workers free tier includes 100,000 requests per day. The paid tier ($5/month) includes 10 million requests and 30 million milliseconds of CPU time. Beyond that, additional requests cost $0.02 per million and CPU time costs $12.50 per million milliseconds. Teams running heavy edge compute should model CPU time carefully, as it is now the primary cost driver.\n\n### What changed in Cloudflare pricing in 2025 and 2026? [...] New in 2026: Cloudflare Workers pricing has also been adjusted. The free tier still includes 100,000 requests per day. The paid Workers tier (bundled into the $5/month Workers Paid plan) now meters CPU time more granularly, charging $0.02 per additional million requests and $12.50 per additional million milliseconds of CPU time. For teams running heavy compute at the edge, this is the line item that surprises.\n\n## Cloudflare Plans in 2026: Free vs Pro vs Business vs Enterprise [...] The 2025 change introduced utilization-based data transfer pricing, replacing the previous model where Pro and Business plans included effectively unlimited bandwidth. In early 2026, Cloudflare raised the Pro plan from $20 to $25/month and refined Workers CPU time metering. Enterprise customers saw no structural changes but report tighter negotiation on committed-use discounts.\n\n### Is Cloudflare still the cheapest CDN option?",
+        "publishedDate": null
+      },
+      {
+        "url": "https://www.cloudflare.com/plans",
+        "title": "Pricing",
+        "snippet": "#### Workers\n\nServerless functions that run everywhere, instantly\n\n| Component | Free | Paid |\n --- \n| Requests | 100k / day | $0.30 / million requests |\n| CPU Time | 10 ms / request | $0.02 / million CPU ms |\n\nRequests\n\nFree\n\n100k / day\n\nPaid\n\n$0.30 / million requests\n\nCPU Time\n\nFree\n\n10 ms / request\n\nPaid\n\n$0.02 / million CPU ms\n\n#### Containers\n\nRun any language in secure, global containers (also applies to Sandboxes) [...] Free\n\n1 TB included\n\nPaid\n\n$0.025 / GB\n\n#### Workers for Platforms\n\nDeploy Workers on behalf of your customers\n\n| Component | Free | Paid |\n --- \n| Requests | Not available— | $0.30 / million requests |\n| CPU Time | Not available— | $0.02 / million CPU ms |\n| Scripts Deployed | Not available— | $0.02 / script |\n\nRequests\n\nFree\n\n—\n\nPaid\n\n$0.30 / million requests\n\nCPU Time\n\nFree\n\n—\n\nPaid\n\n$0.02 / million CPU ms\n\nScripts Deployed\n\nFree\n\n—\n\nPaid\n\n$0.02 / script\n\n#### Durable Objects [...] Paid\n\n$0.01 / GB\n\n#### Workers KV\n\nLightning-fast key-value storage\n\n| Component | Free | Paid |\n --- \n| Stored Data | 1 GB | $0.50 / GB-month |\n| Read Requests | 100,000 / day | $0.50 / million requests |\n| Write, Delete, List requests | 1,000 / day | $5.00 / million requests |\n\nStored Data\n\nFree\n\n1 GB\n\nPaid\n\n$0.50 / GB-month\n\nRead Requests\n\nFree\n\n100,000 / day\n\nPaid\n\n$0.50 / million requests\n\nWrite, Delete, List requests\n\nFree\n\n1,000 / day\n\nPaid\n\n$5.00 / million requests\n\n#### D1",
+        "publishedDate": "2023-09-11T18:00:00.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}

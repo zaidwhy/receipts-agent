@@ -1,0 +1,42 @@
+{
+  "request": {
+    "query": "Render pricing Professional workspace cost",
+    "start_date": null,
+    "end_date": null
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://www.activepieces.com/blog/render-pricing-2026-free-tier-workers-total-cost",
+        "title": "Render Pricing 2026: Free Tier, Workers & Total Cost",
+        "snippet": "| Item | Monthly price basis | What is included | Usage limits |\n ---  --- |\n| Entry workspace plan | Lowest workspace fee | Core deploys for one builder | Tightest seat, build and bandwidth allowances |\n| Pro workspace plan | $25/mo flat plus compute | Unlimited seats and services | 25 GB bandwidth included |\n| Enterprise plan | Quoted, not listed | Negotiated terms | Set by contract |\n| Free instance | No instance charge | One small service for testing | Spins down when idle | [...] Small team running staging and production: the Pro workspace plan, $25 flat for unlimited seats and services, plus $138 a month in services.\n Company needing negotiated terms: the Enterprise plan, quoted by contract. [...] | Platform | Entry price | Billing model | Free option | Database cost | Team/seat pricing |\n ---  ---  --- |\n| Render | Workspace plan plus the smallest paid instance | Flat instance | Free web services that spin down | Priced by instance size, separate from compute | Higher workspace plans add seats |\n| Railway | Subscription with usage credit | Usage-metered | Trial only | Metered like any other service | Seats on paid plans |",
+        "publishedDate": "2026-11-12T04:32:14.000Z"
+      },
+      {
+        "url": "https://temps.sh/blog/render-pricing-2026",
+        "title": "Render Pricing 2026: Free Tier Sleep, Plans, Compute | Temps",
+        "snippet": "No. In April 2026 Render replaced its per-member plans with flat workspace fees: Pro ($25/month flat) replaced Professional ($19 per member per month), and Scale ($499/month flat) replaced Organization ($29 per member per month), per Render's changelog. Pro and Scale include unlimited seats. Hobby stays at one seat, so a team of two or more needs Pro.\n\n## What Does a Production App on Render Cost?\n\nThree worked examples, using the list prices above (no bandwidth overage): [...] > TL;DR: Hobby is $0 + compute (1 seat, 25 services, 5 GB bandwidth). Pro is $25/month + compute (unlimited seats, 25 GB). Scale is $499/month + compute (multiple workspaces, SAML SSO, 1 TB). Web services cost $0 (Free, sleeps), then $7/month for 512 MB and $25/month for 2 GB. Postgres starts at $6/month. Upgrading the workspace plan does not stop a Free service from sleeping — moving the service to a paid instance does, on any plan.\n\n## What Are Render's Workspace Plans in 2026? [...] No. Since April 2026, Pro is $25/month flat per workspace with unlimited seats, plus compute. It replaced the per-member Professional plan ($19 per member). Scale ($499/month flat) replaced Organization ($29 per member).\n\n### How long does Render's free Postgres database last?",
+        "publishedDate": "2026-10-05T00:00:00.000Z"
+      },
+      {
+        "url": "https://justinmckelvey.com/blog/render-pricing",
+        "title": "Render Pricing 2026: Pro $25 + Compute, 3 Real Bills",
+        "snippet": "Two parts: a workspace plan (Hobby $0, Pro $25, Scale $499 a month, per Render's pricing page read November 16, 2026) plus a fixed monthly price for each service. The smallest paid web service is $7 (512 MB) and the smallest paid Postgres is $6 (256 MB), so a small app runs about $13 a month on Hobby.\n\n### Is Render Pro $25 per user?\n\nNo. Render lists Pro at $25 a month plus compute, with unlimited seats and services. You pay the $25 once for the workspace, then pay for each service you run. [...] Quick Answer\n\nRender charges you twice: a workspace plan (Hobby $0, Pro $25, Scale $499 a month) and a fixed monthly price for every service you run. The smallest paid web service is $7 and the smallest paid Postgres is $6, so a small app costs about $13 a month. An app with a background worker and a 1 GB database is about $33, and a team app on Pro with Redis about $107. [...] Bandwidth past the included amount is $0.15 per GB. Persistent disks are $0.25 per GB a month. Pro's $25 is per workspace, not per seat.\n\n## What each service costs",
+        "publishedDate": "2026-11-16T17:20:00.000Z"
+      },
+      {
+        "url": "https://www.srvrlss.io/provider/render",
+        "title": "Render Pricing 2026: Free Tier, RAM Limits & Alternatives",
+        "snippet": "## Render Overview\n\n## Render Information Resource Links\n\nWebsite\n\nDocumentation\n\nRepository\n\nTemplates\n\nCommunity\n\nPricing Page\n\nRender Homepage\n\nCategory\n\nFaaS DBaaS PaaS IaC\n\nPricing Model\n\nFree Trial Free Tier\n\nPricing Examples\n\nHobby workspace: $0/month + compute Pro workspace: $25/month + compute Web services: from $0/month Starter service: $7/month\n\n### What is Render? [...] ### Products\n\n Static sites\n Web Services\n Private Services\n Background workers\n Managed Redis-compatible Key-value storage\n Managed PostgreSQL (30-days free trial)\n Cron jobs\n\n### Pricing\n\n#### Workspace Plans\n\n Hobby: $0/mo + compute\n Pro: $25/mo + compute\n Scale: $499/mo + compute\n Enterprise: Custom pricing\n\n#### Services\n\n Static Sites: $0/mo\n Web Services: from $0/mo\n Starter web service: $7/mo\n Persistent disks: $0.25/GB per month\n\n#### Datastores [...] Convox logo\n\nInstant Cloud Machines · Managed Deployments with Zero Setup\n\nDeploy in minutes — no cloud setup\n\nTry Cloud Machines Free →\n\n(opens in a new window)\n\nRender logo\n\n# Render Pricing, Features & Alternatives\n\nBuild, Deploy, and Scale Your Apps With Ease\n\nUnited States\n\nCategory\n\nFaaS DBaaS PaaS IaC\n\nPricing Model\n\nFree Trial Free Tier\n\nPricing Examples\n\nHobby workspace: $0/month + compute Pro workspace: $25/month + compute Web services: from $0/month Starter service: $7/month",
+        "publishedDate": "2025-03-11T12:13:02.000Z"
+      },
+      {
+        "url": "https://render.com/articles/how-much-does-cloud-application-hosting-cost-for-small-businesses",
+        "title": "How much does cloud application hosting cost for small businesses",
+        "snippet": "Egress. API-heavy or media-heavy apps send more outbound bandwidth. Above your plan's included amount, Render bills $0.15 per GB.\n\nWorkspace plan. Pro ($25/month) unlocks autoscaling, full-stack previews, and more included bandwidth. Scale ($499/month) adds SSO, SCIM, HIPAA eligibility, and organization-level controls.\n\n## Cost optimization\n\n### Right-size instances [...] 1. List every service: web, worker, Postgres, Key Value, cron, workflows, disks.\n2. Look up each instance type on Render pricing.\n3. For always-on services, use the monthly rate. For cron and workflows, estimate runtime and multiply by the per-minute or per-hour rate.\n4. Add Postgres storage (GB × $0.30) and disk storage (GB × $0.25).\n5. Add your workspace plan fee ($0 on Hobby, $25 on Pro, $499 on Scale).\n6. Estimate outbound GB beyond your plan's included bandwidth (× $0.15).",
+        "publishedDate": "2026-07-08T00:00:00.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}

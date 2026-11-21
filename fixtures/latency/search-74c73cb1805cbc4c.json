@@ -1,0 +1,42 @@
+{
+  "request": {
+    "query": "Cloudflare Workers pricing paid plan included requests CPU time",
+    "start_date": null,
+    "end_date": null
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://makerkit.dev/pricing-calculator/cloudflare",
+        "title": "Cloudflare Workers Pricing Calculator (2026) — Estimate Your Monthly Bill",
+        "snippet": "Cloudflare Workers Paid costs $5/month base and includes 10 million requests and 30 million CPU milliseconds. Beyond the included tier, additional requests cost $0.30 per million and additional CPU time costs $0.02 per million milliseconds. Workers executions are priced on CPU time — the time your code is actually executing — not wall-clock time. A function waiting on a database query doesn't rack up CPU charges during the wait. [...] The Workers Paid plan costs $5/month and includes 10 million requests and 30 million CPU milliseconds. Most small-to-medium apps stay well within those limits and pay only the $5 base fee. High-traffic apps pay $0.30 per additional million requests and $0.02 per additional million CPU-ms.\n\n### Does Cloudflare charge for bandwidth? [...] Growing SaaS (250k visitors, 5M API calls/mo): 5M requests inside the 10M included. CPU time starts to accumulate but likely stays within the 30M CPU-ms included. Storage and ops start to add up. Total: $20–50/month.\n\nScale (1.5M visitors, 45M API calls/mo): 35M in request overage × $0.30/M = $10.50. CPU time overages depend on function complexity. No bandwidth charges. Total: $30–80/month — dramatically cheaper than Vercel or Netlify at this scale.\n\n## How this calculator works",
+        "publishedDate": "2026-05-21T00:00:00.000Z"
+      },
+      {
+        "url": "https://www.activepieces.com/blog/cloudflare-workers-pricing-2026-free-vs-paid-plans",
+        "title": "Cloudflare Workers Pricing 2026: Free vs Paid Plans",
+        "snippet": "As of November 3, 2026, Paid includes 10 million requests and 30 million CPU milliseconds a month. Beyond that, requests cost $0.30 per additional million and CPU time costs $0.02 per additional million milliseconds.\n\nAt every volume the formula is the same:\n\n1. Requests over the included allowance, multiplied by the per-request overage rate.\n2. Total CPU milliseconds (requests × average CPU ms) over the included allowance, multiplied by the per-CPU-ms rate.\n3. Add both to the $5 base. [...] | Free | Paid | Enterprise |\n --- \n| Monthly price | No charge | Flat base fee per account | Negotiated contract |\n| Included requests | Daily allowance | Monthly allowance | Set in contract |\n| Included CPU time | Small daily allowance | Monthly allowance | Set in contract |\n| CPU per invocation | Short, hard ceiling | Much longer ceiling | Highest, by agreement |\n| Subrequests | Low ceiling | Far higher ceiling | Set in contract | [...] At 50 million requests, 40 million are over the allowance, which adds $12.00. CPU is 500 million ms, 470 million over, adding $9.40, so the month is $26.40.\n\nAt 200 million requests, request overage is $57.00 and CPU (2,000 million ms) adds $39.40, for $101.40 in total.\n\nAt 200 million requests, a small change in CPU per request moves the total more than the request count does.\n\n### Why CPU time per request moves the bill most",
+        "publishedDate": "2026-11-09T10:37:15.000Z"
+      },
+      {
+        "url": "https://developers.cloudflare.com/workers/platform/pricing",
+        "title": "Pricing · Cloudflare Workers docs",
+        "snippet": "| Unit | Workers Free | Workers Paid |\n --- \n| Requests (millions) | 100,000 per day (shared with Workers requests) | 10 million included per month + $0.30 per additional million |\n| CPU time (ms) | 10 milliseconds of CPU time per invocation | 30 million CPU milliseconds included per month + $0.02 per additional million CPU milliseconds |\n| Storage (GB-mo) | 1 GB-month | 1 GB-month included + $0.20/ GB-month | [...] | Monthly Costs | Formula |\n --- |\n| Subscription | $5.00 |\n| Requests | $27.00 | (100,000,000 requests - 10,000,000 included requests) / 1,000,000 \\ $0.30 |\n| CPU time | $2.20 | ((7 ms of CPU time per request \\ 20,000,000 requests) - 30,000,000 included CPU ms) / 1,000,000 \\ $0.02 |\n| Total | $34.20 |\n\nFor details on what is cached and how to enable caching, refer to Cache.\n\n### How to switch usage models [...] | Monthly Costs | Formula |\n --- |\n| Subscription | $5.00 |\n| Requests | $1.50 | (15,000,000 requests - 10,000,000 included requests) / 1,000,000 \\ $0.30 |\n| CPU time | $1.50 | ((7 ms of CPU time per request \\ 15,000,000 requests) - 30,000,000 included CPU ms) / 1,000,000 \\ $0.02 |\n| Total | $8.00 |\n\n#### Example 2",
+        "publishedDate": "2026-10-02T00:00:00.000Z"
+      },
+      {
+        "url": "https://blog.blazingcdn.com/en-us/cloudflares-pricing-for-developers-a-closer-look-at-workers-pages",
+        "title": "Cloudflare Workers and Pages Pricing: What It Really Costs",
+        "snippet": "## FAQ\n\n### Is Cloudflare Workers pricing based on requests or CPU time?\n\nBoth, on separate meters. As of 2026 the Paid plan bills $0.30 per million requests beyond 10M included, plus $0.02 per million CPU-milliseconds beyond 30M included. Time spent awaiting fetches, KV reads, or D1 queries is not billed, so I/O-bound Workers stay cheap regardless of wall-clock latency.\n\n### At what CPU time does the CPU line overtake the request line? [...] | Plan | Cost | Included | Overage |\n ---  --- |\n| Free | $0 | 100,000 requests/day, 10 ms CPU per invocation | Hard stop, no overage |\n| Paid | $5/month base | 10M requests + 30M CPU-ms | $0.30 per million requests; $0.02 per million CPU-ms |\n| Enterprise | Negotiated | Committed volume, SLA, support | Discounted per-unit rates | [...] The billing model bills active CPU only. Awaiting a subrequest, a KV read, a D1 query, or an origin fetch is free wall-clock time. This is why an I/O-bound API gateway on Workers can serve 200 million requests for pocket change while a JSON-transforming, JWT-verifying, HTML-rewriting Worker at the same volume costs an order of magnitude more.\n\n### Three worked Cloudflare Workers pricing models (2026 rates)\n\nAssume Paid plan, $5 base, 10M requests and 30M CPU-ms included.",
+        "publishedDate": "2026-09-04T00:00:00.000Z"
+      },
+      {
+        "url": "https://stackoverflow.com/questions/68720436/what-is-cpu-time-and-wall-time-in-the-context-of-cloudflare-worker-request",
+        "title": "What is CPU time and Wall time in the context of Cloudflare Worker request? - Stack Overflow",
+        "snippet": "> Most Worker requests consume less than a millisecond. It is rare to\n> find a normally operating Workers script that exceeds the CPU time\n> limit. A Worker may consume up to 10ms on the free plan and up to 50ms\n> for Bundled Workers on the Paid Plan. The Paid Plan also offers up to\n> a 30 second duration for increased compute time. The 10ms allowance on\n> the free plan is enough execution time for most use cases including\n> application hosting.\n> [...] The paid plan specifies a 30-second limit on request processing. In fact, the enforced limit here is again on CPU time, not wall time. So, a request can take much longer than 30s, as long as it isn't executing code the whole time. However, note that when requests take longer than 30 seconds, the change that a request is randomly disrupted go up. For example, a very long-running request may suffer TCP timeouts or random network disconnects. Additionally, when the Workers Runtime receives a code [...] and in paid plan following\n\n> Up to 30s wall time per request\n\nTypically it takes more time than 10ms to execute a script that does something useful. Even 30s wall time can be short depending on the task.\n\nIf you look at Worker's documentation limits: CPU runtime section it has",
+        "publishedDate": "2021-08-10T02:31:18.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}

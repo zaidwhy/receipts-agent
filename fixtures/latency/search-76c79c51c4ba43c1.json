@@ -1,0 +1,42 @@
+{
+  "request": {
+    "query": "Vercel pricing Pro plan seat cost",
+    "start_date": null,
+    "end_date": null
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://schematichq.com/blog/vercel-pricing",
+        "title": "Vercel Pricing Plans and Hidden Costs Explained (2026)",
+        "snippet": "Source: Vercel.com\n\nVercel's Pro plan starts at $20 per developer seat per month. This creates a predictable fixed monthly fee based on team seats, with additional resource usage billed separately.\n\nThe Pro plan includes all Hobby features in addition to $20 worth of monthly credits and higher infrastructure limits.\n\nPro also unlocks collaboration features, including shared environments, role-based access control, and free viewer seats for non-developers. [...] ### Team Seats\n\nTeam seats refer to the number of developers, viewers, and team members who can access and work on a Vercel project.\n\nThe Hobby plan offers a single developer seat for free. This works for solo developers but does not support team collaboration.\n\nPro charges $20 per month per developer seat. It also includes unlimited viewer seats and one billing seat with read-only access to all team projects.\n\nHere's how seat-based pricing looks in the Pro plan: [...] - Vercel offers three pricing plans: Hobby (free) for personal projects, Pro ($20 per user/month) with $20 usage credits, and Enterprise with custom pricing.\n- Team seats quickly add up in the Pro plan. Paying $20 per developer every month can become expensive as your team grows.\n- Most costs come from usage, and not the base plan. Your final bill depends on how your app runs in production.",
+        "publishedDate": "2026-03-19T23:00:00.000Z"
+      },
+      {
+        "url": "https://focusreactive.com/vercel-cost-optimization",
+        "title": "How Much Does Vercel Cost? (Updated, October 2026)",
+        "snippet": "The Pro plan costs $20 per active developer seat per month, which gives small teams (for example, three developers and one account manager) an affordable way to collaborate on production workloads. This plan is a good fit for small to mid-size Next.js applications and is enough to run production confidently: [...] While the base cost of Vercel Pro starts at $20 per seat, it is crucial to understand how Vercel calculates limits across your projects. Pro includes default monthly allowances—such as 1 TB of bandwidth, 1,000 GB-hours of Serverless Function execution, and 5,000 source images for optimization. Once your application breaches these limits, Vercel shifts to usage-based pricing ($400 per additional 1 TB of bandwidth, $40 per 100 GB-hours of compute). For fast-scaling Next.js apps, hitting these [...] At $20 per seat per month, Pro looks reasonable for a core team, but seat count is where bills quietly grow. Vercel’s definition of a billable seat is stricter than most teams assume.",
+        "publishedDate": "2026-05-14T00:00:00.000Z"
+      },
+      {
+        "url": "https://makerkit.dev/blog/saas/vercel-cost",
+        "title": "Vercel Cost in 2026: What You'll Actually Pay (with Calculator)",
+        "snippet": "The Pro plan is where 95% of paying customers live, and it works like this: each developer seat costs $20 per month and includes $20 of usage credit. The included allocations (1 TB Fast Data Transfer and 10M Edge Requests) are free and do not consume credit. Everything else gets charged against the credit first, then billed on demand.\n\nHere are the meters Vercel runs on Pro, with verified May 2026 rates: [...] Quick answer: Vercel costs $0 on Hobby (personal projects only), $20 per developer seat per month on Pro with a matching $20 of usage credit per seat, and custom pricing on Enterprise. A real Pro account with three seats and a growing SaaS workload (250k monthly visitors, 5M API requests) lands around $305 per month in our calculator. The number that bites is not the seat cost. It is Fast Data Transfer and Edge Requests above the included tiers. [...] | Plan | Base cost | Who it's for | Commercial use? |\n ---  --- |\n| Hobby | $0/mo | Personal projects, portfolios, learning | No |\n| Pro | $20/seat/mo | Teams, startups, SaaS | Yes |\n| Enterprise | Custom (typically $20k+/yr) | Compliance, SLAs, support | Yes |",
+        "publishedDate": "2026-05-21T00:00:00.000Z"
+      },
+      {
+        "url": "https://wiki.licenseware.io/wiki/vercel-pro-plan-seats-and-monthly-credit",
+        "title": "Vercel Pro plan, seats and monthly credit | LICENSEWARE Wiki",
+        "snippet": "On Pro “your team starts with 1 included paid seat that can deploy projects, manage the team, and access all member-level permissions”.( Further paid seats use the Owner or Member role at $20 per month each.( Vercel bills seats and add-ons for the next 30 days of use, and bills the previous cycle’s usage in arrears.( Catalog: Deploying team seat; Additional deploying seats cost $20 per month. [...] | Component | Amount | Source behaviour |\n --- \n| Platform fee | $20 per month | Includes 1 deploying seat and $20 of monthly usage credit( |\n| Additional paid seats | $20 per month each | Owner or Member roles( |\n| Viewer seats | Free | Read-only, unlimited( |\n\nCatalog: Pro plan; Pro platform fee includes one seat and $20 credit.\n\n### What Hobby and Pro differ on\n\nVercel’s plan comparison lists limits that frequently drive a Hobby-to-Pro move.(",
+        "publishedDate": "2026-10-08T00:00:00.000Z"
+      },
+      {
+        "url": "https://massivegrid.com/blog/vercel-pricing-explained-2026",
+        "title": "Vercel Pricing 2026 Explained: Hobby, Pro, Overages | MassiveGRID",
+        "snippet": "- Hobby is $0, one developer seat, personal and non-commercial use only, with monthly caps you cannot buy your way past.\n- Pro is a $20 per month platform fee that includes one deploying seat and $20 of usage credit; each additional deploying seat is $20, viewer seats are free. Pro also includes the lowest Flat Rate CDN tier, 1 million CDN requests and 1 TB of data transfer a month. [...] - Elastic build machines are the default for new Pro and Enterprise teams, and paid teams are billed per CPU-minute for builds, including Basic.\n- Data Cache is merging into Runtime Cache (30 October 2026), with more cache storage per project; the read and write rates are the same as ISR.\n- Core prices did not move: Hobby is still $0 and the Pro seat is still $20, as it has been since the credit-based model of September 2025. [...] Since 9 September 2025 Pro has been credit-based: instead of fixed allowances per resource, each team gets $20 of monthly credit to spend across every metered resource, and the credit expires at the end of the month. The platform fee is $20 and includes one deploying seat; additional Owner or Member seats are $20 each, Viewer seats (read-only, can comment) are free. Once the credit is spent, usage is billed on demand. Spend management notifications are on by default at $200 per billing cycle,",
+        "publishedDate": "2026-10-31T10:00:00.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}

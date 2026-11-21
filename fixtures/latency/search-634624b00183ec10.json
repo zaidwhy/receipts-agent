@@ -1,0 +1,42 @@
+{
+  "request": {
+    "query": "How much is Vercel Pro per user per month?",
+    "start_date": null,
+    "end_date": null
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://focusreactive.com/vercel-cost-optimization",
+        "title": "How Much Does Vercel Cost? (Updated, October 2026)",
+        "snippet": "Hobby: $0/month (strictly for personal, non-commercial projects).\n Pro: $20/month per user. This includes baseline allowances for bandwidth, serverless function execution, and image optimization. However, once your app scales beyond these included limits, usage-based overage fees can accumulate rapidly.\n Enterprise: Custom pricing tailored for large organizations requiring advanced security, SSO, and custom SLAs. [...] ### \n\nVercel pricing is tiered by plan: the Hobby plan is free forever for personal use; the Pro plan starts at around $20 per user per month with usage credits and extra resource billing on top; and the Enterprise plan has custom pricing tailored to large organizations and usually requires contacting sales for a quote.\n\n### [...] Vercel hosting costs grow mainly with bandwidth, serverless function execution, and team size, not with fixed infrastructure fees.\n Vercel has a free Hobby plan for personal projects and experiments, but it isn’t meant for production or commercial use.\n Most production Next.js applications run on the Pro plan: $20 per user per month, plus usage-based resources like bandwidth and compute.",
+        "publishedDate": "2026-05-14T00:00:00.000Z"
+      },
+      {
+        "url": "https://schematichq.com/blog/vercel-pricing",
+        "title": "Vercel Pricing Plans and Hidden Costs Explained (2026)",
+        "snippet": "- Vercel offers three pricing plans: Hobby (free) for personal projects, Pro ($20 per user/month) with $20 usage credits, and Enterprise with custom pricing.\n- Team seats quickly add up in the Pro plan. Paying $20 per developer every month can become expensive as your team grows.\n- Most costs come from usage, and not the base plan. Your final bill depends on how your app runs in production. [...] Source: Vercel.com\n\nVercel's Pro plan starts at $20 per developer seat per month. This creates a predictable fixed monthly fee based on team seats, with additional resource usage billed separately.\n\nThe Pro plan includes all Hobby features in addition to $20 worth of monthly credits and higher infrastructure limits.\n\nPro also unlocks collaboration features, including shared environments, role-based access control, and free viewer seats for non-developers. [...] Yes, Vercel's Hobby plan is free forever. However, it comes with strict limits on bandwidth, active CPU time, and storage size. Once your app scales, you will likely need to upgrade to a paid plan.\n\n### How much does Vercel cost per month?\n\nVercel's Pro plan costs $20 per developer per month. The total monthly costs will increase if you add more developer seats. Overage fees also apply for edge requests, bandwidth, image optimization, edge config, build minutes, and other features.",
+        "publishedDate": "2026-03-19T23:00:00.000Z"
+      },
+      {
+        "url": "https://www.activepieces.com/blog/vercel-pricing-in-2026-how-the-costs-scale",
+        "title": "Vercel Pricing in 2026: How the Costs Scale | Activepieces",
+        "snippet": "Because technical constraints like the 7-day limit on Edge Config history exist, Vercel notes that you can only rollback configuration changes within a one-week window.\n\nYou cannot apply this tier in any revenue-generating environment, as Vercel restricts it to non-commercial use.\n\n### Pro: $20 per user per month for teams [...] Stepping up to the Pro tier introduces a $20 per-seat base fee, which adds a predictable recurring cost to your monthly budget, so you must account for these expenses before scaling your team.\n\nThe primary shift, however, is toward metered billing for bandwidth, execution time, and data storage.\n\nAccording to Vercel’s analysis, the Edge Config history on this tier extends to 90 days, so you can track configuration drift across an entire fiscal quarter. [...] Exceeding a quota on Vercel triggers either a hard service suspension or an automated billing overage. The following table establishes the baseline for these tiers.\n\n| Plan Feature | Hobby | Pro | Enterprise |\n ---  --- |\n| Base Price | $0 | $20/seat | Custom |\n| Included Bandwidth | 100GB | 1TB | Unlimited/Custom |\n| Build Minutes | 6,000 | 24,000 | Custom |\n| Edge Config Size | 8KB | 64KB | 512KB |\n| Support Level | Community | Standard | Dedicated/24-7 |",
+        "publishedDate": "2026-11-12T03:17:29.000Z"
+      },
+      {
+        "url": "https://vercel.com/docs/plans/pro-plan",
+        "title": "Vercel Pro Plan",
+        "snippet": "The Pro plan is billed monthly based on the number of deploying team seats, paid add-ons, and any on-demand usage during the billing period. Each product has its own pricing structure, and includes both included resources and extra usage charges. The platform fee is a fixed monthly fee that includes $20 in usage credit.\n\n### Platform fee\n\n $20/month Pro platform fee\n  + 1 deploying team seat included\n  + $20/month in usage credit [...] Seats with Owner or Member roles: $20/month each\n  + These team seats have the ability to configure & deploy projects\n Viewer Pro (read-only) seats: Free\n\n## Paid add-ons\n\nThe following features are available as add-ons: [...] SAML Single Sign-On: $300/month\n HIPAA BAA: Healthcare compliance agreements for $350/month\n Password Protection: $20 per month per protected project\n Flags Explorer: $250/month\n Observability Plus: $1.20 per 1 million events\n Preview Deployment Suffix: $100/month\n Static IPs: $100/month per project, plus Private Data Transfer\n Web Analytics Plus: $10/month\n Speed Insights Plus: $10/month per project, plus $0.65 per 10,000 events\n\n## Downgrading to Hobby",
+        "publishedDate": "2026-09-15T00:00:00.000Z"
+      },
+      {
+        "url": "https://vercel.com/pricing",
+        "title": "Vercel Pricing: Hobby, Pro, and Enterprise plans",
+        "snippet": "Get a Demo\n\nLog InSign Up\n\n# Scale your app, control your costs\n\n$0/mo.\n\nThe perfect starting place for your web app or personal project.\n\nImport your repo, deploy in seconds\n\nAutomatic CI/CD\n\nWeb Application Firewall\n\nGlobal, automated CDN\n\nFluid compute\n\nDDoS Mitigation\n\nTraffic & performance insights\n\nStart deploying\n\nPro\n\n$20/mo.\n\nEverything you need to build and scale your app.\n\nAll Hobby features, plus:\n\n$20 of included usage credit\n\nFlat Rate CDN with traffic spike protection [...] —\n\n$0.028 per minute\n\nCustom\n\nTurbo machines\n\n—\n\n$0.105 per minute\n\nCustom\n\nElastic machines\n\n—\n\n$0.0035 per CPU minute\n\nCustom\n\nDeployments\n\nUnlimited Deployments\n\nEnvironment Variables\n\nInstant Rollback\n\nMulti-tenant support\n\nSkew Protection\n\n—\n\nRolling Releases\n\n—\n\n1 project included\n\nCustom\n\nPreview Deployment Suffix\n\n—\n\n$100 / month\n\nTeam Seats\n\nDeveloper seat\n\n1\n\n$20 / month\n\nCustom\n\nViewer seat\n\n—\n\nUnlimited\n\nCustom\n\nBilling seat\n\n—\n\n1\n\nCustom\n\nVercel Toolbar\n\nComments [...] Starting at $0.60 per 1,000,000 creations\n\nCustom\n\nSandbox Data Transfer\n\n20 GB / month included\n\nIncluded in Flat Rate CDN\n\nCustom\n\nConcurrent Sandboxes\n\n10\n\n10K\n\nCustom\n\nSnapshot Storage\n\n15 GB\n\nStarting at $0.08 per GB-month\n\nCustom\n\nVercel Daemons\n\nDaemons Active CPU\n\n5 hours / month included\n\nStarting at $0.128 per hour\n\nCustom\n\nDaemons Provisioned Memory\n\n420 GB-hrs / month included\n\nStarting at $0.0212 per GB-hr\n\nCustom\n\nVercel Container Registry Image Storage\n\nBeta",
+        "publishedDate": null
+      }
+    ],
+    "timedOut": false
+  }
+}

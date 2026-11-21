@@ -1,0 +1,342 @@
+[
+  {
+    "label": "baseline-live",
+    "model": "anthropic/claude-haiku-5.5",
+    "webMode": "record",
+    "speculative": false,
+    "compact": false,
+    "at": "2026-11-21T18:47:46.187Z",
+    "samples": [
+      {
+        "question": "How much does the Supabase Pro plan cost per month?",
+        "firstTokenMs": 5546,
+        "totalMs": 6793,
+        "round1Ms": 2242,
+        "round2FirstTokenMs": 1606,
+        "searchMs": 1175,
+        "readMs": 788,
+        "speculative": "off",
+        "sources": 3,
+        "anchoredClaims": 2,
+        "answerChars": 513,
+        "error": null
+      },
+      {
+        "question": "What does the Neon Launch plan cost?",
+        "firstTokenMs": 7849,
+        "totalMs": 9354,
+        "round1Ms": 2166,
+        "round2FirstTokenMs": 3676,
+        "searchMs": 1538,
+        "readMs": 924,
+        "speculative": "off",
+        "sources": 3,
+        "anchoredClaims": 2,
+        "answerChars": 560,
+        "error": null
+      },
+      {
+        "question": "How much is Vercel Pro per user per month?",
+        "firstTokenMs": 6233,
+        "totalMs": 7050,
+        "round1Ms": 1771,
+        "round2FirstTokenMs": 2981,
+        "searchMs": 1184,
+        "readMs": 561,
+        "speculative": "off",
+        "sources": 3,
+        "anchoredClaims": 1,
+        "answerChars": 346,
+        "error": null
+      },
+      {
+        "question": "What is the price of the Render Professional workspace plan?",
+        "firstTokenMs": 8037,
+        "totalMs": 9674,
+        "round1Ms": 1944,
+        "round2FirstTokenMs": 2301,
+        "searchMs": 3382,
+        "readMs": 667,
+        "speculative": "off",
+        "sources": 3,
+        "anchoredClaims": 2,
+        "answerChars": 701,
+        "error": null
+      },
+      {
+        "question": "How much does Cloudflare Workers Paid cost per month?",
+        "firstTokenMs": 6137,
+        "totalMs": 7847,
+        "round1Ms": 1785,
+        "round2FirstTokenMs": 2976,
+        "searchMs": 1121,
+        "readMs": 505,
+        "speculative": "off",
+        "sources": 2,
+        "anchoredClaims": 3,
+        "answerChars": 610,
+        "error": null
+      }
+    ],
+    "tavily": {
+      "searches": 10,
+      "extractCalls": 10,
+      "extractUrls": 15
+    }
+  },
+  {
+    "label": "speculative-live",
+    "model": "anthropic/claude-haiku-5.5",
+    "webMode": "record",
+    "speculative": true,
+    "compact": false,
+    "at": "2026-11-21T18:48:26.389Z",
+    "samples": [
+      {
+        "question": "How much does the Supabase Pro plan cost per month?",
+        "firstTokenMs": 4411,
+        "totalMs": 5467,
+        "round1Ms": 1810,
+        "round2FirstTokenMs": 2314,
+        "searchMs": 0,
+        "readMs": 240,
+        "speculative": "hit",
+        "sources": 3,
+        "anchoredClaims": 2,
+        "answerChars": 411,
+        "error": null
+      },
+      {
+        "question": "What does the Neon Launch plan cost?",
+        "firstTokenMs": 5406,
+        "totalMs": 7398,
+        "round1Ms": 2268,
+        "round2FirstTokenMs": 3134,
+        "searchMs": 0,
+        "readMs": 0,
+        "speculative": "hit",
+        "sources": 2,
+        "anchoredClaims": 3,
+        "answerChars": 687,
+        "error": null
+      },
+      {
+        "question": "How much is Vercel Pro per user per month?",
+        "firstTokenMs": 5655,
+        "totalMs": 7240,
+        "round1Ms": 2003,
+        "round2FirstTokenMs": 3647,
+        "searchMs": 0,
+        "readMs": 0,
+        "speculative": "hit",
+        "sources": 2,
+        "anchoredClaims": 2,
+        "answerChars": 625,
+        "error": null
+      },
+      {
+        "question": "What is the price of the Render Professional workspace plan?",
+        "firstTokenMs": 5683,
+        "totalMs": 6843,
+        "round1Ms": 1761,
+        "round2FirstTokenMs": 2660,
+        "searchMs": 0,
+        "readMs": 0,
+        "speculative": "hit",
+        "sources": 2,
+        "anchoredClaims": 1,
+        "answerChars": 526,
+        "error": null
+      },
+      {
+        "question": "How much does Cloudflare Workers Paid cost per month?",
+        "firstTokenMs": 6594,
+        "totalMs": 7376,
+        "round1Ms": 1919,
+        "round2FirstTokenMs": 3383,
+        "searchMs": 0,
+        "readMs": 0,
+        "speculative": "hit",
+        "sources": 1,
+        "anchoredClaims": 1,
+        "answerChars": 295,
+        "error": null
+      }
+    ],
+    "tavily": {
+      "searches": 5,
+      "extractCalls": 6,
+      "extractUrls": 11
+    }
+  },
+  {
+    "label": "speculative-live-2",
+    "model": "anthropic/claude-haiku-5.5",
+    "webMode": "record",
+    "speculative": true,
+    "compact": false,
+    "at": "2026-11-21T18:49:11.744Z",
+    "samples": [
+      {
+        "question": "How much does the Supabase Pro plan cost per month?",
+        "firstTokenMs": 4715,
+        "totalMs": 5345,
+        "round1Ms": 1780,
+        "round2FirstTokenMs": 2222,
+        "searchMs": 0,
+        "readMs": 290,
+        "speculative": "hit",
+        "sources": 3,
+        "anchoredClaims": 1,
+        "answerChars": 235,
+        "error": null
+      },
+      {
+        "question": "What does the Neon Launch plan cost?",
+        "firstTokenMs": 4470,
+        "totalMs": 6210,
+        "round1Ms": 1796,
+        "round2FirstTokenMs": 2669,
+        "searchMs": 0,
+        "readMs": 0,
+        "speculative": "hit",
+        "sources": 2,
+        "anchoredClaims": 3,
+        "answerChars": 622,
+        "error": null
+      },
+      {
+        "question": "How much is Vercel Pro per user per month?",
+        "firstTokenMs": 4135,
+        "totalMs": 5106,
+        "round1Ms": 1694,
+        "round2FirstTokenMs": 2136,
+        "searchMs": 0,
+        "readMs": 0,
+        "speculative": "hit",
+        "sources": 2,
+        "anchoredClaims": 1,
+        "answerChars": 407,
+        "error": null
+      },
+      {
+        "question": "What is the price of the Render Professional workspace plan?",
+        "firstTokenMs": 4313,
+        "totalMs": 5794,
+        "round1Ms": 2008,
+        "round2FirstTokenMs": 2302,
+        "searchMs": 0,
+        "readMs": 0,
+        "speculative": "hit",
+        "sources": 2,
+        "anchoredClaims": 2,
+        "answerChars": 563,
+        "error": null
+      },
+      {
+        "question": "How much does Cloudflare Workers Paid cost per month?",
+        "firstTokenMs": 5666,
+        "totalMs": 6838,
+        "round1Ms": 1893,
+        "round2FirstTokenMs": 3592,
+        "searchMs": 0,
+        "readMs": 0,
+        "speculative": "hit",
+        "sources": 1,
+        "anchoredClaims": 1,
+        "answerChars": 541,
+        "error": null
+      }
+    ],
+    "tavily": {
+      "searches": 5,
+      "extractCalls": 6,
+      "extractUrls": 11
+    }
+  },
+  {
+    "label": "baseline-live-2",
+    "model": "anthropic/claude-haiku-5.5",
+    "webMode": "record",
+    "speculative": false,
+    "compact": false,
+    "at": "2026-11-21T18:49:56.575Z",
+    "samples": [
+      {
+        "question": "How much does the Supabase Pro plan cost per month?",
+        "firstTokenMs": 5517,
+        "totalMs": 6609,
+        "round1Ms": 1721,
+        "round2FirstTokenMs": 2161,
+        "searchMs": 916,
+        "readMs": 1832,
+        "speculative": "off",
+        "sources": 3,
+        "anchoredClaims": 2,
+        "answerChars": 464,
+        "error": null
+      },
+      {
+        "question": "What does the Neon Launch plan cost?",
+        "firstTokenMs": 7225,
+        "totalMs": 9261,
+        "round1Ms": 1859,
+        "round2FirstTokenMs": 3196,
+        "searchMs": 1564,
+        "readMs": 1890,
+        "speculative": "off",
+        "sources": 3,
+        "anchoredClaims": 3,
+        "answerChars": 825,
+        "error": null
+      },
+      {
+        "question": "How much is Vercel Pro per user per month?",
+        "firstTokenMs": 5855,
+        "totalMs": 6861,
+        "round1Ms": 1684,
+        "round2FirstTokenMs": 2424,
+        "searchMs": 912,
+        "readMs": 1967,
+        "speculative": "off",
+        "sources": 3,
+        "anchoredClaims": 2,
+        "answerChars": 338,
+        "error": null
+      },
+      {
+        "question": "What is the price of the Render Professional workspace plan?",
+        "firstTokenMs": 6964,
+        "totalMs": 8715,
+        "round1Ms": 1717,
+        "round2FirstTokenMs": 2999,
+        "searchMs": 1736,
+        "readMs": 1595,
+        "speculative": "off",
+        "sources": 2,
+        "anchoredClaims": 2,
+        "answerChars": 596,
+        "error": null
+      },
+      {
+        "question": "How much does Cloudflare Workers Paid cost per month?",
+        "firstTokenMs": 9130,
+        "totalMs": 10486,
+        "round1Ms": 1841,
+        "round2FirstTokenMs": 4341,
+        "searchMs": 2151,
+        "readMs": 1568,
+        "speculative": "off",
+        "sources": 2,
+        "anchoredClaims": 2,
+        "answerChars": 461,
+        "error": null
+      }
+    ],
+    "tavily": {
+      "searches": 10,
+      "extractCalls": 10,
+      "extractUrls": 15
+    }
+  }
+]

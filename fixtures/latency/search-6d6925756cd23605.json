@@ -1,0 +1,42 @@
+{
+  "request": {
+    "query": "Render pricing Professional workspace seat cost",
+    "start_date": null,
+    "end_date": null
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://checkthat.ai/brands/render/pricing",
+        "title": "Render Pricing 2026: Total Cost & Competitors Compared - Render",
+        "snippet": "| 15-person SaaS with moderate traffic | Pro workspace ($25) + 2 Pro services ($170) + 1 Standard worker ($25) + Pro-8gb Postgres ($100) + Standard Redis ($32) + 100 GB storage ($30) + ~75 GB bandwidth overage (~$11) | $390–$450 |\n| HIPAA healthcare startup | Scale workspace ($499) + 2 Standard services ($50) + Pro-4gb Postgres ($55) + 20% HIPAA surcharge on compute (~$21) | $625–$700 | [...] | Scenario | What you pay for | Ballpark/month |\n --- \n| Solo developer side project | Hobby workspace ($0) + Starter web service ($7) + Basic-256mb Postgres ($6) | $13 |\n| 5-person production API team | Pro workspace ($25) + 2 Standard services ($50) + Pro-4gb Postgres ($55) + 20 GB Postgres storage ($6) | $135–$160 | [...] Render pricing has two layers: a flat monthly workspace fee plus separate per-second compute charges. The workspace fee sets feature access, compliance certifications, and support level; compute covers every web service, worker, and database you run. The current plans took effect on April 23, 2026, when Render replaced its $19-per-member Professional plan with flat tiers and unlimited seats. Remaining legacy workspaces migrate automatically on August 1, 2026, and Render says 75% of paying",
+        "publishedDate": "2026-07-30T00:00:00.000Z"
+      },
+      {
+        "url": "https://www.activepieces.com/blog/render-pricing-2026-free-tier-workers-total-cost",
+        "title": "Render Pricing 2026: Free Tier, Workers & Total Cost",
+        "snippet": "| Item | Monthly price basis | What is included | Usage limits |\n ---  --- |\n| Entry workspace plan | Lowest workspace fee | Core deploys for one builder | Tightest seat, build and bandwidth allowances |\n| Pro workspace plan | $25/mo flat plus compute | Unlimited seats and services | 25 GB bandwidth included |\n| Enterprise plan | Quoted, not listed | Negotiated terms | Set by contract |\n| Free instance | No instance charge | One small service for testing | Spins down when idle | [...] Small team running staging and production: the Pro workspace plan, $25 flat for unlimited seats and services, plus $138 a month in services.\n Company needing negotiated terms: the Enterprise plan, quoted by contract. [...] | Platform | Entry price | Billing model | Free option | Database cost | Team/seat pricing |\n ---  ---  --- |\n| Render | Workspace plan plus the smallest paid instance | Flat instance | Free web services that spin down | Priced by instance size, separate from compute | Higher workspace plans add seats |\n| Railway | Subscription with usage credit | Usage-metered | Trial only | Metered like any other service | Seats on paid plans |",
+        "publishedDate": "2026-11-12T04:32:14.000Z"
+      },
+      {
+        "url": "https://forteplatforms.com/blog/render-workspace-fees",
+        "title": "Render Workspace Fees After the End of Seat Pricing | Forte Blog",
+        "snippet": "Take a hypothetical API with $18 in monthly Render service charges. Hobby adds no workspace fee. If the same API still costs $18 to run after the team moves to Pro, the $25 workspace fee brings the total to $43 before tax. A third developer can join without increasing that workspace fee. These are illustrative service charges using Render's published billing structure, not a quote for a particular app. [...] Teams\n\n# Render Workspace Fees After the End of Seat Pricing\n\nRender no longer charges per seat. See when the $25 Pro workspace fee applies and how to compare it with your service costs.\n\nForte TeamPublished November 8, 2026Updated November 15, 20263 min read [...] On Render, adding a second developer can change the platform bill even when the app uses exactly the same resources. Hobby allows one workspace member. A team that needs another member must move to Pro, with a $25 monthly workspace fee under the published terms. See Render's plan limits and its pricing announcement.",
+        "publishedDate": "2026-11-08T00:00:00.000Z"
+      },
+      {
+        "url": "https://justinmckelvey.com/blog/render-pricing",
+        "title": "Render Pricing 2026: Pro $25 + Compute, 3 Real Bills",
+        "snippet": "Bandwidth past the included amount is $0.15 per GB. Persistent disks are $0.25 per GB a month. Pro's $25 is per workspace, not per seat.\n\n## What each service costs [...] Two parts: a workspace plan (Hobby $0, Pro $25, Scale $499 a month, per Render's pricing page read November 16, 2026) plus a fixed monthly price for each service. The smallest paid web service is $7 (512 MB) and the smallest paid Postgres is $6 (256 MB), so a small app runs about $13 a month on Hobby.\n\n### Is Render Pro $25 per user?\n\nNo. Render lists Pro at $25 a month plus compute, with unlimited seats and services. You pay the $25 once for the workspace, then pay for each service you run. [...] No. Render lists Pro at $25 a month plus compute, with unlimited seats and services. You pay the $25 once for the workspace, then pay for each service you run.\n\nHow much is a Render Postgres database?\n\nRender's paid Postgres starts at $6 a month for 256 MB of RAM, then $19 for 1 GB, $40 for 2 GB and $55 for 4 GB. Storage beyond the included amount is $0.30 per GB. There's a free instance too, with limits covered on our is-Render-free page.\n\nIs Render cheaper than Railway?",
+        "publishedDate": "2026-11-16T17:20:00.000Z"
+      },
+      {
+        "url": "https://temps.sh/blog/render-pricing-2026",
+        "title": "Render Pricing 2026: Free Tier Sleep, Plans, Compute | Temps",
+        "snippet": "No. In April 2026 Render replaced its per-member plans with flat workspace fees: Pro ($25/month flat) replaced Professional ($19 per member per month), and Scale ($499/month flat) replaced Organization ($29 per member per month), per Render's changelog. Pro and Scale include unlimited seats. Hobby stays at one seat, so a team of two or more needs Pro.\n\n## What Does a Production App on Render Cost?\n\nThree worked examples, using the list prices above (no bandwidth overage): [...] > TL;DR: Hobby is $0 + compute (1 seat, 25 services, 5 GB bandwidth). Pro is $25/month + compute (unlimited seats, 25 GB). Scale is $499/month + compute (multiple workspaces, SAML SSO, 1 TB). Web services cost $0 (Free, sleeps), then $7/month for 512 MB and $25/month for 2 GB. Postgres starts at $6/month. Upgrading the workspace plan does not stop a Free service from sleeping — moving the service to a paid instance does, on any plan.\n\n## What Are Render's Workspace Plans in 2026? [...] No. Since April 2026, Pro is $25/month flat per workspace with unlimited seats, plus compute. It replaced the per-member Professional plan ($19 per member). Scale ($499/month flat) replaced Organization ($29 per member).\n\n### How long does Render's free Postgres database last?",
+        "publishedDate": "2026-10-05T00:00:00.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}

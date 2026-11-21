@@ -1,0 +1,42 @@
+{
+  "request": {
+    "query": "Neon Postgres pricing Launch plan limits",
+    "start_date": null,
+    "end_date": null
+  },
+  "response": {
+    "results": [
+      {
+        "url": "https://selfhost.dev/blog/neon-pricing-cost-of-serverless-postgres",
+        "title": "Neon Pricing: The Honest Cost of Serverless Postgres",
+        "snippet": "| Plan | Compute | Storage | Autoscaling | Best for |\n ---  --- \n| Free | $0 (100 CU-hours/project) | $0 (1 GB/project) | Up to 2 CU | Prototypes, learning, side projects |\n| Launch | $0.106/CU-hour | $0.35/GB-month | Up to 16 CU | Startups and growing production apps |\n| Scale | $0.222/CU-hour | $0.35/GB-month | Up to 16 CU autoscaling (or fixed sizes up to 56 CU) | Production needing compliance and SLAs | [...] Free is for proving things, not running them. 100 CU-hours and 1 GB of storage per project, with scale-to-zero always on. Genuinely useful for prototypes, but the hard usage cutoff makes it unsuitable for production.\n\nLaunch is the workhorse. Pay-as-you-go with no minimum, autoscaling to 16 CU, and 10 branches included. This is where most startups and small production apps land. [...] Neon’s Managed Better Auth is included on every plan: up to 60,000 monthly active users per project on Free, and up to 1 million on Launch and Scale, with no per-user price listed. Past 1 million, Neon asks you to contact sales.\n\ncost check\n\nBased on this page: ·\n\nOn now or still deciding?\n\nWhat's the bill you're looking at?\n\nRoughly how much a month, all in?\n\n·\n\nMatched to RDS, we bill 3.0x less in ap-south-1 (Mumbai) and 2.1x less in us-east-1.",
+        "publishedDate": "2026-06-25T08:25:10.000Z"
+      },
+      {
+        "url": "https://medium.com/@alexeylark/neon-does-going-serverless-solve-fixed-expenses-for-postgres-b54786af3f40",
+        "title": "Neon: Does Going Serverless Solve Fixed Expenses for Postgres?",
+        "snippet": "Free-Tier has fixed 0.25 vCPU, 1 GB RAM, and most notably just 0.5 GB of storage. The storage plays the biggest limiting factor here, although it’s perfectly sufficient for really small projects, and again, it’s totally free and it can scale once we decide to pay.\n\nPaid Tier “Launch” — comes at $19, has up to 4 vCPU and 16 GB RAM, with 300 vCPU-hours included in the plan monthly. Plan features 10 GB of storage included, with a price of $3.50 per extra 2GB/month. [...] Compute is enough in Launch Tier at $19, with time limit of 300 vCPU hours. With 4 vCPU at maximum capacity all month we would need 4 x 24 x 30 = 2880 hours. To add that we need to pay $0.16 per vCPU/hour, which translates to $0.16 x (2880–300) = $413.\n\n10 GB of storage is included in the Launch Tier, with $3.5 / 2 GB for additional space. This would cost $3.5 x 90 / 2 = $158 for 100 GB. [...] Free tier has no time limit on vCPU-hours, which is equal to 0.25 x 30 x 24 = 180 vCPU hours included. To have 10 GB of storage we would need to pay for the Launch tier at $19, which would also increase compute capacity.\n\nTotal cost monthly: $0.\n\n2. Average config: 4 vCPU + 16 GB RAM + 100 GB storage.",
+        "publishedDate": "2024-04-25T16:33:38.000Z"
+      },
+      {
+        "url": "https://makerkit.dev/pricing-calculator/neon",
+        "title": "Neon Pricing Calculator (2026) — Estimate Your Monthly Bill",
+        "snippet": "A side project with scale-to-zero can cost as little as $1–3/month. A production SaaS on 1 CU always-on runs about $78/month before storage. Neon has no monthly minimum on the Launch plan — you pay only for what you use.\n\n### Does Neon have a free plan?\n\nYes. The Free plan includes 100 CU-hours/month, 0.5 GB storage, and up to 2 CU autoscale. It is suitable for development and side projects. The Launch plan removes these limits and enables scale-to-zero with configurable autoscale up to 8 CU. [...] Neon's minimum compute size is 0.25 CU (0.25 vCPU, 1 GB RAM). From there it scales to 0.5 CU (2 GB), 1 CU (4 GB), 2 CU (8 GB), and up to 16 CU (64 GB). Autoscaling adjusts the CU size dynamically — you set a minimum and maximum, and Neon scales within that range based on load. The Launch plan allows up to 8 CU autoscale. [...] Growing SaaS (2 CU, scale-to-zero, 300 active hours): 2 CU × 300 hours × $0.106 + 20 GB storage × $0.35 =$70.60/month.\n\n## What to watch out for with Neon\n\nThe main limitation of the Launch plan is no HA. Data is durably replicated, but there is no user-selectable multi-AZ primary. If your primary compute fails, Neon handles recovery automatically, but you cannot configure an active standby. For strict HA requirements, consider PlanetScale HA clusters or Supabase Pro.",
+        "publishedDate": "2026-05-21T00:00:00.000Z"
+      },
+      {
+        "url": "https://neon.com/docs/introduction/plans",
+        "title": "Neon plans - Neon Docs",
+        "snippet": "Free: No charge, up to 6 hours, limited to 1 GB of change history per project\n   Launch: Up to 7 days, billed at $0.20/GB-month\n   Scale: Up to 30 days, billed at $0.20/GB-month\n\nYou can change your history window to control how much change history you retain for instant restore. See Instant restore for how to use the feature.\n\n> The change history is a log of write operations in the form of Postgres Write-Ahead Logs.\n\n### History window for your project. [...] 1 extra branch × 1 month = 1 branch-month\n\nCost: $1.50/branch-month (~$0.002/hour).\n\nExample: The Launch plan includes 10 branches/project. You create 2 extra branches for 5 hours each → 10 extra branch-hours × $0.002/hour = ~$0.02 total.\n\n> Extra branches are not available on the Free plan. Delete branches or upgrade if you need more.\n\nThe maximum number of branches you can have per project:\n\n   Launch: 5,000 branches/project\n   Scale: 5,000 branches/project",
+        "publishedDate": "2025-05-30T00:00:00.000Z"
+      },
+      {
+        "url": "https://www.jetadmin.io/blog/neon-pricing",
+        "title": "Neon Pricing 2026: Plans, Costs & Limits",
+        "snippet": "| Plan | Billing | Database allowance or rate | When it fits |\n ---  --- |\n| Free | $0; no annual commitment | 100 CU-hours and 0.5 GB storage per project | Experiments and small workloads within every free limit |\n| Launch | Usage billed monthly; no fixed annual equivalent | $0.106/CU-hour; $0.35/GB-month | Applications that exceed Free without requiring Scale controls | [...] Summarize with AI\n\n\n\nShare article\n\n\n\nNeon pricing starts with a free plan; paid Launch and Scale plans charge for actual usage with no monthly minimum. Database compute costs $0.106 per CU-hour on Launch and $0.222 on Scale, with storage billed separately. The main budget question is how much compute runs, and for how long—not how many colleagues log in. [...] ## Which plan should you choose?\n\nUse Free while the real workload fits its per-project limits. Move to Launch when storage, compute, or idle behavior requires it. Choose Scale when its controls or capacity are necessary. Measure a representative week—including background jobs—before projecting a full month.\n\n## Frequently asked questions\n\n### Is Neon really free?\n\nYes, within the Free plan allowances. Free is not a time-limited trial; paid resources and higher requirements change the budget.",
+        "publishedDate": "2026-09-26T05:02:25.000Z"
+      }
+    ],
+    "timedOut": false
+  }
+}
