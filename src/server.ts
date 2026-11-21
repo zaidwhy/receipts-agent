@@ -6,6 +6,7 @@ import { createApp } from "./app.ts";
 import { createClock } from "./clock.ts";
 import { loadConfig, missingKeys } from "./config.ts";
 import { openDatabase } from "./db.ts";
+import { createFeedPort } from "./discovery.ts";
 import { createLlmClient } from "./llm.ts";
 import { createLogger } from "./log.ts";
 import { createReader } from "./reader.ts";
@@ -25,6 +26,7 @@ const app = createApp({
     llm: createLlmClient({ baseUrl: config.llmBaseUrl, apiKey: config.llmApiKey, model: config.llmModel }),
     search: createSearch(webOptions),
     reader: createReader(webOptions),
+    feeds: createFeedPort(config.webMode),
     db: openDatabase(config.dbPath),
     clock: createClock(),
   },

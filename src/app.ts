@@ -54,6 +54,7 @@ async function handle(deps: AppDeps, request: IncomingMessage, response: ServerR
 }
 
 async function handleChat(deps: AppDeps, request: IncomingMessage, response: ServerResponse): Promise<void> {
+  const startedAt = performance.now();
   const missing = missingKeys(deps.config);
   if (missing.length > 0) {
     sendJson(response, 503, { error: `Missing environment variable(s): ${missing.join(", ")}. Copy .env.example to .env and fill them in.` });
@@ -96,12 +97,17 @@ async function handleChat(deps: AppDeps, request: IncomingMessage, response: Ser
   };
 
   try {
-    await runTurn(deps.conversation, { message: payload.message, timezone: resolveTimezone(payload.timezone) }, (event) => {
-      if (event.type === "status") send("status", { text: event.text });
-      else if (event.type === "token") send("token", { text: event.text });
-      else send("sources", { sources: event.sources });
-    });
-    send("done", {});
+    const result = await runTurn(
+      deps.conversation,
+      { message: payload.message, timezone: resolveTimezone(payload.timezone), startedAt },
+      (event) => {
+        if (event.type === "status") send("status", { text: event.text });
+        else if (event.type === "token") send("token", { text: event.text });
+        else if (event.type === "sources") send("sources", { sources: event.sources });
+        else send(event.type, event.data); // recheck_row, event_row, coverage
+      },
+    );
+    send("done", { timings: result.timings });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     log.error("turn failed", { message });

@@ -1,6 +1,7 @@
-// One chat turn: look up past conversation when the user points at it, ask the model,
-// run web_search or recall if it asks (at most 4 rounds), stream the answer, then turn
-// the receipts block into stored claims.
+// One chat turn: look up past conversation when the user points at it, recheck earlier
+// answers when the user asks whether they still hold, ask the model, run web_search,
+// recall or recheck if it asks (at most 4 rounds), stream the answer, then turn the
+// receipts block into stored claims.
 import { createReceiptsFilter, parseReceipts, storeClaims, type SnapshotRef, type StoreClaimsResult } from "./claims.ts";
 import { describeToday, type Clock } from "./clock.ts";
 import { insertTurn, recentTurns, type Database } from "./db.ts";
@@ -9,7 +10,9 @@ import { createLogger } from "./log.ts";
 import type { ReaderPort } from "./reader.ts";
 import { saveSnapshot } from "./receipts.ts";
 import type { SearchPort } from "./search.ts";
+import type { FeedPort } from "./discovery.ts";
 import { describeRecall, recall, refersToPastConversation, RECALL_TOOL, runRecall } from "./memory.ts";
+import { asksAboutChange, parseRecheckArguments, RECHECK_TOOL, runRecheck, type RecheckEvent, type RecheckOutput } from "./recheck-tool.ts";
 import { resolveDates, type DateReference } from "./temporal.ts";
 import { runWebSearch, WEB_SEARCH_TOOL, type Source } from "./tools.ts";
 
@@ -23,6 +26,7 @@ export interface ConversationDeps {
   llm: LlmClient;
   search: SearchPort;
   reader: ReaderPort;
+  feeds: FeedPort;
   db: Database;
   clock: Clock;
 }
@@ -36,17 +40,32 @@ export interface CitedSource {
 export type TurnEvent =
   | { type: "status"; text: string }
   | { type: "token"; text: string }
-  | { type: "sources"; sources: CitedSource[] };
+  | { type: "sources"; sources: CitedSource[] }
+  | RecheckEvent;
+
+// Where the time of one turn went, in milliseconds. Measured, not tuned.
+export interface TurnTimings {
+  thinking_emitted_ms: number; // from the request arriving to the first "thinking" status
+  recall_ms: number | null; // the recall the code ran before the model
+  recheck_ms: number | null; // the recheck the code ran before the model, plus any the model asked for
+  recheck_lane_a_ms: number | null; // re-reading the cited pages
+  recheck_lane_b_ms: number | null; // feeds and dated search
+  llm_rounds: { ttft_ms: number | null; duration_ms: number }[]; // per model call; ttft is null when the round streamed no text
+  search_ms: number; // summed over web_search calls
+  read_ms: number; // summed over page reads; direct reads overlap the searches
+  total_ms: number;
+}
 
 export interface TurnResult {
   answer: string;
   assistantTurnId: number;
   claims: StoreClaimsResult;
+  timings: TurnTimings;
 }
 
 export function buildSystemPrompt(today: string, references: DateReference[] = []): string {
   return [
-    `You are a research assistant with two tools: web_search for the web and recall for the earlier conversation. Today is ${today}.`,
+    `You are a research assistant with three tools: web_search for the web, recall for the earlier conversation and recheck for whether earlier answers still hold. Today is ${today}.`,
     "",
     "When to search:",
     "- Greetings, thanks and chit-chat: answer directly, never call a tool.",
@@ -67,6 +86,15 @@ export function buildSystemPrompt(today: string, references: DateReference[] = [
     '{"entities": ["Acme", "Other Co"], "claims": [{"text": "Pro plan costs $19 per month", "kind": "price", "entity": "Acme", "source": 1, "quote": "Pro $19 / month"}]}',
     "```",
     "entities lists every product or company the answer discusses, even one with no checkable claim. kind is one of price, limit, version, date, availability, launch. source is the [n] of the page. quote must be copied word for word from that page's excerpt, from one stretch with no [...] inside it. Give at most 6 claims, only for facts you stated in the answer. If there are no entities and no claims, leave the block out.",
+    "",
+    "Rechecking:",
+    "- A recheck result shows the user a table (claim, then, now, status) above your answer, so do not copy it. Lead with what changed, then what is unchanged, then what could not be checked.",
+    "- Say \"source unchanged\", never \"still true\": a page that reads the same says nothing about the world. Name any claim marked changed with its old and new value, and cite its source.",
+    "- A claim marked context changed, reworded or cannot tell is not a clean pass: say so in a few words. A lead from search is from a different source than the page checked; say that when you mention it.",
+    "- Never say nothing changed when any source was unreachable or any claim was undecided. Say what was not checked.",
+    "- Events listed as unconfirmed or undated are not announcements: call them unconfirmed or possibly older.",
+    "- In a turn that only reports a recheck, leave out the receipts block unless you also searched.",
+    "- recheck(turn_ids, entities, since) runs a recheck yourself; turn_ids come from recall. It re-reads earlier sources and looks for what shipped since, and costs a few seconds.",
     "",
     "Memory:",
     "- recall(start, end, topic) returns the questions the user asked and the answers given before, with each stored fact's source, age in days and whether it has expired. Use it when the user points at something asked or said earlier. If the message already shows a recall result, use it; call recall again only for a different range or topic.",
@@ -93,12 +121,26 @@ function dateHints(references: DateReference[]): string[] {
 
 export async function runTurn(
   deps: ConversationDeps,
-  input: { message: string; timezone: string },
+  input: { message: string; timezone: string; startedAt?: number }, // startedAt: performance.now() when the request arrived
   emit: (event: TurnEvent) => void,
 ): Promise<TurnResult> {
   const { db, clock } = deps;
+  const turnStarted = performance.now();
+  const timings: TurnTimings = {
+    thinking_emitted_ms: 0,
+    recall_ms: null,
+    recheck_ms: null,
+    recheck_lane_a_ms: null,
+    recheck_lane_b_ms: null,
+    llm_rounds: [],
+    search_ms: 0,
+    read_ms: 0,
+    total_ms: 0,
+  };
+  const elapsed = (since: number) => Math.round(performance.now() - since);
   // First thing: the user sees activity before any model or network call starts.
   emit({ type: "status", text: "thinking" });
+  timings.thinking_emitted_ms = elapsed(input.startedAt ?? turnStarted);
   const history = recentTurns(db, HISTORY_TURNS);
   const now = clock.now();
   const userTurnId = insertTurn(db, "user", input.message, now.toISOString(), input.timezone);
@@ -117,7 +159,9 @@ export async function runTurn(
     clock,
     sources,
     status: (text: string) => emit({ type: "status", text }),
+    timings: { searchMs: 0, readMs: 0 },
   };
+  const recheckDeps = { db, reader: deps.reader, search: deps.search, llm: deps.llm, clock, feeds: deps.feeds };
 
   const recallOptions = { timeZone: input.timezone, beforeTurnId: userTurnId };
 
@@ -127,17 +171,51 @@ export async function runTurn(
     const forced = references.filter((reference) => reference.start !== null && reference.end !== null).slice(0, MAX_FORCED_RECALLS);
     const calls: ToolCall[] = [];
     const results: string[] = [];
+    const recalledTurnIds: number[] = [];
+    const recallStarted = performance.now();
     for (const reference of forced) {
       const where = reference.label?.startsWith("week") ? `during ${reference.label}` : `on ${reference.label}`;
       emit({ type: "status", text: `looking up what you asked ${where}` });
       const range = { start: reference.start as string, end: reference.end as string };
       calls.push({ id: `recall_${calls.length + 1}`, name: "recall", arguments: JSON.stringify({ start: range.start, end: range.end }) });
-      results.push(describeRecall(recall(db, { range }, now, recallOptions), { range }, reference.label ?? undefined));
+      const recalled = recall(db, { range }, now, recallOptions);
+      recalledTurnIds.push(...recalled.found.map((turn) => turn.turnId));
+      results.push(describeRecall(recalled, { range }, reference.label ?? undefined));
     }
+    timings.recall_ms = elapsed(recallStarted);
     if (calls.length > 0) {
       messages.push({ role: "assistant", content: "", toolCalls: calls });
       calls.forEach((call, index) => messages.push({ role: "tool", toolCallId: call.id, content: results[index] as string }));
     }
+
+    // "Has any of that changed since earlier?" is answered from fresh reads, so the recheck runs here too,
+    // before the model writes. T is where the recalled range starts.
+    if (recalledTurnIds.length > 0 && asksAboutChange(input.message)) {
+      const since = new Date(Math.min(...forced.map((reference) => new Date(reference.start as string).getTime())));
+      emit({ type: "status", text: "rechecking what you asked about" });
+      const recheckStarted = performance.now();
+      const output = await runRecheck(recheckDeps, { turnIds: recalledTurnIds, since }, (event) => emit(event));
+      timings.recheck_ms = elapsed(recheckStarted);
+      if (output) {
+        recordRecheckTimings(timings, output);
+        const call: ToolCall = { id: "recheck_1", name: "recheck", arguments: JSON.stringify({ turn_ids: recalledTurnIds, since: since.toISOString() }) };
+        messages.push({ role: "assistant", content: "", toolCalls: [call] });
+        messages.push({ role: "tool", toolCallId: call.id, content: output.text });
+      }
+    }
+  }
+
+  // The model's own recheck call: the same work the code runs, with its rows streamed too.
+  async function runRecheckTool(rawArguments: string): Promise<string> {
+    const parsed = parseRecheckArguments(rawArguments);
+    if ("error" in parsed) return parsed.error;
+    emit({ type: "status", text: "rechecking earlier sources" });
+    const started = performance.now();
+    const output = await runRecheck(recheckDeps, parsed.input, (event) => emit(event));
+    timings.recheck_ms = (timings.recheck_ms ?? 0) + elapsed(started);
+    if (!output) return "Nothing to recheck: no stored claims or entities match those turn_ids or entities.";
+    recordRecheckTimings(timings, output);
+    return output.text;
   }
 
   let rawAnswer = "";
@@ -147,9 +225,12 @@ export async function runTurn(
     const filter = createReceiptsFilter();
     let text = "";
     const calls: ToolCall[] = [];
+    const roundStarted = performance.now();
+    let firstTokenMs: number | null = null;
 
-    for await (const event of deps.llm.streamChat({ messages, tools: toolsAllowed ? [WEB_SEARCH_TOOL, RECALL_TOOL] : undefined })) {
+    for await (const event of deps.llm.streamChat({ messages, tools: toolsAllowed ? [WEB_SEARCH_TOOL, RECALL_TOOL, RECHECK_TOOL] : undefined })) {
       if (event.type === "token") {
+        firstTokenMs ??= elapsed(roundStarted);
         text += event.text;
         const visible = filter.push(event.text);
         if (visible) emit({ type: "token", text: visible });
@@ -159,6 +240,7 @@ export async function runTurn(
     }
     const rest = filter.finish();
     if (rest) emit({ type: "token", text: rest });
+    timings.llm_rounds.push({ ttft_ms: firstTokenMs, duration_ms: elapsed(roundStarted) });
 
     if (calls.length === 0 || !toolsAllowed) {
       rawAnswer = text;
@@ -174,6 +256,8 @@ export async function runTurn(
       } else if (call.name === "recall") {
         emit({ type: "status", text: "looking through earlier conversation" });
         result = runRecall(db, now, recallOptions, call.arguments);
+      } else if (call.name === "recheck") {
+        result = await runRecheckTool(call.arguments);
       } else {
         result = `Unknown tool "${call.name}".`;
       }
@@ -208,5 +292,15 @@ export async function runTurn(
 
   const claims = storeClaims(db, { turnId: assistantTurnId, claims: parsed.claims, entities: parsed.entities, snapshots });
   if (citedSources.length > 0) emit({ type: "sources", sources: citedSources });
-  return { answer: parsed.visibleText, assistantTurnId, claims };
+
+  timings.search_ms = Math.round(toolContext.timings.searchMs);
+  timings.read_ms = Math.round(toolContext.timings.readMs);
+  timings.total_ms = elapsed(input.startedAt ?? turnStarted);
+  log.info("turn timings", { ...timings });
+  return { answer: parsed.visibleText, assistantTurnId, claims, timings };
+}
+
+function recordRecheckTimings(timings: TurnTimings, output: RecheckOutput): void {
+  timings.recheck_lane_a_ms = (timings.recheck_lane_a_ms ?? 0) + output.laneAMs;
+  timings.recheck_lane_b_ms = (timings.recheck_lane_b_ms ?? 0) + output.laneBMs;
 }

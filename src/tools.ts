@@ -64,6 +64,8 @@ export interface ToolContext {
   clock: Clock;
   sources: Source[]; // grows across tool calls in one turn
   status: (text: string) => void;
+  // Milliseconds spent, summed over the turn. Direct page reads run beside the searches, so the two overlap.
+  timings?: { searchMs: number; readMs: number };
 }
 
 export async function runWebSearch(context: ToolContext, rawArguments: string): Promise<string> {
@@ -78,6 +80,7 @@ export async function runWebSearch(context: ToolContext, rawArguments: string): 
   // Official pages are read while the searches run, so they cost no extra waiting.
   const direct = readPages(context, urls);
 
+  const searchStarted = performance.now();
   const perQuery = await Promise.all(
     queries.map(async (query) => {
       try {
@@ -92,6 +95,8 @@ export async function runWebSearch(context: ToolContext, rawArguments: string): 
       }
     }),
   );
+
+  if (context.timings) context.timings.searchMs += performance.now() - searchStarted;
 
   // A search hit on a domain the model already named adds nothing, so it is skipped.
   const directDomains = new Set(urls.map(domainOf));
@@ -132,12 +137,15 @@ export async function runWebSearch(context: ToolContext, rawArguments: string): 
 async function readPages(context: ToolContext, urls: string[]): Promise<ReadOutcome> {
   if (urls.length === 0) return { pages: [], failures: [] };
   for (const url of urls) context.status(`reading ${shortUrl(url)}`);
+  const started = performance.now();
   try {
     return await context.reader.read(urls);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     log.warn("reader failed", { message });
     return { pages: [], failures: urls.map((url) => ({ url, reason: "failed" as const, error: message })) };
+  } finally {
+    if (context.timings) context.timings.readMs += performance.now() - started;
   }
 }
 

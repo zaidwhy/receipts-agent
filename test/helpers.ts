@@ -8,6 +8,7 @@ import { storeClaims, type ReceiptClaim, type SnapshotRef } from "../src/claims.
 import { createClock } from "../src/clock.ts";
 import { loadConfig, type Config } from "../src/config.ts";
 import type { ConversationDeps } from "../src/conversation.ts";
+import { createFeedPort } from "../src/discovery.ts";
 import { insertTurn, openDatabase, type Database } from "../src/db.ts";
 import type { ChatMessage, LlmClient, LlmEvent, ToolDefinition } from "../src/llm.ts";
 import { createReader, type ReaderPort, type ReadOptions, type ReadOutcome } from "../src/reader.ts";
@@ -67,6 +68,7 @@ export function offlineDeps(llm: LlmClient, db: Database): ConversationDeps {
     db,
     search: createSearch(web),
     reader: createReader(web),
+    feeds: createFeedPort("replay"),
     clock: createClock("2026-11-21T10:00:00Z"),
   };
 }

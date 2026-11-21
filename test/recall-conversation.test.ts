@@ -75,7 +75,7 @@ test("a question about last Tuesday is looked up in code before the model is cal
   // The recall call comes after the history and the user's message, and the model still gets both tools.
   const roles = first.messages.map((m) => m.role);
   assert.deepEqual(roles.slice(-3), ["user", "assistant", "tool"]);
-  assert.deepEqual(first.tools?.map((t) => t.name), ["web_search", "recall"]);
+  assert.deepEqual(first.tools?.map((t) => t.name), ["web_search", "recall", "recheck"]);
   assert.equal(result.answer, "You asked what AcmeDB costs.");
 });
 
