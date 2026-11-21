@@ -1,0 +1,23 @@
+{
+  "name": "minimi-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Chat agent with one tool, web search, where every answer is a receipt.",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "test": "tsx --test \"test/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "openai": "^7.62.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
