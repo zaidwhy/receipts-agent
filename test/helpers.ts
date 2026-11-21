@@ -10,15 +10,15 @@ import { loadConfig, type Config } from "../src/config.ts";
 import type { ConversationDeps } from "../src/conversation.ts";
 import { insertTurn, openDatabase, type Database } from "../src/db.ts";
 import type { ChatMessage, LlmClient, LlmEvent, ToolDefinition } from "../src/llm.ts";
-import { createReader } from "../src/reader.ts";
+import { createReader, type ReaderPort, type ReadOptions, type ReadOutcome } from "../src/reader.ts";
 import { saveSnapshot } from "../src/receipts.ts";
-import { createSearch } from "../src/search.ts";
+import { createSearch, type SearchOutcome, type SearchPort, type SearchRequest, type SearchResult } from "../src/search.ts";
 
 export function memoryDb(): Database {
   return openDatabase(":memory:");
 }
 
-type CountedTable = "turns" | "snapshots" | "claims" | "entities";
+type CountedTable = "turns" | "snapshots" | "claims" | "entities" | "rechecks" | "events";
 
 // Fixed statements, so no SQL is ever built from a variable.
 const countStatements: Record<CountedTable, string> = {
@@ -26,6 +26,8 @@ const countStatements: Record<CountedTable, string> = {
   snapshots: "SELECT COUNT(*) AS n FROM snapshots",
   claims: "SELECT COUNT(*) AS n FROM claims",
   entities: "SELECT COUNT(*) AS n FROM entities",
+  rechecks: "SELECT COUNT(*) AS n FROM rechecks",
+  events: "SELECT COUNT(*) AS n FROM events",
 };
 
 export function count(db: Database, table: CountedTable): number {
@@ -102,6 +104,7 @@ export interface SeedClaim {
   url: string;
   page: string;
   fetchedAt: string;
+  extractor?: string; // how the page was read; "fetch" unless a test needs Tavily
 }
 
 // One past question and its answer, backdated, with the claims the answer would have stored.
@@ -115,10 +118,49 @@ export function seedExchange(
   const answerId = insertTurn(db, "assistant", seed.answer, answeredAt, tz);
   const snapshots = new Map<number, SnapshotRef>();
   const claims: ReceiptClaim[] = (seed.claims ?? []).map((claim, index) => {
-    const saved = saveSnapshot(db, claim.url, claim.url, claim.page, "fetch", claim.fetchedAt);
+    const saved = saveSnapshot(db, claim.url, claim.url, claim.page, claim.extractor ?? "fetch", claim.fetchedAt);
     snapshots.set(index + 1, { hash: saved.hash, text: saved.text, url: claim.url });
     return { text: claim.text, kind: claim.kind, entity: claim.entity, source: index + 1, quote: claim.quote };
   });
   storeClaims(db, { turnId: answerId, claims, entities: seed.entities, snapshots });
   return { questionId, answerId };
+}
+
+// A reader that answers from a function, so a test decides what each extractor returns for each URL.
+// A string is the page text; { error } is a failed read; undefined is a failed read with no message.
+export type PageAnswer = string | { error: string } | undefined;
+
+export class FakeReader implements ReaderPort {
+  calls: { url: string; extractor: string | undefined }[] = [];
+  active = 0;
+  peak = 0;
+  constructor(private answer: (url: string, extractor: string | undefined) => PageAnswer) {}
+
+  async read(urls: string[], options?: ReadOptions): Promise<ReadOutcome> {
+    this.active += 1;
+    this.peak = Math.max(this.peak, this.active);
+    await new Promise((resolve) => setTimeout(resolve, 5)); // lets concurrent reads overlap
+    this.active -= 1;
+    const outcome: ReadOutcome = { pages: [], failures: [] };
+    for (const url of urls) {
+      this.calls.push({ url, extractor: options?.extractor });
+      const answer = this.answer(url, options?.extractor);
+      if (typeof answer === "string") {
+        outcome.pages.push({ url, finalUrl: url, text: answer, extractor: options?.extractor ?? "fetch", publishedAt: null });
+      } else {
+        outcome.failures.push({ url, reason: "failed", error: answer?.error ?? "no text" });
+      }
+    }
+    return outcome;
+  }
+}
+
+// A search port that returns the same results for every query and remembers the queries.
+export class FakeSearch implements SearchPort {
+  queries: SearchRequest[] = [];
+  constructor(private results: SearchResult[] = []) {}
+  async search(request: SearchRequest): Promise<SearchOutcome> {
+    this.queries.push(request);
+    return { results: this.results, timedOut: false };
+  }
 }
