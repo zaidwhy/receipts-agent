@@ -28,7 +28,7 @@ const app = createApp({
     llm: createLlmClient({ baseUrl: config.llmBaseUrl, apiKey: config.llmApiKey, model: config.llmModel }),
     search: createSearch(webOptions),
     reader: createReader(webOptions),
-    feeds: createFeedPort(config.webMode),
+    feeds: createFeedPort(config.webMode, config.fixturesDir),
     db: openDatabase(config.dbPath),
     clock: createClock(),
   },

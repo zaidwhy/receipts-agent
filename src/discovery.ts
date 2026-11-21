@@ -4,6 +4,7 @@
 // domain; anything else is listed as unconfirmed.
 import type { WebMode } from "./config.ts";
 import type { Database } from "./db.ts";
+import { hasFixture, readFixture, writeFixture } from "./fixtures.ts";
 import { createLogger } from "./log.ts";
 import { runLimited, RECHECK_CONCURRENCY } from "./recheck.ts";
 import type { SearchPort, SearchResult } from "./search.ts";
@@ -50,10 +51,10 @@ export interface DiscoveryDeps {
   now: () => Date;
 }
 
-// Replay mode never touches the network, so a feed is simply never found there.
-export function createFeedPort(mode: WebMode): FeedPort {
-  if (mode === "replay") return { get: async () => null };
-  return {
+// live reads the network; record does too and keeps every feed it found; replay answers from those
+// saved feeds and treats everything else as not found, which is what a vendor with no feed looks like.
+export function createFeedPort(mode: WebMode, fixturesDir = "fixtures/web"): FeedPort {
+  const live: FeedPort = {
     async get(url, timeoutMs) {
       try {
         const response = await fetch(url, {
@@ -65,6 +66,22 @@ export function createFeedPort(mode: WebMode): FeedPort {
       } catch {
         return null;
       }
+    },
+  };
+  if (mode === "live") return live;
+  if (mode === "record") {
+    return {
+      async get(url, timeoutMs) {
+        const body = await live.get(url, timeoutMs);
+        if (body !== null && looksLikeFeed(body)) writeFixture(fixturesDir, "feed", { url }, { body });
+        return body;
+      },
+    };
+  }
+  return {
+    async get(url) {
+      if (!hasFixture(fixturesDir, "feed", { url })) return null;
+      return readFixture<{ body: string }>(fixturesDir, "feed", { url }).body;
     },
   };
 }

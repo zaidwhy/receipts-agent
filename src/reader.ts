@@ -2,7 +2,7 @@
 // plain fetch for any URL Tavily could not return. Each page records which
 // extractor produced its text, because a later recheck must use the same one.
 import type { WebMode } from "./config.ts";
-import { readFixture, writeFixture } from "./fixtures.ts";
+import { readFixture, replayStats, writeFixture } from "./fixtures.ts";
 import { createLogger } from "./log.ts";
 import { toIsoDate } from "./search.ts";
 
@@ -61,16 +61,16 @@ export function createReader(options: ReaderOptions): ReaderPort {
     return {
       async read(urls, readOptions) {
         const outcome = await live.read(urls, readOptions);
-        // A recheck read is not recorded: it would overwrite the first read of the same URL.
-        if (readOptions?.extractor) return outcome;
+        // A recheck read is saved under its extractor as well, so it cannot overwrite the first read of the same URL.
+        const keyed = (url: string): object => (readOptions?.extractor ? { url, extractor: readOptions.extractor } : { url });
         // One fixture per URL so a replayed question can read any subset of them.
         for (const page of outcome.pages) {
-          writeFixture(options.fixturesDir, "page", { url: page.url }, { ok: true, page } satisfies PageFixture);
+          writeFixture(options.fixturesDir, "page", keyed(page.url), { ok: true, page } satisfies PageFixture);
         }
         for (const failure of outcome.failures) {
           if (failure.reason === "timeout") continue; // timeouts are not repeatable, so not recorded
           const fixture: PageFixture = { ok: false, reason: "failed", error: failure.error };
-          writeFixture(options.fixturesDir, "page", { url: failure.url }, fixture);
+          writeFixture(options.fixturesDir, "page", keyed(failure.url), fixture);
         }
         return outcome;
       },
@@ -78,10 +78,20 @@ export function createReader(options: ReaderOptions): ReaderPort {
   }
 
   return {
-    async read(urls) {
+    async read(urls, readOptions) {
       const outcome: ReadOutcome = { pages: [], failures: [] };
       for (const url of urls) {
-        const fixture = readFixture<PageFixture>(options.fixturesDir, "page", { url });
+        const request = readOptions?.extractor ? { url, extractor: readOptions.extractor } : { url };
+        // A page nobody recorded fails that page only, like an unreachable site, so the others still read.
+        let fixture: PageFixture;
+        try {
+          fixture = readFixture<PageFixture>(options.fixturesDir, "page", request);
+        } catch (error) {
+          replayStats.pageMiss += 1;
+          outcome.failures.push({ url, reason: "failed", error: errorMessage(error) });
+          continue;
+        }
+        replayStats.pageHit += 1;
         if (fixture.ok) outcome.pages.push(fixture.page);
         else outcome.failures.push({ url, reason: "failed", error: fixture.error });
       }

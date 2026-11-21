@@ -1,7 +1,8 @@
 // Web search behind a port. live talks to Tavily, record does the same and saves
 // fixtures, replay answers from saved fixtures only.
 import type { WebMode } from "./config.ts";
-import { readFixture, writeFixture } from "./fixtures.ts";
+import { queryTerms } from "./excerpt.ts";
+import { hasFixture, readFixture, readNearestSearchFixture, replayStats, writeFixture } from "./fixtures.ts";
 import { createLogger } from "./log.ts";
 
 const log = createLogger("search");
@@ -54,7 +55,17 @@ export function createSearch(options: SearchOptions): SearchPort {
   }
   return {
     async search(request) {
-      return readFixture<SearchOutcome>(options.fixturesDir, "search", fixtureRequest(request));
+      const wanted = fixtureRequest(request);
+      if (!hasFixture(options.fixturesDir, "search", wanted)) {
+        const nearest = readNearestSearchFixture<SearchOutcome>(options.fixturesDir, wanted, queryTerms);
+        if (nearest) {
+          replayStats.searchNearest += 1;
+          return nearest;
+        }
+      }
+      const outcome = readFixture<SearchOutcome>(options.fixturesDir, "search", wanted);
+      replayStats.searchExact += 1;
+      return outcome;
     },
   };
 }
