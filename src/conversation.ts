@@ -14,6 +14,7 @@ import type { FeedPort } from "./discovery.ts";
 import { describeRecall, recall, refersToPastConversation, RECALL_TOOL, runRecall } from "./memory.ts";
 import { asksAboutChange, parseRecheckArguments, RECHECK_TOOL, runRecheck, type RecheckEvent, type RecheckOutput } from "./recheck-tool.ts";
 import { resolveDates, type DateReference } from "./temporal.ts";
+import { eligibleForSpeculation, startSpeculation } from "./speculative.ts";
 import { runWebSearch, WEB_SEARCH_TOOL, type Source } from "./tools.ts";
 
 const log = createLogger("conversation");
@@ -29,6 +30,8 @@ export interface ConversationDeps {
   feeds: FeedPort;
   db: Database;
   clock: Clock;
+  speculativeSearch?: boolean; // SPECULATIVE_SEARCH=1: search the raw message while the model plans
+  compactPrompt?: boolean; // COMPACT_PROMPT=1: a shorter first prompt, web_search only, for plain fresh questions
 }
 
 export interface CitedSource {
@@ -54,6 +57,8 @@ export interface TurnTimings {
   search_ms: number; // summed over web_search calls
   read_ms: number; // summed over page reads; direct reads overlap the searches
   total_ms: number;
+  speculative: "off" | "skipped" | "hit" | "miss"; // skipped: the flag was on but the message was not eligible
+  compact_prompt: boolean;
 }
 
 export interface TurnResult {
@@ -63,7 +68,15 @@ export interface TurnResult {
   timings: TurnTimings;
 }
 
-export function buildSystemPrompt(today: string, references: DateReference[] = []): string {
+// Words that mean the answer may lie in the earlier conversation, so the compact prompt must not be used.
+const MEMORY_WORDS = /\b(we|our|my|earlier|before|remind|previous|ago|since|changed|updates?|again)\b/i;
+
+export function wantsCompactPrompt(message: string, references: DateReference[]): boolean {
+  return eligibleForSpeculation(message, references) && !MEMORY_WORDS.test(message);
+}
+
+export function buildSystemPrompt(today: string, references: DateReference[] = [], compact = false): string {
+  if (compact) return buildCompactPrompt(today);
   return [
     `You are a research assistant with three tools: web_search for the web, recall for the earlier conversation and recheck for whether earlier answers still hold. Today is ${today}.`,
     "",
@@ -105,6 +118,25 @@ export function buildSystemPrompt(today: string, references: DateReference[] = [
   ].join("\n");
 }
 
+// The same rules for a plain question about the web, without the memory and recheck sections: fewer
+// tokens before the model's first move.
+function buildCompactPrompt(today: string): string {
+  return [
+    `You are a research assistant with one tool, web_search. Today is ${today}.`,
+    "",
+    "- Greetings, thanks and chit-chat: answer directly, never call a tool.",
+    "- Anything that can change (prices, plan limits, versions, availability, launches) or that you are unsure of: call web_search with 2 to 4 self-contained queries about different angles, and put each named vendor's official pricing page in urls (for example https://supabase.com/pricing). Do not write any text before calling a tool.",
+    "- Each source is an excerpt of its page; [...] marks text that was left out. If an excerpt does not show what you need, say so rather than guess.",
+    "- Short answer first, then only the details that matter, in the user's language. Cite sources inline as [n], using only the numbers shown in the tool results. If sources disagree, say so. Never invent a fact.",
+    "",
+    "Receipts: when your answer names products or states checkable facts (price, limit, version, date, availability, launch), end the answer with a fenced block tagged receipts holding a JSON object, and say nothing about the block:",
+    "```receipts",
+    '{"entities": ["Acme", "Other Co"], "claims": [{"text": "Pro plan costs $19 per month", "kind": "price", "entity": "Acme", "source": 1, "quote": "Pro $19 / month"}]}',
+    "```",
+    "entities lists every product or company the answer discusses. kind is one of price, limit, version, date, availability, launch. source is the [n] of the page. quote must be copied word for word from that page's excerpt, from one stretch with no [...] inside it. At most 6 claims, only for facts you stated. If there are none, leave the block out.",
+  ].join("\n");
+}
+
 // Tells the model what the user's date words mean, in the user's own days, in their own words.
 function dateHints(references: DateReference[]): string[] {
   if (references.length === 0) return [];
@@ -137,6 +169,8 @@ export async function runTurn(
     search_ms: 0,
     read_ms: 0,
     total_ms: 0,
+    speculative: "off",
+    compact_prompt: false,
   };
   const elapsed = (since: number) => Math.round(performance.now() - since);
   // First thing: the user sees activity before any model or network call starts.
@@ -147,8 +181,10 @@ export async function runTurn(
   const userTurnId = insertTurn(db, "user", input.message, now.toISOString(), input.timezone);
   const references = resolveDates(input.message, now, input.timezone);
 
+  const compact = deps.compactPrompt === true && wantsCompactPrompt(input.message, references);
+  timings.compact_prompt = compact;
   const messages: ChatMessage[] = [
-    { role: "system", content: buildSystemPrompt(describeToday(now, input.timezone), references) },
+    { role: "system", content: buildSystemPrompt(describeToday(now, input.timezone), references, compact) },
     ...history.map((turn): ChatMessage => ({ role: turn.role, content: turn.text })),
     { role: "user", content: input.message },
   ];
@@ -161,7 +197,14 @@ export async function runTurn(
     sources,
     status: (text: string) => emit({ type: "status", text }),
     timings: { searchMs: 0, readMs: 0 },
+    speculation: undefined as ReturnType<typeof startSpeculation> | undefined,
+    speculationOutcome: undefined as "hit" | "miss" | undefined,
   };
+  // Started now, before the model is called, so its search and reads run during the model's first round.
+  if (deps.speculativeSearch) {
+    if (eligibleForSpeculation(input.message, references)) toolContext.speculation = startSpeculation({ search: deps.search, reader: deps.reader }, input.message);
+    else timings.speculative = "skipped";
+  }
   const recheckDeps = { db, reader: deps.reader, search: deps.search, llm: deps.llm, clock, feeds: deps.feeds };
 
   const recallOptions = { timeZone: input.timezone, beforeTurnId: userTurnId };
@@ -229,7 +272,7 @@ export async function runTurn(
     const roundStarted = performance.now();
     let firstTokenMs: number | null = null;
 
-    for await (const event of deps.llm.streamChat({ messages, tools: toolsAllowed ? [WEB_SEARCH_TOOL, RECALL_TOOL, RECHECK_TOOL] : undefined })) {
+    for await (const event of deps.llm.streamChat({ messages, tools: toolsAllowed ? (compact ? [WEB_SEARCH_TOOL] : [WEB_SEARCH_TOOL, RECALL_TOOL, RECHECK_TOOL]) : undefined })) {
       if (event.type === "token") {
         firstTokenMs ??= elapsed(roundStarted);
         text += event.text;
@@ -296,6 +339,8 @@ export async function runTurn(
 
   timings.search_ms = Math.round(toolContext.timings.searchMs);
   timings.read_ms = Math.round(toolContext.timings.readMs);
+  if (toolContext.speculationOutcome) timings.speculative = toolContext.speculationOutcome;
+  else if (timings.speculative === "off" && deps.speculativeSearch) timings.speculative = "miss"; // eligible, but the model never searched
   timings.total_ms = elapsed(input.startedAt ?? turnStarted);
   log.info("turn timings", { ...timings });
   return { answer: parsed.visibleText, assistantTurnId, claims, timings };

@@ -10,6 +10,8 @@ export interface Config {
   llmModel: string;
   dbPath: string;
   fixturesDir: string;
+  speculativeSearch: boolean;
+  compactPrompt: boolean;
 }
 
 function clean(value: string | undefined): string | undefined {
@@ -31,6 +33,8 @@ export function loadConfig(env: NodeJS.ProcessEnv): Config {
     llmModel: clean(env.LLM_MODEL) ?? "anthropic/claude-haiku-5.5",
     dbPath: clean(env.DB_PATH) ?? "data/agent.db",
     fixturesDir: clean(env.FIXTURES_DIR) ?? "fixtures/web",
+    speculativeSearch: clean(env.SPECULATIVE_SEARCH) === "1",
+    compactPrompt: clean(env.COMPACT_PROMPT) === "1",
   };
 }
 

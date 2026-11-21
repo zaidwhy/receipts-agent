@@ -71,7 +71,7 @@ export function planSeed(now: Date, timeZone: string): SeedPlan {
 const AMOUNT = /[$€£₹]\s?\d[\d,]*(?:\.\d+)?/;
 const PLAN_WORD = /\b(starter|professional|pro|enterprise|basic|standard|essentials?|growth|team|business|premium|plus|free|scale|unlimited|lite|ultimate|advanced|solo|individual)\b/i;
 const PERIOD_WORD = /\b(month|mo|user|seat|year|annual|annually|billed)\b/i;
-const NOT_A_PLAN_PRICE = /(credits?|additional|api|up to|save|discount|off)/i;
+const NOT_A_PLAN_PRICE = /\b(credits?|additional|api|up to|save|discount|off)\b/i;
 const ZERO_AMOUNT = /[$€£₹]\s?0(?![\d.,]*[1-9])/;
 const MAX_QUOTE_CHARS = 400; // a markdown link carries its whole URL inside the line
 

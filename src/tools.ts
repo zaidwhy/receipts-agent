@@ -7,12 +7,15 @@ import type { ToolDefinition } from "./llm.ts";
 import { createLogger } from "./log.ts";
 import type { Extractor, ReaderPort, ReadOutcome } from "./reader.ts";
 import type { SearchPort, SearchResult } from "./search.ts";
+import type { Speculation } from "./speculative.ts";
+import { queryTerms } from "./excerpt.ts";
 
 const log = createLogger("tools");
 
 export const MAX_QUERIES = 4;
 export const MAX_PAGES_READ = 3;
 export const MAX_DIRECT_URLS = 3;
+const SPECULATION_MATCH_SHARE = 0.5;
 
 export const WEB_SEARCH_TOOL: ToolDefinition = {
   name: "web_search",
@@ -66,6 +69,9 @@ export interface ToolContext {
   status: (text: string) => void;
   // Milliseconds spent, summed over the turn. Direct page reads run beside the searches, so the two overlap.
   timings?: { searchMs: number; readMs: number };
+  // A search and two page reads started before the model chose its queries (SPECULATIVE_SEARCH=1).
+  speculation?: Promise<Speculation | null>;
+  speculationOutcome?: "hit" | "miss"; // set by the first web_search of the turn
 }
 
 export async function runWebSearch(context: ToolContext, rawArguments: string): Promise<string> {
@@ -73,9 +79,26 @@ export async function runWebSearch(context: ToolContext, rawArguments: string): 
   if ("error" in parsed) return parsed.error;
   const { queries, startDate, urls } = parsed;
 
-  context.status(`searching ${queries.length} ${queries.length === 1 ? "query" : "queries"}`);
   const notes: string[] = [];
   const readTime = context.clock.now().toISOString();
+
+  // Only the first web_search of a turn can use the guess; after that it is spent.
+  const guess = context.speculation ? await context.speculation : null;
+  const speculating = context.speculation !== undefined;
+  context.speculation = undefined;
+  if (guess && speculationMatches(guess, queries, urls)) {
+    context.speculationOutcome = "hit";
+    context.status("using pages already found");
+    // The model's own queries are skipped: the guess stands in for them. Official pages it named that the
+    // guess did not read are still read, beside nothing else, so they cost one read.
+    const covered = new Set(guess.pages.map((page) => domainOf(page.url)));
+    const extra = await readPages(context, urls.filter((url) => !covered.has(domainOf(url))));
+    const titles = new Map(guess.results.map((result) => [result.url, { url: result.url, title: result.title, snippet: "", publishedDate: result.publishedDate }]));
+    return describePages(context, [{ pages: guess.pages, failures: [] }, extra], titles, queries.join(" "), readTime, notes, urls.length + guess.pages.length === 0);
+  }
+  if (speculating) context.speculationOutcome = "miss";
+
+  context.status(`searching ${queries.length} ${queries.length === 1 ? "query" : "queries"}`);
 
   // Official pages are read while the searches run, so they cost no extra waiting.
   const direct = readPages(context, urls);
@@ -104,9 +127,21 @@ export async function runWebSearch(context: ToolContext, rawArguments: string): 
   const searched = readPages(context, picked.map((result) => result.url));
 
   const titles = new Map(picked.map((result) => [result.url, result]));
+  return describePages(context, await Promise.all([direct, searched]), titles, queries.join(" "), readTime, notes, picked.length + urls.length === 0);
+}
+
+// Numbers each page that was read, adds it to the turn's sources and writes the excerpt the model reads.
+function describePages(
+  context: ToolContext,
+  outcomes: ReadOutcome[],
+  titles: Map<string, SearchResult>,
+  query: string,
+  readTime: string,
+  notes: string[],
+  nothingToRead: boolean,
+): string {
   const lines: string[] = [];
-  const query = queries.join(" ");
-  for (const outcome of await Promise.all([direct, searched])) {
+  for (const outcome of outcomes) {
     for (const page of outcome.pages) {
       const hit = titles.get(page.url);
       const source = addSource(context.sources, {
@@ -129,8 +164,21 @@ export async function runWebSearch(context: ToolContext, rawArguments: string): 
       notes.push(`Could not read ${failure.url} (${failure.reason}: ${failure.error}). Treat it as unreadable.`);
     }
   }
-  if (lines.length === 0) lines.push(picked.length + urls.length === 0 ? "No pages found." : "No page could be read.");
+  if (lines.length === 0) lines.push(nothingToRead ? "No pages found." : "No page could be read.");
   return [...lines, ...notes].join("\n");
+}
+
+// The guess counts when the model named one of the pages' sites itself, or planned a query that shares
+// at least half its words with the user's message.
+export function speculationMatches(speculation: Speculation, queries: string[], urls: string[]): boolean {
+  const pageDomains = new Set(speculation.pages.map((page) => domainOf(page.url)));
+  if (urls.some((url) => pageDomains.has(domainOf(url)))) return true;
+  const asked = new Set(queryTerms(speculation.query));
+  return queries.some((query) => {
+    const planned = queryTerms(query);
+    if (planned.length === 0) return false;
+    return planned.filter((word) => asked.has(word)).length / planned.length >= SPECULATION_MATCH_SHARE;
+  });
 }
 
 // A reader that throws is reported as every page failing, so one bad call never hides the other.
@@ -223,7 +271,7 @@ export function isVendorDomain(domain: string, queryText: string): boolean {
   return name.length >= 3 && queryText.includes(name);
 }
 
-function domainOf(url: string): string {
+export function domainOf(url: string): string {
   try {
     return new URL(url).hostname.toLowerCase().replace(/^www\./, "");
   } catch {

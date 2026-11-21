@@ -31,6 +31,8 @@ const app = createApp({
     feeds: createFeedPort(config.webMode, config.fixturesDir),
     db: openDatabase(config.dbPath),
     clock: createClock(),
+    speculativeSearch: config.speculativeSearch,
+    compactPrompt: config.compactPrompt,
   },
 });
 
