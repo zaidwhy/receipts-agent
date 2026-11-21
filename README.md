@@ -13,7 +13,7 @@ npm run dev              # http://localhost:3000
 ```
 
 - `TAVILY_API_KEY`: web search and page reading (https://tavily.com, the free tier is enough).
-- `LLM_API_KEY`: the model. It talks to OpenRouter with `anthropic/claude-haiku-5.5` by default; set `LLM_BASE_URL` and `LLM_MODEL` for any other OpenAI-compatible endpoint.
+- `LLM_API_KEY`: the model. It talks to OpenRouter with the free `nvidia/nemotron-3.5-super-vl:free` by default (OpenRouter allows 50 free requests a day on an account with no credits); `LLM_MODEL=anthropic/claude-haiku-5.5` is faster and steadier (see evals/RESULTS-haiku.md); set `LLM_BASE_URL` and `LLM_MODEL` for any other OpenAI-compatible endpoint.
 
 Without keys the server still starts, `/health` lists the missing ones and the page shows a setup card.
 

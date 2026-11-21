@@ -30,7 +30,7 @@ export function loadConfig(env: NodeJS.ProcessEnv): Config {
     tavilyApiKey: clean(env.TAVILY_API_KEY),
     llmBaseUrl: clean(env.LLM_BASE_URL) ?? "https://openrouter.ai/api/v1",
     llmApiKey: clean(env.LLM_API_KEY),
-    llmModel: clean(env.LLM_MODEL) ?? "anthropic/claude-haiku-5.5",
+    llmModel: clean(env.LLM_MODEL) ?? "nvidia/nemotron-3.5-super-vl:free",
     dbPath: clean(env.DB_PATH) ?? "data/agent.db",
     fixturesDir: clean(env.FIXTURES_DIR) ?? "fixtures/web",
     speculativeSearch: clean(env.SPECULATIVE_SEARCH) === "1",

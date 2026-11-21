@@ -19,10 +19,19 @@ Storage is built-in `node:sqlite` (no native build on a reviewer's machine), UI 
 
 The three example questions are all "you told me X at time T, is X still true?". A plain search agent can only re-search and compare by feel; it cannot prove that nothing changed, and it cannot know what it told you. Keeping the receipt turns both into lookups and diffs. minimi's product catches promises people forget; this agent treats its own answers as promises it can be held to.
 
-## Measured (evals/RESULTS.md, evals/LATENCY.md)
+## Measured (evals/RESULTS*.md, evals/LATENCY.md)
 
-- 12 eval cases (the three examples, two empty-memory traps, "hi", Hindi, ambiguous dates, a pronoun follow-up), real model, recorded web: 24/24 over two runs. The pronoun case is flaky in a third partial run ("the second one" read in question order, not answer order).
-- First token median 3.6 s, p90 9.6 s; fresh live pricing questions 6.2-7.0 s median to first token.
+12 eval cases (the three examples, two empty-memory traps, "hi", Hindi, ambiguous dates, a pronoun follow-up), real model, recorded web. The model is one env line, so the same suite ran on three:
+
+| Model | Pass | First token median / p90 |
+|---|---|---|
+| `anthropic/claude-haiku-5.5` (paid) | 24/24 over two runs | 3.6 s / 9.6 s |
+| `nvidia/nemotron-3.5-super-vl:free` (default) | 11/12 | 4.4 s / 24.2 s |
+| `nvidia/nemotron-3-ultra-550b-a55b:free` | 9/12 | 4.7 s / 16.4 s |
+
+- The default is free so anyone can run it with a zero-credit OpenRouter key; Haiku is faster and steadier. Both free models failed the Postgres recheck for the same reason: "Last Tuesday we compared..." did not match the code's list of past-conversation phrases, and unlike Haiku they did not call `recall` on their own. The trigger now matches "I/we/you" plus a talking-or-deciding verb (unit-tested; the free-model re-run hit OpenRouter's 50-requests-a-day free cap, so it is not re-measured).
+- The pronoun case is flaky on Haiku in a third partial run ("the second one" read in question order, not answer order).
+- Fresh live pricing questions on Haiku: 6.2-7.0 s median to first token.
 - Same-day recheck: 3/3 claims settled at tier 1, zero model calls, and Tavily and a direct fetch agreed on 3/3 quotes (the stale-cache risk did not show). Archive-backed demo history: 0% tier 1, because a months-old page never hash-matches today's. The cheap path pays off on repeat checks, not on old ones.
 - Live CRM demo on archive history: it caught a real pricing change. Attio's 8 Nov 2026 archive copy says "Pro $ 99 79 per user/month"; the live page on 22 Nov says "Pro $ 125 100 mo/workspace, Includes 1 user. Add users for $99 $79 /mo each" and adds an Ultra plan (checked by hand against both pages). It also produced one false positive: Pipedrive's CA$ prefix vanished between a Canadian capture and today's page and was reported as a change. The verdict check now downgrades "changed" to "reworded" when the old quote and the new value hold the same amounts (tested on fixtures; the live demo has not been re-run since).
 

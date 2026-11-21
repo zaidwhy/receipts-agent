@@ -1,61 +1,32 @@
 # Eval results
 
-Model `anthropic/claude-haiku-5.5`, web `replay`, clock fixed at 2026-11-21T10:00:00Z. 2 runs of 12 cases against the real model (its answers differ run to run).
-Replay: 23 searches matched a recording exactly, 8 used the nearest recorded search, 50 page reads hit, 0 had no recording and failed like an unreachable page.
+Model `nvidia/nemotron-3.5-super-vl:free`, web `replay`, clock fixed at 2026-11-21T10:00:00Z. 1 run of 12 cases against the real model (its answers differ run to run).
+Replay: 5 searches matched a recording exactly, 12 used the nearest recorded search, 21 page reads hit, 7 had no recording and failed like an unreachable page.
 
 ## Summary
 
 Run 1:
-- pass rate: 12/12 (100%)
-- first token ms: median 3617, p90 9582
-- total ms: median 4272, p90 11117
-- recheck claims settled at tier 1 (no model call): 0 of 12 (0%)
-
-Run 2:
-- pass rate: 12/12 (100%)
-- first token ms: median 3474, p90 8777
-- total ms: median 4395, p90 11817
-- recheck claims settled at tier 1 (no model call): 0 of 12 (0%)
-
-Both runs together:
-- pass rate: 24/24 (100%)
-- first token ms: median 3617, p90 9582
-- total ms: median 4395, p90 11817
-- recheck claims settled at tier 1 (no model call): 0 of 24 (0%)
+- pass rate: 11/12 (92%)
+- first token ms: median 4381, p90 24226
+- total ms: median 4905, p90 25219
+- recheck claims settled at tier 1 (no model call): 0 of 6 (0%)
 
 ## Run 1
 
 | case | result | reason | first token ms | total ms | model tool calls | web searches / page reads |
 |---|---|---|---|---|---|---|
-| crm-recheck | pass | ok | 9621 | 13140 | 0 | 4 / 7 |
-| postgres-recheck | pass | ok | 9582 | 11117 | 2 | 3 / 6 |
-| nov3-recall | pass | ok | 1380 | 1909 | 0 | 0 / 0 |
-| empty-crm-trap | pass | ok | 3631 | 4272 | 1 | 0 / 0 |
-| empty-nov3-trap | pass | ok | 1475 | 2104 | 0 | 0 / 0 |
-| hi | pass | ok | 1525 | 1685 | 0 | 0 / 0 |
-| postgres-topic | pass | ok | 3925 | 5001 | 1 | 0 / 0 |
-| ambiguous-3-11 | pass | ok | 2110 | 2378 | 0 | 0 / 0 |
-| monday-on-monday | pass | ok | 2982 | 4200 | 0 | 0 / 0 |
-| fresh-pricing | pass | ok | 3703 | 4475 | 1 | 2 / 3 |
-| hindi-price | pass | ok | 3617 | 4776 | 1 | 2 / 3 |
-| pronoun-follow-up | pass | ok | 8493 | 10739 | 1 | 3 / 3 |
-
-## Run 2
-
-| case | result | reason | first token ms | total ms | model tool calls | web searches / page reads |
-|---|---|---|---|---|---|---|
-| crm-recheck | pass | ok | 8777 | 11885 | 0 | 4 / 7 |
-| postgres-recheck | pass | ok | 10132 | 11817 | 2 | 3 / 6 |
-| nov3-recall | pass | ok | 1713 | 2280 | 0 | 0 / 0 |
-| empty-crm-trap | pass | ok | 3640 | 4189 | 1 | 0 / 0 |
-| empty-nov3-trap | pass | ok | 1479 | 1987 | 0 | 0 / 0 |
-| hi | pass | ok | 1285 | 1427 | 0 | 0 / 0 |
-| postgres-topic | pass | ok | 4128 | 5023 | 1 | 0 / 0 |
-| ambiguous-3-11 | pass | ok | 2182 | 2502 | 0 | 0 / 0 |
-| monday-on-monday | pass | ok | 3395 | 4395 | 0 | 0 / 0 |
-| fresh-pricing | pass | ok | 3474 | 4416 | 1 | 2 / 3 |
-| hindi-price | pass | ok | 4133 | 6193 | 1 | 2 / 3 |
-| pronoun-follow-up | pass | ok | 8392 | 10453 | 1 | 2 / 3 |
+| crm-recheck | pass | ok | 37338 | 40972 | 0 | 4 / 7 |
+| postgres-recheck | FAIL | only 0 recheck_row events; 0 coverage events | 12391 | 23430 | 3 | 8 / 6 |
+| nov3-recall | pass | ok | 1048 | 3515 | 0 | 0 / 0 |
+| empty-crm-trap | pass | ok | 4381 | 4905 | 0 | 0 / 0 |
+| empty-nov3-trap | pass | ok | 1025 | 1287 | 0 | 0 / 0 |
+| hi | pass | ok | 888 | 959 | 0 | 0 / 0 |
+| postgres-topic | pass | ok | 2428 | 3190 | 1 | 0 / 0 |
+| ambiguous-3-11 | pass | ok | 22284 | 23673 | 2 | 0 / 0 |
+| monday-on-monday | pass | ok | 24226 | 25219 | 0 | 0 / 0 |
+| fresh-pricing | pass | ok | 3317 | 3997 | 1 | 2 / 3 |
+| hindi-price | pass | ok | 5636 | 6435 | 1 | 3 / 3 |
+| pronoun-follow-up | pass | ok | 9787 | 12630 | 1 | 2 / 3 |
 
 ## What each case checks
 
