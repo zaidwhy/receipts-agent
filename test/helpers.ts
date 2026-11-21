@@ -4,12 +4,14 @@ process.env.LOG_LEVEL = "silent";
 import type { Server } from "node:http";
 import type { AddressInfo } from "node:net";
 import { createApp } from "../src/app.ts";
+import { storeClaims, type ReceiptClaim, type SnapshotRef } from "../src/claims.ts";
 import { createClock } from "../src/clock.ts";
 import { loadConfig, type Config } from "../src/config.ts";
 import type { ConversationDeps } from "../src/conversation.ts";
-import { openDatabase, type Database } from "../src/db.ts";
+import { insertTurn, openDatabase, type Database } from "../src/db.ts";
 import type { ChatMessage, LlmClient, LlmEvent, ToolDefinition } from "../src/llm.ts";
 import { createReader } from "../src/reader.ts";
+import { saveSnapshot } from "../src/receipts.ts";
 import { createSearch } from "../src/search.ts";
 
 export function memoryDb(): Database {
@@ -90,4 +92,33 @@ export function parseSse(body: string): { event: string; data: any }[] {
       const data = /^data: (.*)$/m.exec(block)?.[1] ?? "null";
       return { event, data: JSON.parse(data) };
     });
+}
+
+export interface SeedClaim {
+  text: string;
+  kind: ReceiptClaim["kind"];
+  entity: string;
+  quote: string;
+  url: string;
+  page: string;
+  fetchedAt: string;
+}
+
+// One past question and its answer, backdated, with the claims the answer would have stored.
+export function seedExchange(
+  db: Database,
+  seed: { question: string; answer: string; askedAt: string; tz?: string; entities?: string[]; claims?: SeedClaim[] },
+): { questionId: number; answerId: number } {
+  const tz = seed.tz ?? "Asia/Kolkata";
+  const questionId = insertTurn(db, "user", seed.question, seed.askedAt, tz);
+  const answeredAt = new Date(new Date(seed.askedAt).getTime() + 5000).toISOString();
+  const answerId = insertTurn(db, "assistant", seed.answer, answeredAt, tz);
+  const snapshots = new Map<number, SnapshotRef>();
+  const claims: ReceiptClaim[] = (seed.claims ?? []).map((claim, index) => {
+    const saved = saveSnapshot(db, claim.url, claim.url, claim.page, "fetch", claim.fetchedAt);
+    snapshots.set(index + 1, { hash: saved.hash, text: saved.text, url: claim.url });
+    return { text: claim.text, kind: claim.kind, entity: claim.entity, source: index + 1, quote: claim.quote };
+  });
+  storeClaims(db, { turnId: answerId, claims, entities: seed.entities, snapshots });
+  return { questionId, answerId };
 }

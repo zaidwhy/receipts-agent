@@ -3,6 +3,9 @@
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { DatabaseSync } from "node:sqlite";
+import { createLogger } from "./log.ts";
+
+const log = createLogger("db");
 
 export type Database = DatabaseSync;
 
@@ -13,7 +16,30 @@ export function openDatabase(path: string): Database {
   const db = new DatabaseSync(path);
   db.exec("PRAGMA foreign_keys = ON");
   createTables(db);
+  // Recall's topic search uses FTS5 when this SQLite build has it, plain LIKE otherwise.
+  log.info(`topic search: ${topicSearchMode(db) === "fts5" ? "FTS5" : "LIKE fallback (this SQLite has no FTS5)"}`);
   return db;
+}
+
+export type TopicSearchMode = "fts5" | "like";
+
+export function topicSearchMode(db: Database): TopicSearchMode {
+  const row = db.prepare("SELECT 1 AS present FROM sqlite_master WHERE name = 'turns_fts'").get();
+  return row ? "fts5" : "like";
+}
+
+// Turns are only ever inserted, never edited or deleted, so one insert trigger keeps the index current.
+function createTopicIndex(db: Database): void {
+  try {
+    db.exec(`
+      CREATE VIRTUAL TABLE IF NOT EXISTS turns_fts USING fts5(text, content='turns', content_rowid='id');
+      CREATE TRIGGER IF NOT EXISTS turns_fts_insert AFTER INSERT ON turns BEGIN
+        INSERT INTO turns_fts(rowid, text) VALUES (new.id, new.text);
+      END;
+    `);
+  } catch {
+    // No FTS5 in this build; topicSearchMode reports "like" because the table is missing.
+  }
 }
 
 // "IF NOT EXISTS" makes this safe to run on every start.
@@ -79,6 +105,7 @@ function createTables(db: Database): void {
       kind TEXT NOT NULL
     );
   `);
+  createTopicIndex(db);
   const row = db.prepare("SELECT version FROM schema_version").get();
   if (!row) db.prepare("INSERT INTO schema_version (version) VALUES (?)").run(SCHEMA_VERSION);
 }
