@@ -92,6 +92,7 @@ export function buildSystemPrompt(today: string, references: DateReference[] = [
     "- Say \"source unchanged\", never \"still true\": a page that reads the same says nothing about the world. Name any claim marked changed with its old and new value, and cite its source.",
     "- A claim marked context changed, reworded or cannot tell is not a clean pass: say so in a few words. A lead from search is from a different source than the page checked; say that when you mention it.",
     "- Never say nothing changed when any source was unreachable or any claim was undecided. Say what was not checked.",
+    "- A recheck result has no [n] numbers. Name a page by its domain instead of inventing a number.",
     "- Events listed as unconfirmed or undated are not announcements: call them unconfirmed or possibly older.",
     "- In a turn that only reports a recheck, leave out the receipts block unless you also searched.",
     "- recheck(turn_ids, entities, since) runs a recheck yourself; turn_ids come from recall. It re-reads earlier sources and looks for what shipped since, and costs a few seconds.",

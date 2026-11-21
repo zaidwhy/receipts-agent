@@ -169,6 +169,7 @@ test("the prompt tells the model to lead with changes and never say nothing chan
   assert.match(system.content, /Lead with what changed, then what is unchanged, then what could not be checked/);
   assert.match(system.content, /Never say nothing changed when any source was unreachable/);
   assert.match(system.content, /never \\?"still true\\?"/);
+  assert.match(system.content, /no \[n\] numbers\. Name a page by its domain/);
 });
 
 test("which messages ask about change", () => {

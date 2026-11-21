@@ -276,6 +276,7 @@ async function searchLane(deps: DiscoveryDeps, entity: EntityRow, domain: string
       return [];
     }
     results = outcome.results.slice(0, 5);
+    log.info("discovery search", { entity: entity.name, results: results.length, dated: results.filter((result) => result.publishedDate !== null).length });
   } catch (error) {
     log.warn("discovery search failed", { entity: entity.name, message: error instanceof Error ? error.message : String(error) });
     totals.searchesFailed += 1;
