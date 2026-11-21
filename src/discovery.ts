@@ -1,10 +1,9 @@
 // Recheck, lane B: "did any of these vendors ship something big since T?" Each vendor's own
 // feed is read (no model call: dated items after T are events), and one date-filtered web
 // search adds what the feed missed. An event needs a date after T from the vendor's own
-// domain or from two independent domains; anything else is listed as unconfirmed.
+// domain; anything else is listed as unconfirmed.
 import type { WebMode } from "./config.ts";
 import type { Database } from "./db.ts";
-import { queryTerms } from "./excerpt.ts";
 import { createLogger } from "./log.ts";
 import { runLimited, RECHECK_CONCURRENCY } from "./recheck.ts";
 import type { SearchPort, SearchResult } from "./search.ts";
@@ -284,15 +283,17 @@ async function searchLane(deps: DiscoveryDeps, entity: EntityRow, domain: string
   }
 
   const events: EventRow[] = [];
-  for (const [index, result] of results.entries()) {
+  for (const result of results) {
     const date = result.publishedDate;
     if (date !== null && new Date(date).getTime() <= since.getTime()) continue;
-    const kind = classify(`${result.title} ${result.snippet}`);
+    // Title only: a snippet is a window of page text, and one stray "launch" in it made a docs page a launch.
+    const kind = classify(result.title);
     if (!kind) {
       totals.minorCount += 1;
       continue;
     }
-    const confirmed = isVendorHost(hostOf(result.url), domain) || corroborated(results, index, entity.name, kind);
+    // Confirmed needs the vendor's own domain; a title-matched result from anyone else is a lead, not an announcement.
+    const confirmed = isVendorHost(hostOf(result.url), domain);
     events.push({ entity: entity.name, title: result.title, url: result.url, publishedAt: date, kind, source: "search", confirmed });
   }
   return events;
@@ -308,21 +309,6 @@ function hostOf(url: string): string {
 
 function isVendorHost(host: string, vendorDomain: string): boolean {
   return host === vendorDomain || host.endsWith(`.${vendorDomain}`);
-}
-
-const GENERIC_TITLE_WORDS = new Set(["pricing", "price", "prices", "plan", "plans", "launch", "launches", "launched", "release", "released", "new", "announces", "introducing", "now", "available"]);
-
-// Two results from different domains about the same thing: same kind and at least two distinctive title words in common.
-function corroborated(results: SearchResult[], index: number, entityName: string, kind: EventKind): boolean {
-  const subject = results[index] as SearchResult;
-  const skip = new Set(queryTerms(entityName));
-  const distinctive = (title: string) => queryTerms(title).filter((word) => !skip.has(word) && !GENERIC_TITLE_WORDS.has(word));
-  const mine = new Set(distinctive(subject.title));
-  return results.some((other, otherIndex) => {
-    if (otherIndex === index || hostOf(other.url) === hostOf(subject.url)) return false;
-    if (classify(`${other.title} ${other.snippet}`) !== kind) return false;
-    return distinctive(other.title).filter((word) => mine.has(word)).length >= 2;
-  });
 }
 
 export interface Coverage {

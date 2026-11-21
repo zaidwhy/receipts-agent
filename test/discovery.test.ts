@@ -113,7 +113,7 @@ test("the search asks for results since T with the date filter, and sorts them i
   seedEntity(db);
   const search = new FakeSearch([
     result("https://acmedb.dev/blog/launch-branching", "AcmeDB launches database branching"), // vendor's own domain
-    result("https://techdaily.example/acme-raises-prices", "AcmeDB raises Pro plan price for startups", "pricing change"), // two independent domains say it
+    result("https://techdaily.example/acme-raises-prices", "AcmeDB raises Pro plan price for startups", "pricing change"), // two blogs agree, still not the vendor
     result("https://newsbytes.example/acme-pro-price-startups", "Startups hit as AcmeDB raises Pro plan price"),
     result("https://lonely.example/acme-rumor", "AcmeDB acquisition rumour"), // one blog, nobody confirms
     result("https://random.example/acme-lunch", "AcmeDB team lunch photos"), // matches no kind
@@ -123,13 +123,25 @@ test("the search asks for results since T with the date filter, and sorts them i
   assert.deepEqual(search.queries, [{ query: "AcmeDB pricing OR launch OR release", startDate: "2026-11-17", filterByPublishedDate: true }]);
   const byUrl = new Map(found.events.map((event) => [event.url, event]));
   assert.equal(byUrl.get("https://acmedb.dev/blog/launch-branching")?.confirmed, true);
-  assert.equal(byUrl.get("https://techdaily.example/acme-raises-prices")?.confirmed, true);
-  assert.equal(byUrl.get("https://newsbytes.example/acme-pro-price-startups")?.confirmed, true);
+  assert.equal(byUrl.get("https://techdaily.example/acme-raises-prices")?.confirmed, false);
+  assert.equal(byUrl.get("https://newsbytes.example/acme-pro-price-startups")?.confirmed, false);
   assert.equal(byUrl.get("https://lonely.example/acme-rumor")?.confirmed, false);
   assert.equal(byUrl.get("https://lonely.example/acme-rumor")?.kind, "acquisition");
   assert.ok(!byUrl.has("https://random.example/acme-lunch"));
   assert.equal(found.minorCount, 1);
   assert.ok(found.events.every((event) => event.source === "search"));
+});
+
+test("a vendor docs page whose snippet says launch is not a launch: the title decides", async () => {
+  const db = memoryDb();
+  seedEntity(db);
+  const search = new FakeSearch([
+    result("https://acmedb.dev/docs/config-formats", "Configuration formats | AcmeDB Docs", "Supported file formats. Since the launch of branching you can also use TOML."),
+    result("https://acmedb.dev/docs/regions", "Regions | AcmeDB Docs", "Plans differ by region."),
+  ]);
+  const found = await discoverEvents(deps(db, new FakeFeeds({}), search), loadEntities(db, { names: ["AcmeDB"] }), SINCE);
+  assert.deepEqual(found.events, []);
+  assert.equal(found.minorCount, 2);
 });
 
 test("a search result published before T, or beyond the first five, is not an event", async () => {
