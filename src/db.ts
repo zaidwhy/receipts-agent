@@ -36,6 +36,11 @@ function createTables(db: Database): void {
       domain TEXT,
       feed_url TEXT
     );
+    CREATE TABLE IF NOT EXISTS turn_entities (
+      turn_id INTEGER NOT NULL REFERENCES turns(id),
+      entity_id INTEGER NOT NULL REFERENCES entities(id),
+      PRIMARY KEY (turn_id, entity_id)
+    );
     CREATE TABLE IF NOT EXISTS snapshots (
       hash TEXT PRIMARY KEY,    -- sha256 of the normalised text
       url TEXT NOT NULL,

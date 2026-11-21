@@ -1,7 +1,7 @@
 import "./helpers.ts";
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { createReceiptsFilter, entitiesForTurn, parseReceipts, storeClaims, volatilityDays, type SnapshotRef } from "../src/claims.ts";
+import { createReceiptsFilter, entitiesForTurn, looksLikeVendorDomain, parseReceipts, storeClaims, volatilityDays, type SnapshotRef } from "../src/claims.ts";
 import { insertTurn } from "../src/db.ts";
 import { saveSnapshot } from "../src/receipts.ts";
 import { count, memoryDb } from "./helpers.ts";
@@ -114,4 +114,50 @@ test("streaming an answer with no block shows every character, including a lone 
   for (const chunk of ["Use the `", "pricing` page", " (see [1]).  "]) shown += filter.push(chunk);
   shown += filter.finish();
   assert.equal(shown, "Use the `pricing` page (see [1]).  ");
+});
+
+test("the object form lists the shortlist; the bare array still works", () => {
+  const claim = { text: "Pro is $25", kind: "price", entity: "Supabase", source: 1, quote: "$25" };
+  const object = parseReceipts("a\n```receipts\n" + JSON.stringify({ entities: ["Neon", " Supabase ", "neon", 7], claims: [claim] }) + "\n```");
+  assert.deepEqual(object.entities, ["Neon", "Supabase"]);
+  assert.equal(object.claims.length, 1);
+
+  const bare = parseReceipts("a\n```receipts\n" + JSON.stringify([claim]) + "\n```");
+  assert.equal(bare.claims.length, 1);
+  assert.deepEqual(bare.entities, []);
+
+  const noClaims = parseReceipts('a\n```receipts\n{"entities": ["Neon"]}\n```');
+  assert.deepEqual(noClaims.entities, ["Neon"]);
+  assert.equal(noClaims.invalidCount, 0);
+});
+
+test("a name discussed without a claim is still in the turn's entity set", () => {
+  const db = memoryDb();
+  const turnId = insertTurn(db, "assistant", "answer", "2026-11-21T10:00:00Z", "UTC");
+  const claims = parseReceipts(sampleAnswer).claims;
+  storeClaims(db, { turnId, claims, entities: ["AcmeDB", "Pipedrive", "HubSpot"], snapshots: new Map() });
+  assert.deepEqual(entitiesForTurn(db, turnId), ["AcmeDB", "Pipedrive", "HubSpot"]);
+  assert.equal(count(db, "entities"), 3);
+});
+
+test("an entity only gets a domain that looks like the vendor's own", () => {
+  assert.equal(looksLikeVendorDomain("supabase.com", "Supabase"), true);
+  assert.equal(looksLikeVendorDomain("neon.com", "Neon"), true);
+  assert.equal(looksLikeVendorDomain("www.pipedrive.com", "Pipe-Drive"), true);
+  assert.equal(looksLikeVendorDomain("jetadmin.io", "Supabase"), false);
+  assert.equal(looksLikeVendorDomain("google.com", "Go"), false);
+
+  const db = memoryDb();
+  const blog = saveSnapshot(db, "https://jetadmin.io/blog", "https://jetadmin.io/blog", "Pro $25 per month", "fetch", "2026-11-21T10:00:00Z");
+  const turnId = insertTurn(db, "assistant", "answer", "2026-11-21T10:00:00Z", "UTC");
+  const claim = { text: "Pro is $25", kind: "price" as const, entity: "Supabase", source: 1, quote: "Pro $25" };
+  storeClaims(db, { turnId, claims: [claim], snapshots: new Map([[1, { hash: blog.hash, text: blog.text, url: "https://jetadmin.io/blog" }]]) });
+  const domainOf = () => (db.prepare("SELECT domain FROM entities WHERE name = 'Supabase'").get() as { domain: string | null }).domain;
+  assert.equal(domainOf(), null);
+
+  // A later turn reads the vendor's own page: the gap is filled, not left null forever.
+  const official = saveSnapshot(db, "https://supabase.com/pricing", "https://supabase.com/pricing", "Pro from $25 / month", "fetch", "2026-11-22T10:00:00Z");
+  const later = insertTurn(db, "assistant", "answer", "2026-11-22T10:00:00Z", "UTC");
+  storeClaims(db, { turnId: later, claims: [{ ...claim, quote: "Pro from $25" }], snapshots: new Map([[1, { hash: official.hash, text: official.text, url: "https://supabase.com/pricing" }]]) });
+  assert.equal(domainOf(), "supabase.com");
 });

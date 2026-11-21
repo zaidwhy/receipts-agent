@@ -47,37 +47,57 @@ export function splitReceiptsBlock(raw: string): { visible: string; blockText: s
   return { visible: raw.slice(0, start).trimEnd(), blockText };
 }
 
+export const MAX_TURN_ENTITIES = 20;
+
 export interface ParsedReceipts {
   visibleText: string;
   claims: ReceiptClaim[];
+  entities: string[]; // every product the answer discusses, with or without a checkable claim
   invalidCount: number; // entries that were in the block but not usable
 }
 
 export function parseReceipts(raw: string): ParsedReceipts {
   const { visible, blockText } = splitReceiptsBlock(raw);
-  if (blockText === null) return { visibleText: visible, claims: [], invalidCount: 0 };
+  if (blockText === null) return { visibleText: visible, claims: [], entities: [], invalidCount: 0 };
 
   let entries: unknown;
   try {
     entries = JSON.parse(blockText);
   } catch {
     log.warn("receipts block was not valid JSON");
-    return { visibleText: visible, claims: [], invalidCount: 1 };
+    return { visibleText: visible, claims: [], entities: [], invalidCount: 1 };
   }
-  if (!Array.isArray(entries)) {
-    log.warn("receipts block was not a JSON array");
-    return { visibleText: visible, claims: [], invalidCount: 1 };
+  // Two shapes are accepted: the bare array of claims, and {"entities": [...], "claims": [...]}.
+  let claimEntries: unknown = entries;
+  let entityNames: unknown = [];
+  if (typeof entries === "object" && entries !== null && !Array.isArray(entries)) {
+    ({ claims: claimEntries = [], entities: entityNames = [] } = entries as Record<string, unknown>);
+  }
+  if (!Array.isArray(claimEntries)) {
+    log.warn("receipts block had no claims array");
+    return { visibleText: visible, claims: [], entities: [], invalidCount: 1 };
   }
 
   const claims: ReceiptClaim[] = [];
   let invalidCount = 0;
-  for (const entry of entries) {
+  for (const entry of claimEntries) {
     const claim = toClaim(entry);
     if (claim) claims.push(claim);
     else invalidCount += 1;
   }
   if (invalidCount > 0) log.warn("some receipts entries were unusable", { invalidCount });
-  return { visibleText: visible, claims, invalidCount };
+  return { visibleText: visible, claims, entities: cleanEntityNames(entityNames), invalidCount };
+}
+
+function cleanEntityNames(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  const names: string[] = [];
+  for (const item of value) {
+    if (typeof item !== "string" || item.trim() === "") continue;
+    const name = item.trim();
+    if (!names.some((existing) => existing.toLowerCase() === name.toLowerCase())) names.push(name);
+  }
+  return names.slice(0, MAX_TURN_ENTITIES);
 }
 
 function toClaim(entry: unknown): ReceiptClaim | null {
@@ -144,7 +164,7 @@ export interface StoreClaimsResult {
 
 export function storeClaims(
   db: Database,
-  input: { turnId: number; claims: ReceiptClaim[]; snapshots: Map<number, SnapshotRef> },
+  input: { turnId: number; claims: ReceiptClaim[]; entities?: string[]; snapshots: Map<number, SnapshotRef> },
 ): StoreClaimsResult {
   const result: StoreClaimsResult = { stored: 0, anchored: 0, unanchored: 0 };
   const insert = db.prepare(
@@ -152,12 +172,16 @@ export function storeClaims(
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
   );
 
+  const linkEntity = db.prepare("INSERT OR IGNORE INTO turn_entities (turn_id, entity_id) VALUES (?, ?)");
+
   db.exec("BEGIN");
   try {
+    for (const name of input.entities ?? []) linkEntity.run(input.turnId, findOrCreateEntity(db, name, null));
     for (const claim of input.claims) {
       const snapshot = input.snapshots.get(claim.source);
       const anchor = snapshot ? anchorQuote(snapshot.text, claim.quote) : null;
       const entityId = findOrCreateEntity(db, claim.entity, snapshot ? domainOf(snapshot.url) : null);
+      linkEntity.run(input.turnId, entityId);
       // A claim that does not anchor is still stored; recheck decides what to do with it later.
       insert.run(
         input.turnId,
@@ -186,10 +210,27 @@ export function storeClaims(
 }
 
 function findOrCreateEntity(db: Database, name: string, domain: string | null): number {
-  const existing = db.prepare("SELECT id FROM entities WHERE name = ? COLLATE NOCASE").get(name) as { id: number } | undefined;
-  if (existing) return existing.id;
-  const created = db.prepare("INSERT INTO entities (name, domain) VALUES (?, ?)").run(name, domain);
+  // A domain is kept only when it looks like the vendor's own, never a blog that mentions the vendor.
+  const vendorDomain = domain && looksLikeVendorDomain(domain, name) ? domain : null;
+  const existing = db.prepare("SELECT id, domain FROM entities WHERE name = ? COLLATE NOCASE").get(name) as
+    | { id: number; domain: string | null }
+    | undefined;
+  if (existing) {
+    // The vendor's own page may only show up in a later turn; fill the gap then.
+    if (existing.domain === null && vendorDomain) {
+      db.prepare("UPDATE entities SET domain = ? WHERE id = ?").run(vendorDomain, existing.id);
+    }
+    return existing.id;
+  }
+  const created = db.prepare("INSERT INTO entities (name, domain) VALUES (?, ?)").run(name, vendorDomain);
   return Number(created.lastInsertRowid);
+}
+
+// "neon.com" for "Neon", "supabase.com" for "Supabase"; "jetadmin.io" is not Supabase's.
+// Names under 3 letters are too short to match a hostname safely ("Go" is inside "google.com").
+export function looksLikeVendorDomain(hostname: string, entityName: string): boolean {
+  const name = entityName.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
+  return name.length >= 3 && hostname.toLowerCase().includes(name);
 }
 
 function domainOf(url: string): string | null {
@@ -200,13 +241,13 @@ function domainOf(url: string): string | null {
   }
 }
 
-// The "shortlist" of a turn: every entity that one of its claims is about.
+// The "shortlist" of a turn: every product the answer discussed.
 export function entitiesForTurn(db: Database, turnId: number): string[] {
   const rows = db
     .prepare(
-      `SELECT DISTINCT entities.name AS name FROM claims
-       JOIN entities ON entities.id = claims.entity_id
-       WHERE claims.turn_id = ? ORDER BY entities.name`,
+      `SELECT entities.name AS name FROM turn_entities
+       JOIN entities ON entities.id = turn_entities.entity_id
+       WHERE turn_entities.turn_id = ? ORDER BY turn_entities.rowid`,
     )
     .all(turnId) as { name: string }[];
   return rows.map((row) => row.name);

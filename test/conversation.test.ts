@@ -4,6 +4,7 @@ import { test } from "node:test";
 import { runTurn, MAX_TOOL_ROUNDS, type TurnEvent } from "../src/conversation.ts";
 import type { LlmEvent } from "../src/llm.ts";
 import { createSearch } from "../src/search.ts";
+import { entitiesForTurn } from "../src/claims.ts";
 import { loadSnapshotText } from "../src/receipts.ts";
 import { count, memoryDb, offlineDeps, replayConfig, ScriptedLlm, type RecordedRequest } from "./helpers.ts";
 
@@ -42,7 +43,7 @@ test("a full turn offline: searches, reads, answers with citations, and stores c
   assert.equal(result.answer, shown);
 
   const statuses = events.filter((e) => e.type === "status").map((e) => (e as { text: string }).text);
-  assert.deepEqual(statuses, ["searching 1 query", "reading acmedb.dev/pricing", "reading blog.example.org/acmedb-review"]);
+  assert.deepEqual(statuses, ["thinking", "searching 1 query", "reading acmedb.dev/pricing", "reading blog.example.org/acmedb-review"]);
 
   // The vendor page is [1] even though the search ranked the blog first.
   const sourcesEvent = events.find((e) => e.type === "sources");
@@ -101,7 +102,8 @@ test("a greeting is answered with no search, no snapshot and no claim", async ()
 
   assert.equal(result.answer, "Hi! Ask me about any product or price.");
   assert.equal(llm.requests.length, 1);
-  assert.deepEqual(events.map((e) => e.type), ["token", "token"]);
+  assert.deepEqual(events.map((e) => e.type), ["status", "token", "token"]);
+  assert.deepEqual(events[0], { type: "status", text: "thinking" });
   assert.equal(count(db, "snapshots"), 0);
   assert.equal(count(db, "claims"), 0);
 });
@@ -168,4 +170,36 @@ test("only pages the answer cites get a snapshot", async () => {
 
   const urls = db.prepare("SELECT url FROM snapshots").all() as { url: string }[];
   assert.deepEqual(urls.map((row) => row.url), ["https://www.acmedb.dev/pricing"]);
+});
+
+test("the first status is shown before the model is called", async () => {
+  const db = memoryDb();
+  const events: TurnEvent[] = [];
+  let statusesWhenModelStarted: string[] = [];
+  const llm = new ScriptedLlm([
+    () => {
+      statusesWhenModelStarted = events.map((e) => (e.type === "status" ? e.text : e.type));
+      return [{ type: "token", text: "Hello." }];
+    },
+  ]);
+  await runTurn(offlineDeps(llm, db), { message: "hi", timezone: "UTC" }, (e) => events.push(e));
+  assert.deepEqual(statusesWhenModelStarted, ["thinking"]);
+});
+
+test("a shortlist and its claims are stored from the object form of the receipts block", async () => {
+  const db = memoryDb();
+  const block = JSON.stringify({
+    entities: ["AcmeDB", "OtherDB"],
+    claims: [{ text: "Launch costs $19 per month", kind: "price", entity: "AcmeDB", source: 1, quote: "Launch | $19 / month" }],
+  });
+  const answer: LlmEvent[] = [{ type: "token", text: "AcmeDB Launch is $19 [1]. OtherDB is an option.\n\n```receipts\n" + block + "\n```" }];
+  const llm = new ScriptedLlm([() => [searchCall], () => answer]);
+
+  const result = await runTurn(offlineDeps(llm, db), { message: "Compare AcmeDB and OtherDB", timezone: "UTC" }, () => {});
+
+  assert.equal(result.answer, "AcmeDB Launch is $19 [1]. OtherDB is an option.");
+  assert.deepEqual(entitiesForTurn(db, result.assistantTurnId), ["AcmeDB", "OtherDB"]);
+  const system = llm.requests[0]?.messages[0];
+  assert.ok(system && system.role === "system");
+  assert.match(system.content, /"entities": \[/);
 });
