@@ -1,7 +1,6 @@
 # minimi chat agent: design spec (locked 2026-11-21, after two Fable reviews)
 
-Challenge: https://binary.so/YIrD8L5 (SWE intern, on-site Bengaluru, pay not stated: confirm before accepting).
-Submit: public repo, one-page DESIGN.md, 60s video (Zaid records in batch), ranked top-3 projects.
+The working spec written before the code; DESIGN.md is the one-page summary with measured results.
 
 ## Thesis
 Every answer is a receipt, so "is it still true?" is a diff of what the source said then against what it says now, plus a dated search for what is new, and the agent tells you exactly what it could not check.
@@ -12,7 +11,7 @@ Every answer is a receipt, so "is it still true?" is a diff of what the source s
 - Raw fetch of pricing pages (curl, browser UA): neon.com/pricing and supabase.com/pricing have dollar figures in the HTML; hubspot.com/pricing/sales has none (client-rendered); pipedrive.com/en/pricing returns 403. So "unanchored" and "could not verify" are common real paths, not edge cases.
 - OpenRouter tool-calling models live: anthropic/claude-haiku-5.5 ($0.10/$0.50 per M), google/gemini-3.8-flash, anthropic/claude-sonnet-5.5.
 
-- Live probe with keys (Zaid ran it 2026-11-21): Tavily extract got prices from all 4 pages, including HubSpot (client-rendered) and Pipedrive (403 to plain fetch); basic and advanced returned identical text in ~740 ms each, so use basic (half the credits). Search with start_date returned `published_date` as RFC 1123 strings; top 5 for "Neon Postgres pricing change" were all third-party blogs, none from neon.com. LLM (OpenRouter, claude-haiku-5.5) answered in 2312 ms for a 5-token reply.
+- Live probe with keys (2026-11-21): Tavily extract got prices from all 4 pages, including HubSpot (client-rendered) and Pipedrive (403 to plain fetch); basic and advanced returned identical text in ~740 ms each, so use basic (half the credits). Search with start_date returned `published_date` as RFC 1123 strings; top 5 for "Neon Postgres pricing change" were all third-party blogs, none from neon.com. LLM (OpenRouter, claude-haiku-5.5) answered in 2312 ms for a 5-token reply.
 - Open risk: identical output for basic vs advanced may mean Tavily served a cached copy. A recheck that reads a cache can report "source unchanged" for a page that changed. Before trusting recheck, measure: edit-detect test against a page we control, or compare Tavily text with plain fetch where plain fetch works; if cached, recheck prefers plain fetch and records the extractor.
 
 ## Refinements (2026-11-21, after the checks)
@@ -78,6 +77,3 @@ Day 2
 5. Discovery -> fixture feed yields only items after T.
 6. Seed, replay, guards -> clean clone boots with no keys.
 7. Evals -> 12 cases, latency and cheap-path share printed.
-
-## Video checklist (Zaid records in batch)
-Empty-memory trap ("I have no record of Monday's shortlist"), load demo history, CRM recheck table with coverage line, one "source unchanged" with zero LLM calls shown.
