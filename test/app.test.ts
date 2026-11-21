@@ -151,3 +151,20 @@ test("a model failure reaches the browser as an error event", async () => {
     await app.close();
   }
 });
+
+test("a model key out of credit shows which key to fix, not the provider's account URL", async () => {
+  const broke = new ScriptedLlm([
+    () => {
+      throw new Error("403 Key limit exceeded (total limit). Manage it using https://openrouter.ai/workspaces/default/keys/abc");
+    },
+  ]);
+  const app = await startApp(replayConfig(), offlineDeps(broke, memoryDb()));
+  try {
+    const response = await fetch(`${app.url}/chat`, { method: "POST", body: JSON.stringify({ message: "hi" }) });
+    const error = parseSse(await response.text()).find((e) => e.event === "error");
+    assert.match(error?.data.message ?? "", /LLM_API_KEY is invalid or out of credit/);
+    assert.doesNotMatch(error?.data.message ?? "", /openrouter\.ai/);
+  } finally {
+    await app.close();
+  }
+});

@@ -149,9 +149,17 @@ async function handleChat(deps: AppDeps, request: IncomingMessage, response: Ser
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     log.error("turn failed", { message });
-    send("error", { message });
+    send("error", { message: userFacingError(message) });
   }
   response.end();
+}
+
+// Provider errors carry account URLs and raw codes; the person chatting needs to know which key to fix.
+export function userFacingError(message: string): string {
+  const status = /^(401|402|403|429)\b/.exec(message)?.[1];
+  if (status === "429") return "The model provider is rate limiting this key (HTTP 429). Wait a minute and ask again.";
+  if (status) return `The model provider refused the request (HTTP ${status}): LLM_API_KEY is invalid or out of credit.`;
+  return message;
 }
 
 // Returns null as soon as the body passes the limit. The rest is thrown away.
