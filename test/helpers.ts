@@ -3,7 +3,7 @@ process.env.LOG_LEVEL = "silent";
 
 import type { Server } from "node:http";
 import type { AddressInfo } from "node:net";
-import { createApp } from "../src/app.ts";
+import { createApp, type AppDeps } from "../src/app.ts";
 import { storeClaims, type ReceiptClaim, type SnapshotRef } from "../src/claims.ts";
 import { createClock } from "../src/clock.ts";
 import { loadConfig, type Config } from "../src/config.ts";
@@ -73,8 +73,12 @@ export function offlineDeps(llm: LlmClient, db: Database): ConversationDeps {
   };
 }
 
-export async function startApp(config: Config, conversation: ConversationDeps): Promise<{ url: string; close: () => Promise<void> }> {
-  const server: Server = createApp({ config, conversation, publicDir: "public" });
+export async function startApp(
+  config: Config,
+  conversation: ConversationDeps,
+  loadSeed?: AppDeps["loadSeed"],
+): Promise<{ url: string; close: () => Promise<void> }> {
+  const server: Server = createApp({ config, conversation, publicDir: "public", loadSeed });
   await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
   const port = (server.address() as AddressInfo).port;
   return {

@@ -10,6 +10,8 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "test": "tsx --test \"test/**/*.test.ts\"",
+    "seed": "tsx scripts/seed.ts",
+    "eval": "tsx evals/run.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

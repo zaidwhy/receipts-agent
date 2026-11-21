@@ -5,7 +5,9 @@ import { join } from "node:path";
 import { resolveTimezone } from "./clock.ts";
 import { missingKeys, type Config } from "./config.ts";
 import { runTurn, type ConversationDeps } from "./conversation.ts";
+import { turnsForDisplay } from "./db.ts";
 import { createLogger } from "./log.ts";
+import { seedDemoHistory, type SeedFixture } from "./seed.ts";
 
 const log = createLogger("app");
 
@@ -16,6 +18,7 @@ export interface AppDeps {
   config: Config;
   conversation: ConversationDeps;
   publicDir: string;
+  loadSeed?: () => SeedFixture; // the recorded captures behind "Load demo history"; absent means the button reports so
 }
 
 export function createApp(deps: AppDeps): Server {
@@ -45,12 +48,47 @@ async function handle(deps: AppDeps, request: IncomingMessage, response: ServerR
     return;
   }
 
+  // Everything stored, in the order it happened, so a reload shows the memory and marks demo turns.
+  if (request.method === "GET" && path === "/history") {
+    sendJson(response, 200, { turns: historyPayload(deps) });
+    return;
+  }
+
+  if (request.method === "POST" && path === "/seed") {
+    await handleSeed(deps, request, response);
+    return;
+  }
+
   if (request.method === "POST" && path === "/chat") {
     await handleChat(deps, request, response);
     return;
   }
 
   sendJson(response, 404, { error: "not found" });
+}
+
+function historyPayload(deps: AppDeps) {
+  return turnsForDisplay(deps.conversation.db, 200).map((turn) => ({ role: turn.role, text: turn.text, asked_at: turn.askedAt, demo: turn.demo }));
+}
+
+async function handleSeed(deps: AppDeps, request: IncomingMessage, response: ServerResponse): Promise<void> {
+  if (!deps.loadSeed) {
+    sendJson(response, 501, { error: "this server has no demo history to load" });
+    return;
+  }
+  const body = await readBody(request, MAX_BODY_BYTES);
+  let timezone: unknown;
+  try {
+    timezone = (JSON.parse(body ?? "{}") as { timezone?: unknown }).timezone;
+  } catch {
+    timezone = undefined; // an empty or odd body just means "use UTC"
+  }
+  const report = seedDemoHistory(deps.conversation.db, {
+    fixture: deps.loadSeed(),
+    now: deps.conversation.clock.now(),
+    timeZone: resolveTimezone(timezone),
+  });
+  sendJson(response, 200, { report, turns: historyPayload(deps) });
 }
 
 async function handleChat(deps: AppDeps, request: IncomingMessage, response: ServerResponse): Promise<void> {

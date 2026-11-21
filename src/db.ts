@@ -28,13 +28,16 @@ export function topicSearchMode(db: Database): TopicSearchMode {
   return row ? "fts5" : "like";
 }
 
-// Turns are only ever inserted, never edited or deleted, so one insert trigger keeps the index current.
+// Turns are inserted by chat and deleted only when demo history is replaced, so insert and delete triggers keep the index current.
 function createTopicIndex(db: Database): void {
   try {
     db.exec(`
       CREATE VIRTUAL TABLE IF NOT EXISTS turns_fts USING fts5(text, content='turns', content_rowid='id');
       CREATE TRIGGER IF NOT EXISTS turns_fts_insert AFTER INSERT ON turns BEGIN
         INSERT INTO turns_fts(rowid, text) VALUES (new.id, new.text);
+      END;
+      CREATE TRIGGER IF NOT EXISTS turns_fts_delete AFTER DELETE ON turns BEGIN
+        INSERT INTO turns_fts(turns_fts, rowid, text) VALUES ('delete', old.id, old.text);
       END;
     `);
   } catch {
@@ -54,7 +57,8 @@ function createTables(db: Database): void {
       text TEXT NOT NULL,
       asked_at TEXT NOT NULL,   -- UTC ISO time
       tz TEXT NOT NULL,         -- IANA zone the user was in
-      topic_tags TEXT           -- filled by the memory step
+      topic_tags TEXT,          -- filled by the memory step
+      demo INTEGER NOT NULL DEFAULT 0 CHECK (demo IN (0, 1)) -- 1 for turns made by the seed, never by a user
     );
     CREATE TABLE IF NOT EXISTS entities (
       id INTEGER PRIMARY KEY,
@@ -111,6 +115,11 @@ function createTables(db: Database): void {
       UNIQUE (entity_id, url)
     );
   `);
+  // A database made before demo history existed has no such column.
+  const columns = db.prepare("PRAGMA table_info(turns)").all() as { name: string }[];
+  if (!columns.some((column) => column.name === "demo")) {
+    db.exec("ALTER TABLE turns ADD COLUMN demo INTEGER NOT NULL DEFAULT 0 CHECK (demo IN (0, 1))");
+  }
   createTopicIndex(db);
   const row = db.prepare("SELECT version FROM schema_version").get();
   if (!row) db.prepare("INSERT INTO schema_version (version) VALUES (?)").run(SCHEMA_VERSION);
@@ -122,19 +131,40 @@ export interface Turn {
   text: string;
   askedAt: string;
   tz: string;
+  demo: boolean;
 }
 
-export function insertTurn(db: Database, role: Turn["role"], text: string, askedAt: string, tz: string): number {
+export function insertTurn(db: Database, role: Turn["role"], text: string, askedAt: string, tz: string, demo = false): number {
   const result = db
-    .prepare("INSERT INTO turns (role, text, asked_at, tz) VALUES (?, ?, ?, ?)")
-    .run(role, text, askedAt, tz);
+    .prepare("INSERT INTO turns (role, text, asked_at, tz, demo) VALUES (?, ?, ?, ?, ?)")
+    .run(role, text, askedAt, tz, demo ? 1 : 0);
   return Number(result.lastInsertRowid);
 }
 
-// Oldest first, so the result can be sent to the model as-is.
+interface TurnRow {
+  id: number;
+  role: Turn["role"];
+  text: string;
+  asked_at: string;
+  tz: string;
+  demo: number;
+}
+
+const toTurn = (row: TurnRow): Turn => ({ id: row.id, role: row.role, text: row.text, askedAt: row.asked_at, tz: row.tz, demo: row.demo === 1 });
+
+// What the model sees as the running conversation, oldest first. Demo turns are memory to recall,
+// not part of this chat, so they never appear here.
 export function recentTurns(db: Database, limit: number): Turn[] {
   const rows = db
-    .prepare("SELECT id, role, text, asked_at, tz FROM turns ORDER BY id DESC LIMIT ?")
-    .all(limit) as { id: number; role: Turn["role"]; text: string; asked_at: string; tz: string }[];
-  return rows.reverse().map((row) => ({ id: row.id, role: row.role, text: row.text, askedAt: row.asked_at, tz: row.tz }));
+    .prepare("SELECT id, role, text, asked_at, tz, demo FROM turns WHERE demo = 0 ORDER BY id DESC LIMIT ?")
+    .all(limit) as unknown as TurnRow[];
+  return rows.reverse().map(toTurn);
+}
+
+// What the page shows on load: everything stored, in the order it happened.
+export function turnsForDisplay(db: Database, limit: number): Turn[] {
+  const rows = db
+    .prepare("SELECT id, role, text, asked_at, tz, demo FROM (SELECT * FROM turns ORDER BY asked_at DESC, id DESC LIMIT ?) ORDER BY asked_at, id")
+    .all(limit) as unknown as TurnRow[];
+  return rows.map(toTurn);
 }

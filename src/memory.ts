@@ -36,6 +36,7 @@ export interface RecalledTurn {
   askedAt: string; // UTC ISO
   askedAtLocal: string; // "Tuesday 17 Nov, 14:05" in the user's zone
   question: string;
+  demo: boolean; // made by the seed, not by a real conversation
   answer: string | null; // null when the turn failed and was never answered
   entities: string[];
   claims: RecalledClaim[];
@@ -52,6 +53,7 @@ interface TurnRow {
   id: number;
   text: string;
   asked_at: string;
+  demo: number;
 }
 
 export function recall(db: Database, query: RecallQuery, now: Date, options: RecallOptions = {}): RecallResult {
@@ -60,7 +62,7 @@ export function recall(db: Database, query: RecallQuery, now: Date, options: Rec
   const before = options.beforeTurnId ?? Number.MAX_SAFE_INTEGER;
 
   let pool = db
-    .prepare("SELECT id, text, asked_at FROM turns WHERE role = 'user' AND id < ? ORDER BY id")
+    .prepare("SELECT id, text, asked_at, demo FROM turns WHERE role = 'user' AND id < ? ORDER BY id")
     .all(before) as unknown as TurnRow[];
 
   const terms = query.topic ? queryTerms(query.topic) : [];
@@ -151,6 +153,7 @@ function describeTurn(db: Database, turn: TurnRow, now: Date, timeZone: string):
     askedAt: turn.asked_at,
     askedAtLocal: localTime(new Date(turn.asked_at), timeZone, now),
     question: turn.text,
+    demo: turn.demo === 1,
     answer: answer?.text ?? null,
     entities: answer ? entitiesForTurn(db, answer.id) : [],
     claims,
@@ -254,7 +257,10 @@ export function describeRecall(result: RecallResult, query: RecallQuery, rangeLa
   }
   const count = `${result.found.length} past question${result.found.length === 1 ? "" : "s"}`;
   const more = result.omitted > 0 ? ` (${result.omitted} more not shown)` : "";
-  return `Recalled ${count}${what}${more}.\n${JSON.stringify(result.found, null, 1)}`;
+  // The marker is in the data itself, so the model cannot present seeded history as a real conversation.
+  const marked = result.found.map(({ demo, ...turn }) => (demo ? { ...turn, history: "(demo history)" } : turn));
+  const demoNote = result.found.some((turn) => turn.demo) ? " Entries marked (demo history) are sample data loaded for a demo: say so when you mention them." : "";
+  return `Recalled ${count}${what}${more}.${demoNote}\n${JSON.stringify(marked, null, 1)}`;
 }
 
 export function runRecall(db: Database, now: Date, options: RecallOptions, rawArguments: string): string {

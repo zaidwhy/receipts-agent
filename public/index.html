@@ -44,6 +44,9 @@
   }
   header h1 { margin: 0; font-size: 17px; letter-spacing: 0.02em; }
   header span { color: var(--muted); font-size: 14px; }
+  header .seed { margin-left: auto; padding: 4px 12px; font-size: 13px; background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .tag { display: inline-block; margin-left: 8px; padding: 0 6px; border: 1px solid var(--line); border-radius: 4px; font-size: 11px; letter-spacing: 0.04em; color: var(--muted); text-transform: lowercase; }
+  .when { margin-left: 8px; text-transform: none; letter-spacing: 0; }
   main { flex: 1; overflow-y: auto; padding: 20px; }
   .column { max-width: 720px; margin: 0 auto; }
   .turn { margin-bottom: 22px; }
@@ -109,6 +112,7 @@
 <header>
   <h1>minimi agent</h1>
   <span>answers with receipts</span>
+  <button class="seed" id="seed" type="button" title="Adds three sample past conversations, tagged demo, so there is something to recall and recheck">Load demo history</button>
 </header>
 <main id="scroller">
   <div id="setup"></div>
@@ -127,6 +131,7 @@
   const form = document.getElementById("form");
   const input = document.getElementById("input");
   const sendButton = document.getElementById("send");
+  const seedButton = document.getElementById("seed");
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   let busy = false;
   let keysMissing = false;
@@ -138,9 +143,15 @@
     return node;
   }
 
-  function addTurn(role, text) {
+  // A past turn shows when it happened and, for seeded turns, a small "demo" tag.
+  function addTurn(role, text, past) {
     const turn = element("div", "turn " + role);
-    turn.appendChild(element("div", "who", role === "user" ? "You" : "Agent"));
+    const who = element("div", "who", role === "user" ? "You" : "Agent");
+    if (past) {
+      who.appendChild(element("span", "when", new Date(past.asked_at).toLocaleString(undefined, { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })));
+      if (past.demo) who.appendChild(element("span", "tag", "demo"));
+    }
+    turn.appendChild(who);
     const body = element("div", "body", text);
     turn.appendChild(body);
     transcript.appendChild(turn);
@@ -331,7 +342,41 @@
     const off = busy || keysMissing;
     input.disabled = off;
     sendButton.disabled = off;
+    seedButton.disabled = busy;
   }
+
+  // Shows what is stored, oldest first. Turns made in this session are stored too, so nothing is lost.
+  function renderHistory(turns) {
+    transcript.textContent = "";
+    for (const turn of turns) addTurn(turn.role === "user" ? "user" : "assistant", turn.text, turn);
+  }
+
+  async function loadHistory() {
+    try {
+      const response = await fetch("/history");
+      if (response.ok) renderHistory((await response.json()).turns);
+    } catch {
+      // The page still works without the past conversation.
+    }
+  }
+
+  async function loadDemoHistory() {
+    busy = true;
+    updateControls();
+    try {
+      const response = await fetch("/seed", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ timezone }) });
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.error);
+      renderHistory(body.turns);
+    } catch (error) {
+      transcript.appendChild(element("div", "status error", "Could not load demo history: " + error.message));
+    }
+    busy = false;
+    updateControls();
+  }
+
+  seedButton.addEventListener("click", loadDemoHistory);
+  loadHistory();
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
