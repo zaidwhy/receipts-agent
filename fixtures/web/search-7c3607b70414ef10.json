@@ -1,0 +1,24 @@
+{
+  "request": {
+    "query": "AcmeDB pricing plans",
+    "start_date": null,
+    "end_date": null
+  },
+  "response": {
+    "timedOut": false,
+    "results": [
+      {
+        "url": "https://blog.example.org/acmedb-review",
+        "title": "AcmeDB review: is it worth it?",
+        "snippet": "A hands-on review of AcmeDB.",
+        "publishedDate": "2026-09-02"
+      },
+      {
+        "url": "https://www.acmedb.dev/pricing",
+        "title": "AcmeDB Pricing",
+        "snippet": "Free, Launch and Scale plans.",
+        "publishedDate": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "request": {
+    "url": "https://blog.example.org/acmedb-review"
+  },
+  "response": {
+    "ok": true,
+    "page": {
+      "url": "https://blog.example.org/acmedb-review",
+      "finalUrl": "https://blog.example.org/acmedb-review",
+      "extractor": "fetch",
+      "publishedAt": "2026-09-02",
+      "text": "AcmeDB review. We tried AcmeDB for a month. Setup took ten minutes and the free plan was enough for a side project. Support answered within a day."
+    }
+  }
+}

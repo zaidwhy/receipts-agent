@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>minimi agent</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --panel: #ffffff;
+    --text: #1d1b18;
+    --muted: #6b665e;
+    --line: #e2ded6;
+    --accent: #b4430c;
+    --accent-text: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #151412;
+      --panel: #1e1c19;
+      --text: #ece8e1;
+      --muted: #9a948a;
+      --line: #34312c;
+      --accent: #f08a4b;
+      --accent-text: #1a0e05;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  header {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  header h1 { margin: 0; font-size: 17px; letter-spacing: 0.02em; }
+  header span { color: var(--muted); font-size: 14px; }
+  main { flex: 1; overflow-y: auto; padding: 20px; }
+  .column { max-width: 720px; margin: 0 auto; }
+  .turn { margin-bottom: 22px; }
+  .who { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 4px; }
+  .turn.user .body { border-left: 3px solid var(--accent); padding-left: 12px; }
+  .body { white-space: pre-wrap; overflow-wrap: anywhere; }
+  .body a.cite { color: var(--accent); font-weight: 600; text-decoration: none; }
+  .body a.cite:hover { text-decoration: underline; }
+  .status { color: var(--muted); font-size: 14px; margin-top: 6px; min-height: 1.4em; }
+  .sources { margin: 10px 0 0; padding: 0; list-style: none; font-size: 14px; }
+  .sources li { margin: 2px 0; }
+  .sources a { color: var(--text); overflow-wrap: anywhere; }
+  .sources .num { color: var(--accent); font-weight: 600; margin-right: 6px; }
+  .error { color: var(--accent); }
+  .card {
+    max-width: 720px;
+    margin: 0 auto 20px;
+    padding: 14px 16px;
+    background: var(--panel);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+  }
+  .card code { background: var(--bg); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--line); }
+  footer { border-top: 1px solid var(--line); padding: 14px 20px; background: var(--panel); }
+  form { max-width: 720px; margin: 0 auto; display: flex; gap: 10px; }
+  textarea {
+    flex: 1;
+    resize: none;
+    font: inherit;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  textarea:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  button {
+    font: inherit;
+    font-weight: 600;
+    color: var(--accent-text);
+    background: var(--accent);
+    border: 0;
+    border-radius: 8px;
+    padding: 0 20px;
+    cursor: pointer;
+  }
+  button:disabled, textarea:disabled { opacity: 0.5; cursor: not-allowed; }
+</style>
+</head>
+<body>
+<header>
+  <h1>minimi agent</h1>
+  <span>answers with receipts</span>
+</header>
+<main id="scroller">
+  <div id="setup"></div>
+  <div class="column" id="transcript"></div>
+</main>
+<footer>
+  <form id="form">
+    <textarea id="input" rows="2" maxlength="4000" placeholder="Ask about prices, plans, versions, launches..." autofocus></textarea>
+    <button id="send" type="submit">Send</button>
+  </form>
+</footer>
+
+<script>
+  const transcript = document.getElementById("transcript");
+  const scroller = document.getElementById("scroller");
+  const form = document.getElementById("form");
+  const input = document.getElementById("input");
+  const sendButton = document.getElementById("send");
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  let busy = false;
+  let keysMissing = false;
+
+  function element(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function addTurn(role, text) {
+    const turn = element("div", "turn " + role);
+    turn.appendChild(element("div", "who", role === "user" ? "You" : "Agent"));
+    const body = element("div", "body", text);
+    turn.appendChild(body);
+    transcript.appendChild(turn);
+    scroller.scrollTop = scroller.scrollHeight;
+    return { turn, body };
+  }
+
+  // Turns "[2]" in the answer into links to source 2. Uses text nodes, so nothing is parsed as HTML.
+  function renderAnswer(body, text, sources) {
+    body.textContent = "";
+    const known = new Map(sources.map((source) => [source.n, source]));
+    for (const part of text.split(/(\[\d+\])/)) {
+      const match = part.match(/^\[(\d+)\]$/);
+      const source = match ? known.get(Number(match[1])) : undefined;
+      if (source) {
+        const link = element("a", "cite", part);
+        link.href = source.url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.title = source.title;
+        body.appendChild(link);
+      } else {
+        body.appendChild(document.createTextNode(part));
+      }
+    }
+  }
+
+  function renderSources(turn, sources) {
+    const list = element("ol", "sources");
+    for (const source of sources) {
+      const item = element("li");
+      item.appendChild(element("span", "num", "[" + source.n + "]"));
+      const link = element("a", "", source.title);
+      link.href = source.url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      item.appendChild(link);
+      list.appendChild(item);
+    }
+    turn.appendChild(list);
+  }
+
+  // Server-Sent Events arrive as blocks separated by a blank line.
+  function parseEvent(block) {
+    let name = "message";
+    let data = "";
+    for (const line of block.split("\n")) {
+      if (line.startsWith("event: ")) name = line.slice(7);
+      else if (line.startsWith("data: ")) data += line.slice(6);
+    }
+    return { name, data: data ? JSON.parse(data) : {} };
+  }
+
+  async function ask(message) {
+    busy = true;
+    updateControls();
+    addTurn("user", message);
+    const pending = addTurn("assistant", "");
+    const status = element("div", "status", "thinking");
+    pending.turn.appendChild(status);
+    let answer = "";
+
+    try {
+      const response = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, timezone }),
+      });
+      if (!response.ok) {
+        const problem = await response.json().catch(() => ({ error: "HTTP " + response.status }));
+        throw new Error(problem.error);
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        let end;
+        while ((end = buffer.indexOf("\n\n")) !== -1) {
+          const event = parseEvent(buffer.slice(0, end));
+          buffer = buffer.slice(end + 2);
+          if (event.name === "status") {
+            status.textContent = event.data.text;
+          } else if (event.name === "token") {
+            answer += event.data.text;
+            pending.body.textContent = answer;
+          } else if (event.name === "sources") {
+            renderAnswer(pending.body, answer, event.data.sources);
+            renderSources(pending.turn, event.data.sources);
+          } else if (event.name === "error") {
+            throw new Error(event.data.message);
+          }
+        }
+        scroller.scrollTop = scroller.scrollHeight;
+      }
+      status.remove();
+    } catch (error) {
+      status.className = "status error";
+      status.textContent = "No answer: " + error.message + ". The server log (the terminal running npm run dev) has details.";
+    }
+    busy = false;
+    updateControls();
+    input.focus();
+  }
+
+  function updateControls() {
+    const off = busy || keysMissing;
+    input.disabled = off;
+    sendButton.disabled = off;
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const message = input.value.trim();
+    if (!message || busy || keysMissing) return;
+    input.value = "";
+    ask(message);
+  });
+
+  // Enter sends, Shift+Enter adds a new line.
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      form.requestSubmit();
+    }
+  });
+
+  // On load, ask the server whether it has what it needs and say so plainly if not.
+  fetch("/health")
+    .then((response) => response.json())
+    .then((health) => {
+      if (health.missing_keys.length === 0) return;
+      keysMissing = true;
+      updateControls();
+      const card = element("div", "card");
+      card.appendChild(element("strong", "", "Setup needed"));
+      const names = health.missing_keys.join(", ");
+      card.appendChild(element("p", "", "The server is running but these environment variables are not set: " + names + "."));
+      const how = element("p", "");
+      how.append("Copy ", element("code", "", ".env.example"), " to ", element("code", "", ".env"), ", fill in the values, and restart ", element("code", "", "npm run dev"), ".");
+      card.appendChild(how);
+      document.getElementById("setup").appendChild(card);
+    })
+    .catch(() => {});
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "request": {
+    "url": "https://www.acmedb.dev/pricing"
+  },
+  "response": {
+    "ok": true,
+    "page": {
+      "url": "https://www.acmedb.dev/pricing",
+      "finalUrl": "https://www.acmedb.dev/pricing",
+      "extractor": "tavily-basic",
+      "publishedAt": null,
+      "text": "# AcmeDB Pricing\n\nFree: 0.5 GB storage, 1 project, no card needed.\n\n| Plan | Price | Storage |\n| --- | --- | --- |\n| Launch | $19 / month | 10 GB included, then $1.50 per extra GB |\n| Scale | $69 / month | 50 GB included |\n\nAll plans include daily backups."
+    }
+  }
+}
