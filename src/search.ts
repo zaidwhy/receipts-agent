@@ -12,6 +12,9 @@ export interface SearchRequest {
   query: string;
   startDate?: string; // YYYY-MM-DD
   endDate?: string; // YYYY-MM-DD
+  // Ask Tavily to drop results whose publish date it cannot place inside the range. Discovery needs
+  // this so an old article cannot pose as news.
+  filterByPublishedDate?: boolean;
 }
 
 export interface SearchResult {
@@ -58,7 +61,9 @@ export function createSearch(options: SearchOptions): SearchPort {
 
 // Fixed property order so the hash does not depend on how the caller built the object.
 export function fixtureRequest(request: SearchRequest) {
-  return { query: request.query, start_date: request.startDate ?? null, end_date: request.endDate ?? null };
+  const base = { query: request.query, start_date: request.startDate ?? null, end_date: request.endDate ?? null };
+  // Added only when set, so the hash of every request made without it stays what it was.
+  return request.filterByPublishedDate ? { ...base, filter_by_published_date: true } : base;
 }
 
 interface TavilySearchResponse {
@@ -75,6 +80,7 @@ function createLiveSearch(apiKey: string | undefined): SearchPort {
     };
     if (request.startDate) body.start_date = request.startDate;
     if (request.endDate) body.end_date = request.endDate;
+    if (request.filterByPublishedDate) body.filter_by_published_date = true;
     return fetch("https://api.tavily.com/search", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },

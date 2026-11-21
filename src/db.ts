@@ -60,7 +60,8 @@ function createTables(db: Database): void {
       id INTEGER PRIMARY KEY,
       name TEXT NOT NULL,
       domain TEXT,
-      feed_url TEXT
+      feed_url TEXT,
+      feed_checked_at TEXT      -- when feed discovery last ran, so a miss is not probed on every question
     );
     CREATE TABLE IF NOT EXISTS turn_entities (
       turn_id INTEGER NOT NULL REFERENCES turns(id),
@@ -93,16 +94,21 @@ function createTables(db: Database): void {
     CREATE TABLE IF NOT EXISTS rechecks (
       claim_id INTEGER NOT NULL REFERENCES claims(id),
       checked_at TEXT NOT NULL,
-      tier TEXT NOT NULL,
+      tier INTEGER NOT NULL CHECK (tier BETWEEN 1 AND 4),
       status TEXT NOT NULL,
-      new_snapshot_hash TEXT REFERENCES snapshots(hash)
+      new_snapshot_hash TEXT REFERENCES snapshots(hash),
+      new_value TEXT,           -- what the page says now, when it changed
+      note TEXT                 -- why: reads disagreed, a lead from another source, the model's one-line reason
     );
     CREATE TABLE IF NOT EXISTS events (
       entity_id INTEGER NOT NULL REFERENCES entities(id),
       title TEXT NOT NULL,
       url TEXT NOT NULL,
-      published_at TEXT,
-      kind TEXT NOT NULL
+      published_at TEXT,        -- NULL for an undated item
+      kind TEXT NOT NULL,
+      source TEXT NOT NULL CHECK (source IN ('feed', 'search')),
+      confirmed INTEGER NOT NULL CHECK (confirmed IN (0, 1)),
+      UNIQUE (entity_id, url)
     );
   `);
   createTopicIndex(db);

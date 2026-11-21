@@ -35,8 +35,14 @@ export interface ReadOutcome {
   failures: ReadFailure[];
 }
 
+export interface ReadOptions {
+  // Read with exactly this extractor and no fallback. A recheck needs it: text from a different
+  // extractor would differ for reasons that have nothing to do with the page changing.
+  extractor?: Extractor;
+}
+
 export interface ReaderPort {
-  read(urls: string[]): Promise<ReadOutcome>;
+  read(urls: string[], options?: ReadOptions): Promise<ReadOutcome>;
 }
 
 export interface ReaderOptions {
@@ -53,8 +59,10 @@ export function createReader(options: ReaderOptions): ReaderPort {
 
   if (options.mode === "record") {
     return {
-      async read(urls) {
-        const outcome = await live.read(urls);
+      async read(urls, readOptions) {
+        const outcome = await live.read(urls, readOptions);
+        // A recheck read is not recorded: it would overwrite the first read of the same URL.
+        if (readOptions?.extractor) return outcome;
         // One fixture per URL so a replayed question can read any subset of them.
         for (const page of outcome.pages) {
           writeFixture(options.fixturesDir, "page", { url: page.url }, { ok: true, page } satisfies PageFixture);
@@ -89,7 +97,9 @@ interface TavilyExtractResponse {
 
 function createLiveReader(apiKey: string | undefined): ReaderPort {
   return {
-    async read(urls) {
+    async read(urls, options) {
+      if (options?.extractor === "fetch") return readByFetch(urls);
+      if (options?.extractor === "tavily-basic") return readByTavily(urls, apiKey);
       const startedAt = Date.now();
       const pages = new Map<string, Page>();
       const failures = new Map<string, ReadFailure>();
@@ -138,6 +148,40 @@ function createLiveReader(apiKey: string | undefined): ReaderPort {
       };
     },
   };
+}
+
+async function readByFetch(urls: string[]): Promise<ReadOutcome> {
+  const results = await Promise.all(urls.map((url) => fetchPage(url, PAGE_TIMEOUT_MS)));
+  return {
+    pages: results.flatMap((result) => ("page" in result ? [result.page] : [])),
+    failures: results.flatMap((result) => ("failure" in result ? [result.failure] : [])),
+  };
+}
+
+async function readByTavily(urls: string[], apiKey: string | undefined): Promise<ReadOutcome> {
+  try {
+    const extracted = await tavilyExtract(urls, apiKey);
+    const pages: Page[] = [];
+    for (const item of extracted.results ?? []) {
+      if (!item.raw_content?.trim()) continue;
+      pages.push({ url: item.url, finalUrl: item.url, text: item.raw_content, extractor: "tavily-basic", publishedAt: toIsoDate(item.published_date) });
+    }
+    const failures: ReadFailure[] = (extracted.failed_results ?? []).map((item) => ({
+      url: item.url,
+      reason: "failed" as const,
+      error: item.error ?? "Tavily could not extract",
+    }));
+    for (const url of urls) {
+      if (!pages.some((page) => page.url === url) && !failures.some((failure) => failure.url === url)) {
+        failures.push({ url, reason: "failed", error: "Tavily returned no text" });
+      }
+    }
+    return { pages, failures };
+  } catch (error) {
+    const timedOut = isTimeout(error);
+    const message = timedOut ? "Tavily extract timed out" : errorMessage(error);
+    return { pages: [], failures: urls.map((url) => ({ url, reason: timedOut ? ("timeout" as const) : ("failed" as const), error: message })) };
+  }
 }
 
 async function tavilyExtract(urls: string[], apiKey: string | undefined): Promise<TavilyExtractResponse> {

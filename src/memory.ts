@@ -32,6 +32,7 @@ export interface RecalledClaim {
 }
 
 export interface RecalledTurn {
+  turnId: number; // the question's id, which the recheck tool takes
   askedAt: string; // UTC ISO
   askedAtLocal: string; // "Tuesday 17 Nov, 14:05" in the user's zone
   question: string;
@@ -146,6 +147,7 @@ function describeTurn(db: Database, turn: TurnRow, now: Date, timeZone: string):
   const answer = answerOf(db, turn.id);
   const claims = answer ? claimsOf(db, answer.id, answer.asked_at, now) : [];
   return {
+    turnId: turn.id,
     askedAt: turn.asked_at,
     askedAtLocal: localTime(new Date(turn.asked_at), timeZone, now),
     question: turn.text,
