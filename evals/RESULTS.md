@@ -1,32 +1,32 @@
 # Eval results
 
 Model `nvidia/nemotron-3.5-super-vl:free`, web `replay`, clock fixed at 2026-11-21T10:00:00Z. 1 run of 12 cases against the real model (its answers differ run to run).
-Replay: 5 searches matched a recording exactly, 12 used the nearest recorded search, 21 page reads hit, 7 had no recording and failed like an unreachable page.
+Replay: 6 searches matched a recording exactly, 8 used the nearest recorded search, 25 page reads hit, 6 had no recording and failed like an unreachable page.
 
 ## Summary
 
 Run 1:
-- pass rate: 11/12 (92%)
-- first token ms: median 4381, p90 24226
-- total ms: median 4905, p90 25219
-- recheck claims settled at tier 1 (no model call): 0 of 6 (0%)
+- pass rate: 9/12 (75%)
+- first token ms: median 6048, p90 22477
+- total ms: median 7967, p90 28743
+- recheck claims settled at tier 1 (no model call): 0 of 12 (0%)
 
 ## Run 1
 
 | case | result | reason | first token ms | total ms | model tool calls | web searches / page reads |
 |---|---|---|---|---|---|---|
-| crm-recheck | pass | ok | 37338 | 40972 | 0 | 4 / 7 |
-| postgres-recheck | FAIL | only 0 recheck_row events; 0 coverage events | 12391 | 23430 | 3 | 8 / 6 |
-| nov3-recall | pass | ok | 1048 | 3515 | 0 | 0 / 0 |
-| empty-crm-trap | pass | ok | 4381 | 4905 | 0 | 0 / 0 |
-| empty-nov3-trap | pass | ok | 1025 | 1287 | 0 | 0 / 0 |
-| hi | pass | ok | 888 | 959 | 0 | 0 / 0 |
-| postgres-topic | pass | ok | 2428 | 3190 | 1 | 0 / 0 |
-| ambiguous-3-11 | pass | ok | 22284 | 23673 | 2 | 0 / 0 |
-| monday-on-monday | pass | ok | 24226 | 25219 | 0 | 0 / 0 |
-| fresh-pricing | pass | ok | 3317 | 3997 | 1 | 2 / 3 |
-| hindi-price | pass | ok | 5636 | 6435 | 1 | 3 / 3 |
-| pronoun-follow-up | pass | ok | 9787 | 12630 | 1 | 2 / 3 |
+| crm-recheck | pass | ok | 88724 | 97235 | 1 | 8 / 10 |
+| postgres-recheck | pass | ok | 22477 | 24586 | 0 | 3 / 6 |
+| nov3-recall | pass | ok | 2884 | 3842 | 0 | 0 / 0 |
+| empty-crm-trap | pass | ok | 6048 | 6644 | 0 | 0 / 0 |
+| empty-nov3-trap | pass | ok | 2602 | 3200 | 0 | 0 / 0 |
+| hi | FAIL | total 2834 ms is not under 2500 | 2797 | 2834 | 0 | 0 / 0 |
+| postgres-topic | pass | ok | 17143 | 23644 | 1 | 0 / 0 |
+| ambiguous-3-11 | pass | ok | 14340 | 27872 | 2 | 0 / 0 |
+| monday-on-monday | pass | ok | 9735 | 10837 | 0 | 0 / 0 |
+| fresh-pricing | FAIL | no anchored claim was stored | 3687 | 5175 | 1 | 2 / 3 |
+| hindi-price | pass | ok | 6811 | 7967 | 1 | 2 / 3 |
+| pronoun-follow-up | FAIL | searched, but not for supabase | 2607 | 28743 | 1 | 2 / 3 |
 
 ## What each case checks
 

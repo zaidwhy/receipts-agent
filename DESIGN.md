@@ -26,10 +26,10 @@ The three example questions are all "you told me X at time T, is X still true?".
 | Model | Pass | First token median / p90 |
 |---|---|---|
 | `anthropic/claude-haiku-5.5` (paid) | 24/24 over two runs | 3.6 s / 9.6 s |
-| `nvidia/nemotron-3.5-super-vl:free` (default) | 11/12 | 4.4 s / 24.2 s |
+| `nvidia/nemotron-3.5-super-vl:free` (default) | 11/12 (22 Nov), 9/12 (23 Nov) | 4.4 s / 24.2 s, then 6.0 s / 22.5 s |
 | `nvidia/nemotron-3-ultra-550b-a55b:free` | 9/12 | 4.7 s / 16.4 s |
 
-- The default is free so anyone can run it with a zero-credit OpenRouter key; Haiku is faster and steadier. Both free models failed the Postgres recheck for the same reason: "Last Tuesday we compared..." did not match the code's list of past-conversation phrases, and unlike Haiku they did not call `recall` on their own. The trigger now matches "I/we/you" plus a talking-or-deciding verb (unit-tested; the free-model re-run hit OpenRouter's 50-requests-a-day free cap, so it is not re-measured).
+- The default is free so anyone can run it with a zero-credit OpenRouter key; Haiku is faster and steadier. Both free models failed the Postgres recheck for the same reason: "Last Tuesday we compared..." did not match the code's list of past-conversation phrases, and unlike Haiku they did not call `recall` on their own. The trigger now matches "I/we/you" plus a talking-or-deciding verb, and the 23 Nov free-model run passes the Postgres recheck. That run failed three other cases instead: "hi" took 2.8 s against a 2.5 s budget, fresh-pricing stored no anchored claim, and the pronoun follow-up searched without "Supabase". The free model's pass rate moves between runs; Haiku is the steady one.
 - The pronoun case is flaky on Haiku in a third partial run ("the second one" read in question order, not answer order).
 - Fresh live pricing questions on Haiku: 6.2-7.0 s median to first token.
 - Same-day recheck: 3/3 claims settled at tier 1, zero model calls, and Tavily and a direct fetch agreed on 3/3 quotes (the stale-cache risk did not show). Archive-backed demo history: 0% tier 1, because a months-old page never hash-matches today's. The cheap path pays off on repeat checks, not on old ones.
