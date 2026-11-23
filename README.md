@@ -1,5 +1,7 @@
 # minimi agent
 
+<img src=".github/hero.webp" alt="A brass receipt spike on a worn shop counter holding a stack of paper slips, one with a faint red line." width="100%">
+
 Every answer is a receipt, so "is it still true?" is a diff of what the source said then against what it says now, plus a dated search for what is new, and the agent tells you exactly what it could not check.
 
 ## Quickstart
